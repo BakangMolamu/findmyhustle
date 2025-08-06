@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+    <title>FindMyHustle - Heavy Traffic</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            body {
+                  font-family: 'Arial', sans-serif;
+                        text-align: center;
+                              background-color: #f8d7da;
+                                    color: #721c24;
+                                          padding: 40px;
+                                              }
+
+                                                  .box {
+                                                        background-color: #f5c6cb;
+                                                              border: 1px solid #f1b0b7;
+                                                                    padding: 30px;
+                                                                          border-radius: 10px;
+                                                                                max-width: 500px;
+                                                                                      margin: 100px auto;
+                                                                                            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+                                                                                                }
+
+                                                                                                    h1 {
+                                                                                                          font-size: 32px;
+                                                                                                                margin-bottom: 10px;
+                                                                                                                    }
+
+                                                                                                                        p {
+                                                                                                                              font-size: 18px;
+                                                                                                                                    margin-top: 0;
+                                                                                                                                        }
+
+                                                                                                                                            .emoji {
+                                                                                                                                                  font-size: 60px;
+                                                                                                                                                      }
+                                                                                                                                                        </style>
+                                                                                                                                                        </head>
+                                                                                                                                                        <body>
+                                                                                                                                                          <div class="box">
+                                                                                                                                                              <div class="emoji">🚧</div>
+                                                                                                                                                                  <h1>Heavy Traffic Alert</h1>
+                                                                                                                                                                      <p>Too many people are uploading right now.</p>
+                                                                                                                                                                          <p>Please check back later when the system is less busy.</p>
+                                                                                                                                                                              <p>Thank you for your patience 💙</p>
+                                                                                                                                                                                </div>
+                                                                                                                                                                                </body>
+                                                                                                                                                                                </html>

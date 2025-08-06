@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <title>Terms and Conditions - find my hustle</title>
+        <style>
+            body {
+                  font-family: Arial, sans-serif;
+                        background: #f4f4f4;
+                              padding: 30px;
+                                    color: #222;
+                                        }
+                                            .container {
+                                                  max-width: 700px;
+                                                        background: white;
+                                                              border-radius: 10px;
+                                                                    padding: 25px;
+                                                                          margin: auto;
+                                                                                box-shadow: 0 0 10px rgba(0,0,0,0.2);
+                                                                                    }
+                                                                                        h1 {
+                                                                                              color: #222;
+                                                                                                    font-size: 24px;
+                                                                                                          margin-bottom: 20px;
+                                                                                                              }
+                                                                                                                  h2 {
+                                                                                                                        font-size: 18px;
+                                                                                                                              color: #333;
+                                                                                                                                    margin-top: 20px;
+                                                                                                                                        }
+                                                                                                                                            p {
+                                                                                                                                                  font-size: 15px;
+                                                                                                                                                        line-height: 1.6;
+                                                                                                                                                              margin-bottom: 15px;
+                                                                                                                                                                  }
+                                                                                                                                                                    </style>
+                                                                                                                                                                    </head>
+                                                                                                                                                                    <body>
+                                                                                                                                                                      <div class="container">
+                                                                                                                                                                          <h1>Terms and Conditions</h1>
+
+                                                                                                                                                                              <p>Welcome to find my hustle. This platform was created to help local hustlers in South Africa showcase their skills and services to nearby communities and potential clients.</p>
+
+                                                                                                                                                                                  <h2>1. Upload Fee</h2>
+                                                                                                                                                                                      <p>Each upload requires a once-off payment of <strong>R2</strong>. This helps keep the platform active and promote local content.</p>
+
+                                                                                                                                                                                          <h2>2. Payment & Proof</h2>
+                                                                                                                                                                                              <p>Users are expected to pay via the methods shown on the upload page (such as mobile money or bank transfer), and upload valid <strong>proof of payment</strong> (e.g., screenshot).</p>
+
+                                                                                                                                                                                                  <h2>3. Review Process</h2>
+                                                                                                                                                                                                      <p>Once you upload your details and proof of payment, the Sika Lekhekhe team will review your submission. Only valid and clear information will be shown publicly.</p>
+
+                                                                                                                                                                                                          <h2>4. Safety Warning</h2>
+                                                                                                                                                                                                              <p>Do not send money to any stranger on the platform. Always chat safely, ask questions, and meet in a safe public place if needed. Mama Suzan says: "Stay sharp ngwanake!"</p>
+
+                                                                                                                                                                                                                  <h2>5. Removal of Listings</h2>
+                                                                                                                                                                                                                      <p>We reserve the right to remove any hustle submission that is offensive, illegal, incomplete, or misleading.</p>
+
+                                                                                                                                                                                                                          <h2>6. No Refunds</h2>
+                                                                                                                                                                                                                              <p>The R2 fee is not refundable after submission. Please make sure your details are correct before uploading.</p>
+
+                                                                                                                                                                                                                                  <h2>7. Community Rules</h2>
+                                                                                                                                                                                                                                      <p>Be kind, helpful, and honest. This platform was built by locals for locals — let’s support one another.</p>
+
+                                                                                                                                                                                                                                          <h2>8. Contact Us</h2>
+                                                                                                                                                                                                                                              <p>If you need help, contact support or speak to MaOlady via Email on the homepage or upload form.</p>
+
+                                                                                                                                                                                                                                                  <p><strong>Thank you for using find my hustle — together we grow!</strong></p>
+                                                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                                                    </body>
+                                                                                                                                                                                                                                                    </html>
