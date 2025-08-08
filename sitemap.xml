@@ -3,10 +3,14 @@
   xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <url>
-    <loc>https://bakangmolamu.github.io/findmyhustle/</loc>
+    <loc>https://bakangmolamu.github.io/findmyhustle/index.html</loc>
     <priority>1.0</priority>
   </url>
 
+  <url>
+    <loc>https://bakangmolamu.github.io/findmyhustle/browse.html</loc>
+    <priority>0.8</priority>
+  </url>
 
   <url>
     <loc>https://bakangmolamu.github.io/findmyhustle/upload.html</loc>
@@ -14,23 +18,18 @@
   </url>
 
   <url>
-    <loc>https://bakangmolamu.github.io/findmyhustle/advertise.html</loc>
+    <loc>https://bakangmolamu.github.io/findmyhustle/feedback.html</loc>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://bakangmolamu.github.io/findmyhustle/feedback.html</loc>
+    <loc>https://bakangmolamu.github.io/findmyhustle/terms.html</loc>
     <priority>0.6</priority>
   </url>
 
   <url>
-    <loc>https://bakangmolamu.github.io/findmyhustle/terms.html</loc>
-    <priority>0.3</priority>
-  </url>
-
-  <url>
     <loc>https://bakangmolamu.github.io/findmyhustle/heavy.html</loc>
-    <priority>0.5</priority>
+    <priority>0.6</priority>
   </url>
 
 </urlset>
