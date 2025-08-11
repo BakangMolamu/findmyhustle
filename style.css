@@ -41,3 +41,20 @@
     visibility: hidden;
   }
 }
+
+
+.create-cv-btn {
+    background-color: #ff6600;
+    color: white;
+    padding: 15px 30px;
+    font-size: 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+    transition: background 0.3s ease;
+}
+
+.create-cv-btn:hover {
+    background-color: #e65c00;
+}
