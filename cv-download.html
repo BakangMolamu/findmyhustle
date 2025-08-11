@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Download CV - Find My Hustle</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9fbfc;
+      color: #222;
+      margin: 0;
+      padding: 0 15px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    header {
+      background-color: #1c75bc;
+      color: white;
+      padding: 20px 15px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    main {
+      flex-grow: 1;
+      max-width: 600px;
+      margin: 40px auto;
+      background: white;
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 4px 12px rgba(28, 117, 188, 0.15);
+      text-align: center;
+    }
+    button {
+      background-color: #1c75bc;
+      color: white;
+      font-size: 20px;
+      padding: 15px 25px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: background-color 0.3s ease;
+      margin-top: 20px;
+    }
+    button:hover {
+      background-color: #155a8a;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Your CV is Ready</h1>
+  </header>
+
+  <main>
+    <button onclick="generatePDF()">Download CV (PDF)</button>
+  </main>
+
+  <script>
+    function generatePDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({
+        unit: 'pt',
+        format: 'a4'
+      });
+
+      const formData = JSON.parse(localStorage.getItem("cvData"));
+      if (!formData) {
+        alert("No CV data found. Please create your CV first.");
+        return;
+      }
+
+      // Draw border according to theme
+      switch (formData.theme) {
+        case "classic":
+          doc.setDrawColor(0);
+          doc.setLineWidth(1);
+          doc.rect(20, 20, 555, 800);
+          break;
+        case "modern":
+          doc.setDrawColor(100);
+          doc.setLineWidth(2);
+          doc.rect(30, 30, 535, 780);
+          break;
+        case "colorful":
+          doc.setDrawColor(0, 102, 204);
+          doc.setLineWidth(3);
+          doc.rect(25, 25, 545, 790);
+          break;
+        // simple = no border
+      }
+
+      const leftMargin = 40;
+      let y = 40; // start near top of page
+      const lineHeight = 15;
+      const pageWidth = 515; // width of text area
+
+      // Heading: Curriculum Vitae of [Name]
+      doc.setFontSize(24);
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor("#1c75bc"); // light blue
+      const headingText = `Curriculum Vitae of ${formData.name}`;
+      doc.text(headingText, leftMargin, y);
+      y += 40;
+
+      // Personal Information Heading
+      doc.setFontSize(16);
+      doc.setFont("helvetica", "bold");
+      doc.text("Personal Information", leftMargin, y);
+      y += lineHeight;
+
+      // Personal Information details
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(0);
+
+      const personalInfoLines = [
+        `Name & Surname: ${formData.name}`,
+        `ID Number: ${formData.idNumber || "-"}`,
+        `Race: ${formData.race || "-"}`,
+        `Physical Address: ${formData.physicalAddress || "-"}`,
+        `Date of Birth: ${formData.dob || "-"}`,
+        `Province & Location: ${formData.provinceLocation || "-"}`
+      ];
+
+      personalInfoLines.forEach(line => {
+        const split = doc.splitTextToSize(line, pageWidth);
+        doc.text(split, leftMargin, y);
+        y += split.length * lineHeight;
+      });
+
+      y += 10; // space before next section
+
+      // Contact Information Heading
+      doc.setFontSize(16);
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor("#1c75bc");
+      doc.text("Contact Information", leftMargin, y);
+      y += lineHeight;
+
+      // Contact info details
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(0);
+
+      // Highlight email background
+      const emailText = `Email: ${formData.email}`;
+      const emailWidth = doc.getTextWidth(emailText) + 6;
+      const emailHeight = 16;
+      doc.setFillColor(255, 249, 196); // light yellow background
+      doc.rect(leftMargin - 3, y - 12, emailWidth, emailHeight, "F");
+      doc.setTextColor("#fbc02d"); // yellow text
+      doc.text(emailText, leftMargin, y);
+      y += lineHeight;
+
+      doc.setTextColor(0);
+      doc.text(`Phone Number: ${formData.phone}`, leftMargin, y);
+      y += lineHeight;
+
+      if(formData.altPhone && formData.altPhone.trim() !== "") {
+        doc.text(`Alternative Phone Number: ${formData.altPhone}`, leftMargin, y);
+        y += lineHeight;
+      }
+
+      y += 10; // space before next section
+
+      // Education Qualifications Heading
+      doc.setFontSize(16);
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor("#1c75bc");
+      doc.text("Education Qualifications", leftMargin, y);
+      y += lineHeight;
+
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(0);
+
+      const eduSplit = doc.splitTextToSize(formData.education, pageWidth);
+      doc.text(eduSplit, leftMargin, y);
+      y += eduSplit.length * lineHeight + 10;
+
+      // Skills Heading
+      doc.setFontSize(16);
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor("#1c75bc");
+      doc.text("Skills", leftMargin, y);
+      y += lineHeight;
+
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(0);
+
+      const skillsSplit = doc.splitTextToSize(formData.skills, pageWidth);
+      doc.text(skillsSplit, leftMargin, y);
+      y += skillsSplit.length * lineHeight + 10;
+
+      // Work Experience Heading
+      doc.setFontSize(16);
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor("#1c75bc");
+      doc.text("Work Experience", leftMargin, y);
+      y += lineHeight;
+
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(0);
+
+      const expSplit = doc.splitTextToSize(formData.experience, pageWidth);
+      doc.text(expSplit, leftMargin, y);
+      y += expSplit.length * lineHeight + 10;
+
+      // References Heading
+      doc.setFontSize(16);
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor("#1c75bc");
+      doc.text("References", leftMargin, y);
+      y += lineHeight;
+
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(0);
+
+      const refSplit = doc.splitTextToSize(formData.references, pageWidth);
+      doc.text(refSplit, leftMargin, y);
+
+      // Save file
+      const fileName = formData.name ? `${formData.name.trim().replace(/\s+/g, "_")}_CV.pdf` : "my_CV.pdf";
+      doc.save(fileName);
+    }
+  </script>
+</body>
+</html>
