@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://findmyhustle.xyz/sitemap.xml
