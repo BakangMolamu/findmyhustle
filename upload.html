@@ -1,185 +1,164 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Upload | FindMyHustle</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+      color: #333;
       margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #2b1055, #7597de);
-      color: #fff;
+      padding: 0;
+      text-align: center;
     }
     header {
-      background: rgba(0, 0, 0, 0.3);
-      padding: 15px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      background-color: #004080;
+      color: white;
+      padding: 20px;
     }
     header h1 {
-      font-size: 20px;
       margin: 0;
     }
-    nav a {
-      margin-left: 15px;
-      text-decoration: none;
-      color: #fff;
-      font-weight: 600;
-    }
-    .container {
-      max-width: 700px;
+    form {
+      max-width: 600px;
       margin: 30px auto;
       padding: 20px;
-    }
-    .card {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 20px;
-    }
-    h2 {
-      text-align: center;
-      margin-bottom: 15px;
-      font-size: 26px;
-    }
-    .pricing {
-      display: grid;
-      gap: 15px;
-    }
-    .plan {
-      background: rgba(0, 0, 0, 0.2);
-      padding: 15px;
+      background: #f9f9f9;
       border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      text-align: left;
     }
-    .plan h3 {
-      margin: 0;
-      font-size: 18px;
-      color: #ffd369;
-    }
-    .plan p {
-      margin: 5px 0;
-      font-size: 14px;
-    }
-    form label {
+    label {
+      font-weight: bold;
       display: block;
       margin-top: 15px;
-      font-weight: 600;
     }
-    form input, form textarea, form select {
+    input, textarea, select {
       width: 100%;
       padding: 10px;
       margin-top: 5px;
-      border-radius: 8px;
-      border: none;
-      outline: none;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
     }
-    form button {
+    button {
       margin-top: 20px;
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 10px;
-      background: linear-gradient(to right, #6a11cb, #2575fc);
+      background-color: #004080;
       color: white;
-      font-size: 16px;
-      font-weight: 600;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
       cursor: pointer;
+      font-size: 1rem;
+    }
+    button:hover {
+      background-color: #0066cc;
+    }
+    .success-message {
+      display: none;
+      margin-top: 20px;
+      padding: 15px;
+      background: #28a745;
+      color: white;
+      border-radius: 6px;
+      text-align: center;
+    }
+    .helper-link {
+      font-size: 0.9rem;
+      margin-top: 5px;
+    }
+    .helper-link a {
+      color: #0073e6;
+      text-decoration: none;
     }
   </style>
 </head>
 <body>
+
   <header>
-    <h1>FindMyHustle</h1>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="browse.html">Browse</a>
-    </nav>
+    <h1>Upload Your Hustle</h1>
   </header>
 
-  <div class="container">
-    <!-- Pricing Section -->
-    <div class="card">
-      <h2>Upload Your Product</h2>
-      <p style="text-align:center">Only <b>T-shirts, Caps, Hats</b>. Choose a plan to keep your listings live.</p>
-      <div class="pricing">
-        <div class="plan">
-          <h3>Free – Try it</h3>
-          <p>• Up to 3 active uploads</p>
-          <p>• Visible for 14 days</p>
-        </div>
-        <div class="plan">
-          <h3>Basic – R50 / month</h3>
-          <p>• Up to 10 active uploads</p>
-          <p>• Visible for 30 days</p>
-        </div>
-        <div class="plan">
-          <h3>Pro – R110 / month</h3>
-          <p>• Unlimited uploads</p>
-          <p>• Visible for 30 days</p>
-        </div>
-      </div>
-    </div>
+  <form id="uploadForm" method="POST" action="https://script.google.com/macros/s/AKfycbzBDKwaadjYO92Ra7kasLpKfYb33-EGMSkyDfI4ljCna39sdRP5rc-OXXzNboTRp6ox/exec">
+    <label for="name">Full Name</label>
+    <input type="text" id="name" name="Name" required>
 
-    <!-- Upload Form -->
-    <div class="card">
-      <form id="uploadForm" method="POST" action="https://script.google.com/macros/s/AKfycbwVrTMSJ_h_yBj4KFnK2vxE6xr62aTst6ZJ0Ze2CkLLYMRYrkPFOKhZxe_f_ItXXztx/exec">
-        <label>Owner Name</label>
-        <input type="text" name="Owner Name" placeholder="Your full name" required>
+    <label for="product">Product Name</label>
+    <input type="text" id="product" name="Product" placeholder="e.g. T-Shirt, Cap, Hat" required>
 
-        <label>Email</label>
-        <input type="email" name="Email" placeholder="you@example.com" required>
+    <label for="price">Price (Rands)</label>
+    <input type="number" id="price" name="Price" required>
 
-        <label>Phone</label>
-        <input type="tel" name="Phone" placeholder="072 000 0000" required>
+    <label for="description">Description</label>
+    <textarea id="description" name="Description" rows="4" placeholder="Include details: quantity, sizes, colors, materials etc." required></textarea>
 
-        <label>WhatsApp Link</label>
-        <input type="url" name="WhatsApp Link" placeholder="https://wa.me/27xxxxxxxxx" required>
+    <label for="image">Image URL</label>
+    <input type="url" id="image" name="Image" placeholder="Paste your image URL here" required>
+    <p class="helper-link">Need help uploading an image? <a href="https://imgbb.com/" target="_blank">Click here to upload on imgbb</a></p>
 
-        <label>Province</label>
-        <input type="text" name="Province" placeholder="e.g. Gauteng" required>
+    <label for="location">City</label>
+    <input type="text" id="location" name="City" required>
 
-        <label>City</label>
-        <input type="text" name="City" placeholder="e.g. Johannesburg" required>
+    <label for="province">Province</label>
+    <select id="province" name="Province" required>
+      <option value="">Select Province</option>
+      <option value="Gauteng">Gauteng</option>
+      <option value="KwaZulu-Natal">KwaZulu-Natal</option>
+      <option value="Western Cape">Western Cape</option>
+      <option value="Eastern Cape">Eastern Cape</option>
+      <option value="Limpopo">Limpopo</option>
+      <option value="Mpumalanga">Mpumalanga</option>
+      <option value="Free State">Free State</option>
+      <option value="North West">North West</option>
+      <option value="Northern Cape">Northern Cape</option>
+    </select>
 
-        <label>Product Type</label>
-        <select name="Product Type" required>
-          <option value="">Select one</option>
-          <option value="T-shirt">T-shirt</option>
-          <option value="Cap">Cap</option>
-          <option value="Hat">Hat</option>
-        </select>
+    <label for="phone">Phone Number</label>
+    <input type="tel" id="phone" name="Phone" placeholder="e.g. 0712345678" required>
 
-        <label>Product Name</label>
-        <input type="text" name="Product Name" placeholder="e.g. Classic Logo Tee" required>
+    <label for="whatsapp">WhatsApp Link</label>
+    <input type="url" id="whatsapp" name="WhatsApp" placeholder="e.g. https://wa.me/27XXXXXXXXX" required>
+    <p class="helper-link">Need help creating a WhatsApp link? <a href="https://faq.whatsapp.com/5914529660062089/" target="_blank">Click here</a></p>
 
-        <label>Price (ZAR)</label>
-        <input type="number" name="Price (ZAR)" placeholder="e.g. 110" required>
+    <label>
+      <input type="checkbox" id="agree" required>
+      I agree to the <a href="terms.html" target="_blank">Terms & Conditions</a> and <a href="privacy.html" target="_blank">Privacy Policy</a>.
+    </label>
 
-        <label>Color</label>
-        <input type="text" name="Color" placeholder="e.g. Navy / Black">
+    <button type="submit">Submit</button>
+    <div class="success-message" id="successMessage">✅ Successfully submitted!</div>
+  </form>
 
-        <label>Size</label>
-        <input type="text" name="Size" placeholder="e.g. S–XXL / Adjustable">
+  <script>
+    const form = document.getElementById("uploadForm");
+    const successMessage = document.getElementById("successMessage");
 
-        <label>Image URL</label>
-        <input type="url" name="Image URL" placeholder="Direct image link (https://...jpg/png)" required>
+    form.addEventListener("submit", function(e) {
+      e.preventDefault(); // prevent default first
 
-        <label>Description</label>
-        <textarea name="Description" rows="3" placeholder="Short description (fabric, fit, logo, etc.)"></textarea>
+      const formData = new FormData(form);
+      fetch(form.action, {
+        method: "POST",
+        body: formData
+      })
+      .then(response => {
+        if (response.ok) {
+          successMessage.style.display = "block";
+          form.reset();
+          setTimeout(() => {
+            successMessage.style.display = "none";
+          }, 4000);
+        } else {
+          alert("❌ Submission failed. Please try again.");
+        }
+      })
+      .catch(() => {
+        alert("⚠️ Network error. Please check your internet and try again.");
+      });
+    });
+  </script>
 
-        <label>Plan</label>
-        <select name="Plan" required>
-          <option value="Free">Free (3 uploads, 14 days)</option>
-          <option value="Basic">Basic – R50/month</option>
-          <option value="Pro">Pro – R110/month</option>
-        </select>
-
-        <button type="submit">Submit Listing</button>
-      </form>
-    </div>
-  </div>
 </body>
 </html>
