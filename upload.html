@@ -1,164 +1,206 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Upload | FindMyHustle</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #ffffff;
-      color: #333;
-      margin: 0;
-      padding: 0;
-      text-align: center;
-    }
-    header {
-      background-color: #004080;
-      color: white;
-      padding: 20px;
-    }
-    header h1 {
-      margin: 0;
-    }
-    form {
-      max-width: 600px;
-      margin: 30px auto;
-      padding: 20px;
-      background: #f9f9f9;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      text-align: left;
-    }
-    label {
-      font-weight: bold;
-      display: block;
-      margin-top: 15px;
-    }
-    input, textarea, select {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 1rem;
-    }
-    button {
-      margin-top: 20px;
-      background-color: #004080;
-      color: white;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 1rem;
-    }
-    button:hover {
-      background-color: #0066cc;
-    }
-    .success-message {
-      display: none;
-      margin-top: 20px;
-      padding: 15px;
-      background: #28a745;
-      color: white;
-      border-radius: 6px;
-      text-align: center;
-    }
-    .helper-link {
-      font-size: 0.9rem;
-      margin-top: 5px;
-    }
-    .helper-link a {
-      color: #0073e6;
-      text-decoration: none;
-    }
-  </style>
-</head>
-<body>
+<!DOCTYPE html>  <html lang="en">  
+<head>  
+<meta charset="UTF-8" />  
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>  
+<title>Upload Product – FindMyHustle</title>  
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">  
+<style>  
+  :root{  
+    --bg1:#0f0c29; --bg2:#302b63; --bg3:#24243e;  
+    --btn1:#a855f7; --btn2:#3b82f6;  
+    --card:rgba(255,255,255,0.12);  
+    --text:#fff;  
+  }  
+  body{  
+    margin:0; font-family:'Poppins',sans-serif;  
+    background: linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3));  
+    color:var(--text);  
+  }  
+  nav{display:flex;justify-content:space-between;align-items:center;background:#0008;padding:1rem 2rem}  
+  nav a{color:#fff;text-decoration:none;margin:0 1rem;font-weight:600}  
+  main{max-width:980px;margin:30px auto;padding:0 16px}  
+  h1{margin:18px 0 8px;font-size:2rem}  
+  .grid{display:grid;grid-template-columns:1fr;gap:16px}  
+  @media(min-width:900px){.grid{grid-template-columns:1fr 1fr}}  
+  .card{background:var(--card);border-radius:14px;padding:18px 16px}  
+  .card h2{margin:4px 0 12px}  
+  .plan{display:grid;grid-template-columns:1fr;gap:12px}  
+  .plan .p{background:rgba(255,255,255,0.08);border-radius:12px;padding:12px}  
+  .badge{display:inline-block;padding:4px 10px;border-radius:999px;background:#ffffff1a;margin-left:8px;font-size:.8rem}  
+  .btn{display:inline-block;background:linear-gradient(90deg,var(--btn1),var(--btn2));color:#fff;border:none;border-radius:10px;padding:12px 18px;font-weight:700;cursor:pointer;text-decoration:none}  
+  .btn.block{display:block;width:100%;text-align:center}  
+  label{display:block;font-weight:600;margin:10px 0 6px}  
+  input,select,textarea{  
+    width:100%;padding:11px;border-radius:10px;border:1px solid #ffffff2a;background:#ffffff12;color:#fff  
+  }  
+  input::placeholder,textarea::placeholder{color:#ddd}  
+  textarea{min-height:90px;resize:vertical}  
+  .hint{font-size:.9rem;color:#e5e5e5}  
+  .note{background:#ffe08a22;color:#ffd26e;border:1px dashed #ffd26e;padding:10px;border-radius:10px;margin-top:8px}  
+  .msg{margin-top:12px;padding:12px;border-radius:10px;display:none}  
+  .msg.ok{background:#16a34a33;border:1px solid #16a34a}  
+  .msg.err{background:#ef444433;border:1px solid #ef4444}  
+  .helper{position:fixed;right:16px;bottom:16px}  
+  .helper .circle{  
+    width:54px;height:54px;border-radius:50%;  
+    background:linear-gradient(90deg,var(--btn1),var(--btn2));  
+    display:grid;place-items:center;font-size:24px;cursor:pointer;box-shadow:0 10px 25px #0006;  
+  }  
+  .modal{  
+    position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;padding:16px;z-index:99  
+  }  
+  .modal .box{max-width:560px;background:#fff;color:#111;border-radius:14px;padding:18px}  
+  .box h3{margin:0 0 8px}  
+  .box p{margin:8px 0}  
+  .close{background:#111;color:#fff;border:none;border-radius:8px;padding:8px 12px;cursor:pointer}  
+</style>  
+</head>  
+<body>  
+  <nav>  
+    <div><strong>FindMyHustle</strong></div>  
+    <div>  
+      <a href="index.html">Home</a>  
+      <a href="browse.html">Browse</a>  
+      <a href="create-cv.html">Create CV</a>  
+    </div>  
+  </nav>    <main>  
+    <h1>Upload Your Product</h1>  
+    <p class="hint">Only <strong>T-shirts, Caps, Hats</strong>. Choose a plan to keep your listings live.</p>  <div class="grid">  
+  <!-- Pricing side -->  
+  <section class="card">  
+    <h2>Pricing</h2>  
+    <div class="plan">  
+      <div class="p">  
+        <strong>Free</strong><span class="badge">Try it</span>  
+        <div>• Up to 3 active uploads</div>  
+        <div>• Visible for 14 days</div>  
+      </div>  
+      <div class="p">  
+        <strong>Basic – R50 / month</strong>  
+        <div>• Up to 10 active uploads</div>  
+        <div>• Visible for 30 days</div>  
+      </div>  
+      <div class="p">  
+        <strong>Pro – R110 / month</strong><span class="badge">Best</span>  
+        <div>• Unlimited uploads</div>  
+        <div>• Visible for 30 days</div>  
+      </div>  
+    </div>  
+    <div class="note">If you hit your plan limit, the form will tell you to upgrade before accepting more uploads.</div>  
+  </section>  
 
-  <header>
-    <h1>Upload Your Hustle</h1>
-  </header>
+  <!-- Form side -->  
+  <section class="card">  
+    <h2>New Listing</h2>  
+    <form id="uploadForm">  
+      <label>Owner Name</label>  
+      <input name="Owner Name" placeholder="Your name or brand" required>  
 
-  <form id="uploadForm" method="POST" action="https://script.google.com/macros/s/AKfycbzBDKwaadjYO92Ra7kasLpKfYb33-EGMSkyDfI4ljCna39sdRP5rc-OXXzNboTRp6ox/exec">
-    <label for="name">Full Name</label>
-    <input type="text" id="name" name="Name" required>
+      <label>Email</label>  
+      <input name="Email" type="email" placeholder="you@example.com" required>  
 
-    <label for="product">Product Name</label>
-    <input type="text" id="product" name="Product" placeholder="e.g. T-Shirt, Cap, Hat" required>
+      <label>Phone</label>  
+      <input name="Phone" type="tel" placeholder="+27 ..." required>  
 
-    <label for="price">Price (Rands)</label>
-    <input type="number" id="price" name="Price" required>
+      <label>WhatsApp Link</label>  
+      <input name="WhatsApp Link" type="url" placeholder="https://wa.me/27..." required>  
 
-    <label for="description">Description</label>
-    <textarea id="description" name="Description" rows="4" placeholder="Include details: quantity, sizes, colors, materials etc." required></textarea>
+      <label>Province</label>  
+      <input name="Province" placeholder="e.g. North West" required>  
 
-    <label for="image">Image URL</label>
-    <input type="url" id="image" name="Image" placeholder="Paste your image URL here" required>
-    <p class="helper-link">Need help uploading an image? <a href="https://imgbb.com/" target="_blank">Click here to upload on imgbb</a></p>
+      <label>City</label>  
+      <input name="City" placeholder="e.g. Mahikeng" required>  
 
-    <label for="location">City</label>
-    <input type="text" id="location" name="City" required>
+      <label>Product Type</label>  
+      <select name="Product Type" required>  
+        <option value="">Select type</option>  
+        <option>T-shirt</option>  
+        <option>Cap</option>  
+        <option>Hat</option>  
+      </select>  
 
-    <label for="province">Province</label>
-    <select id="province" name="Province" required>
-      <option value="">Select Province</option>
-      <option value="Gauteng">Gauteng</option>
-      <option value="KwaZulu-Natal">KwaZulu-Natal</option>
-      <option value="Western Cape">Western Cape</option>
-      <option value="Eastern Cape">Eastern Cape</option>
-      <option value="Limpopo">Limpopo</option>
-      <option value="Mpumalanga">Mpumalanga</option>
-      <option value="Free State">Free State</option>
-      <option value="North West">North West</option>
-      <option value="Northern Cape">Northern Cape</option>
-    </select>
+      <label>Product Name</label>  
+      <input name="Product Name" placeholder="e.g. Classic Logo Tee" required>  
 
-    <label for="phone">Phone Number</label>
-    <input type="tel" id="phone" name="Phone" placeholder="e.g. 0712345678" required>
+      <label>Price (ZAR)</label>  
+      <input name="Price (ZAR)" type="number" min="0" step="1" placeholder="e.g. 110" required>  
 
-    <label for="whatsapp">WhatsApp Link</label>
-    <input type="url" id="whatsapp" name="WhatsApp" placeholder="e.g. https://wa.me/27XXXXXXXXX" required>
-    <p class="helper-link">Need help creating a WhatsApp link? <a href="https://faq.whatsapp.com/5914529660062089/" target="_blank">Click here</a></p>
+      <label>Color</label>  
+      <input name="Color" placeholder="e.g. Navy / Black" />  
 
-    <label>
-      <input type="checkbox" id="agree" required>
-      I agree to the <a href="terms.html" target="_blank">Terms & Conditions</a> and <a href="privacy.html" target="_blank">Privacy Policy</a>.
-    </label>
+      <label>Size</label>  
+      <input name="Size" placeholder="e.g. S–XXL / Adjustable" />  
 
-    <button type="submit">Submit</button>
-    <div class="success-message" id="successMessage">✅ Successfully submitted!</div>
-  </form>
+      <label>Image URL</label>  
+      <input name="Image URL" type="url" placeholder="Direct image link (https://...jpg/png)" required>  
 
-  <script>
-    const form = document.getElementById("uploadForm");
-    const successMessage = document.getElementById("successMessage");
+      <label>Description</label>  
+      <textarea name="Description" placeholder="Short description (fabric, fit, logo, etc.)"></textarea>  
 
-    form.addEventListener("submit", function(e) {
-      e.preventDefault(); // prevent default first
+      <label>Plan</label>  
+      <select name="Plan" required>  
+        <option value="Free">Free (3 uploads, 14 days)</option>  
+        <option value="Basic">Basic (10 uploads, 30 days)</option>  
+        <option value="Pro">Pro (Unlimited, 30 days)</option>  
+      </select>  
 
-      const formData = new FormData(form);
-      fetch(form.action, {
-        method: "POST",
-        body: formData
-      })
-      .then(response => {
-        if (response.ok) {
-          successMessage.style.display = "block";
-          form.reset();
-          setTimeout(() => {
-            successMessage.style.display = "none";
-          }, 4000);
-        } else {
-          alert("❌ Submission failed. Please try again.");
-        }
-      })
-      .catch(() => {
-        alert("⚠️ Network error. Please check your internet and try again.");
-      });
-    });
-  </script>
+      <button class="btn block" type="submit">Submit Listing</button>  
+      <div id="msgOk" class="msg ok">✅ Listing submitted.</div>  
+      <div id="msgErr" class="msg err">❌ Something went wrong.</div>  
+    </form>  
+  </section>  
+</div>
 
-</body>
-</html>
+  </main>    <!-- Umama Suzan helper -->    <div class="helper">  
+    <div class="circle" title="Umama Suzan" onclick="openHelp()">👵🏾</div>  
+  </div>    <div id="helpModal" class="modal">  
+    <div class="box">  
+      <h3>Umama Suzan</h3>  
+      <p><strong>WhatsApp link tip:</strong> use <code>https://wa.me/27XXXXXXXXX</code> (no spaces, include country code 27).</p>  
+      <p><strong>Image URL:</strong> paste a direct image link ending with <code>.jpg</code> or <code>.png</code>. If using Drive, make sure it’s publicly shareable and use a direct-view URL.</p>  
+      <p><strong>Plans:</strong> Free (3/14 days), Basic (10/30 days), Pro (Unlimited/30 days).</p>  
+      <p class="note" style="color:#111">You can upload first; if you hit your plan limit, the site will ask you to upgrade. No stress.</p>  
+      <div style="margin-top:10px;display:flex;gap:8px;justify-content:flex-end">  
+        <button class="close" onclick="closeHelp()">Close</button>  
+      </div>  
+    </div>  
+  </div>  <script>  
+  const SCRIPT_URL = "YOUR_WEB_APP_URL_HERE"; // <-- replace  
+  
+  const f = document.getElementById('uploadForm');  
+  const ok = document.getElementById('msgOk');  
+  const err = document.getElementById('msgErr');  
+  
+  f.addEventListener('submit', async (e) => {  
+    e.preventDefault();  
+    ok.style.display = 'none';  
+    err.style.display = 'none';  
+  
+    const formData = new FormData(f);  
+  
+    try {  
+      const res = await fetch(SCRIPT_URL, { method:'POST', body: formData });  
+      const data = await res.json().catch(()=>({status:'ok'}));  
+  
+      if (data.status === 'success') {  
+        ok.textContent = `✅ Listing submitted. Visible until ${data.expiry} (${data.plan}).`;  
+        ok.style.display = 'block';  
+        f.reset();  
+      } else if (data.status === 'limit') {  
+        err.textContent = data.message || "Plan limit reached.";  
+        err.style.display = 'block';  
+      } else {  
+        err.textContent = data.message || "Something went wrong.";  
+        err.style.display = 'block';  
+      }  
+    } catch (e) {  
+      err.textContent = "Network error. Try again.";  
+      err.style.display = 'block';  
+    }  
+  });  
+  
+  function openHelp(){ document.getElementById('helpModal').style.display='flex'; }  
+  function closeHelp(){ document.getElementById('helpModal').style.display='none'; }  
+</script>  </body>  
+</html>  This I how I want my upload.html to look like and the Browse but don't remove their functions accordingly
+
