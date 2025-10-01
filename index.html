@@ -1,213 +1,469 @@
+<!-- save as poster-studio.html and open in browser -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Multi-Section Program Creator</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Poster Studio — Create Programs & Posters</title>
+
+<!-- html2canvas for download/export -->
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
 <style>
-body {
-  font-family: Arial, sans-serif;
-  margin: 0; padding: 0;
-  background: linear-gradient(135deg, #6a0dad, #1e90ff);
-  color: #fff;
-}
-header { text-align:center; padding:40px 20px; }
-header h1 { margin:0; font-size:2rem; }
-.container { max-width:1000px; margin:0 auto; padding:20px; }
-.section { background-color: rgba(255,255,255,0.1); padding:20px; border-radius:12px; margin-bottom:20px; }
-label { display:block; margin-top:10px; font-weight:bold; }
-input, select, textarea { width:100%; padding:8px; margin-top:5px; border-radius:6px; border:none; font-size:1rem; }
-textarea { resize:vertical; }
-button { padding:12px 25px; margin-top:15px; font-size:1rem; border-radius:8px; border:none; cursor:pointer; background-color:#fff; color:#6a0dad; font-weight:bold; transition:0.3s; }
-button:hover { background-color:#6a0dad; color:#fff; }
-.preview { background-color: rgba(0,0,0,0.3); padding:20px; border-radius:12px; margin-top:10px; }
-.preview h2, .preview h3 { margin:10px 0; }
-.preview p { margin:5px 0; }
-.section-preview { border:2px dashed #fff; padding:10px; margin-top:10px; border-radius:8px; cursor:text; }
+  :root{
+    --card-radius:16px;
+    --accent1:#6a0dad;
+    --accent2:#1e90ff;
+    --muted: rgba(255,255,255,0.85);
+    --glass: rgba(255,255,255,0.08);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background: linear-gradient(135deg,var(--accent1),var(--accent2));
+    color: white;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+  header{
+    padding:28px 18px;
+    text-align:center;
+  }
+  header h1{margin:0;font-size:1.6rem;letter-spacing:0.2px}
+  header p{margin:8px 0 0;color:rgba(255,255,255,0.9)}
+
+  .wrap{
+    max-width:1100px;
+    margin:20px auto;
+    padding:0 16px 80px;
+    display:grid;
+    grid-template-columns: 380px 1fr;
+    gap:18px;
+  }
+
+  /* left column (controls) */
+  .controls{
+    background:var(--glass);
+    padding:14px;
+    border-radius:var(--card-radius);
+    backdrop-filter: blur(6px) saturate(120%);
+  }
+  .controls h3{margin:6px 0 10px;font-size:1rem}
+  label{display:block;font-weight:600;margin-top:10px;font-size:0.85rem}
+  select,input,textarea{
+    width:100%;
+    padding:10px;
+    margin-top:6px;border-radius:10px;border:none;
+    background: rgba(255,255,255,0.06); color:var(--muted); font-size:0.95rem;
+  }
+  textarea{min-height:80px; resize:vertical}
+  .small{font-size:0.85rem;padding:8px}
+
+  .templates {
+    display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;
+  }
+  .tmpl-thumb{
+    width:96px; height:128px; border-radius:10px; overflow:hidden; cursor:pointer;
+    border:2px solid transparent; box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+    background:white; color:#222; display:flex; align-items:center; justify-content:center;
+    font-size:12px; text-align:center; padding:8px;
+  }
+  .tmpl-thumb.active{ border-color: rgba(255,255,255,0.85); transform:scale(1.03) }
+
+  .btn-row{display:flex; gap:8px; margin-top:12px; flex-wrap:wrap}
+  .btn{flex:1; padding:10px; border-radius:10px; border:none; cursor:pointer; font-weight:700}
+  .btn.primary{ background: white; color: var(--accent1) }
+  .btn.ghost{ background: transparent; color: white; border:1px solid rgba(255,255,255,0.12) }
+
+  .note{font-size:0.82rem; color:rgba(255,255,255,0.85); margin-top:10px}
+
+  /* right column (preview) */
+  .preview-area{
+    display:flex; flex-direction:column; gap:12px;
+  }
+  .program-canvas{
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    padding:22px;
+    border-radius:12px;
+    min-height:420px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    overflow:auto;
+  }
+  .program-title{ font-size:1rem; opacity:0.95; margin:0 0 8px; color:rgba(255,255,255,0.95) }
+
+  .section-block{
+    background: white;
+    color:#111;
+    border-radius:12px;
+    padding:14px;
+    margin:10px 0;
+  }
+  /* template styles (3) */
+  .tmpl-style-1 .section-block{ background: linear-gradient(180deg,#fff,#f7f7ff); box-shadow: 0 8px 18px rgba(20,20,60,0.06) }
+  .tmpl-style-1 .title { font-family: Georgia, "Times New Roman", serif; font-size:20px; color:var(--accent1); margin-bottom:6px }
+  .tmpl-style-1 .meta{ color:#555; font-size:0.9rem }
+
+  .tmpl-style-2 .section-block{ background:#0b1220; color:#fff; border: 1px solid rgba(255,255,255,0.04) }
+  .tmpl-style-2 .title{ font-weight:800; font-size:18px; color:var(--accent2) }
+  .tmpl-style-2 .meta{ color:rgba(255,255,255,0.85) }
+
+  .tmpl-style-3 .section-block{ background: #fff7ed; color:#333; border-left:6px solid var(--accent1) }
+  .tmpl-style-3 .title{ font-weight:700; color: #7a2aa6 }
+  .tmpl-style-3 .meta{ color:#444 }
+
+  /* text editable */
+  [contenteditable]{ outline: none; }
+  .editable{ padding:4px; border-radius:6px; min-height:26px }
+
+  /* small helpers */
+  .row { display:flex; gap:8px; align-items:center }
+  .small-btn{ padding:8px 10px; border-radius:8px; border:none; cursor:pointer; background:rgba(255,255,255,0.08); color:var(--muted) }
+
+  /* responsive */
+  @media (max-width:980px){
+    .wrap{ grid-template-columns: 1fr; padding-bottom:60px }
+    .controls{ order:2 }
+    .preview-area{ order:1 }
+  }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>Multi-Section Program Creator</h1>
+  <h1>Poster Studio</h1>
+  <p>Create wedding programs, funeral programs, menus & event posters — fast, in multiple languages.</p>
 </header>
 
-<div class="container">
-  <div class="section">
-    <label for="section-type">Choose Section Type</label>
-    <select id="section-type">
-      <option value="obituary">🕊️ Obituary</option>
+<div class="wrap">
+  <!-- CONTROLS -->
+  <aside class="controls">
+    <h3>Add section to your program</h3>
+
+    <label>Choose category</label>
+    <select id="category">
       <option value="wedding">💍 Wedding Program</option>
+      <option value="obituary">🕊️ Funeral / Obituary</option>
       <option value="family">👨‍👩‍👧 Family Gathering</option>
       <option value="restaurant">🍽️ Restaurant Menu</option>
       <option value="event">🎉 Event Poster</option>
     </select>
 
-    <label for="template">Choose Template</label>
-    <select id="template">
-      <option value="template1">Template 1</option>
-      <option value="template2">Template 2</option>
-      <option value="template3">Template 3</option>
-    </select>
+    <label>Choose template style</label>
+    <div class="templates" id="template-list">
+      <div class="tmpl-thumb active" data-tmpl="tmpl-style-1">Classic<br>Elegant</div>
+      <div class="tmpl-thumb" data-tmpl="tmpl-style-2">Dark<br>Bold</div>
+      <div class="tmpl-thumb" data-tmpl="tmpl-style-3">Modern<br>Accent</div>
+    </div>
 
-    <label for="language">Choose Language</label>
+    <label>Language</label>
     <select id="language">
       <option value="english">English</option>
-      <option value="zulu">Zulu</option>
-      <option value="tswana">Tswana</option>
+      <option value="zulu">Zulu (isiZulu)</option>
+      <option value="xhosa">Xhosa (isiXhosa)</option>
+      <option value="tswana">Tswana (Setswana)</option>
+      <option value="sotho">Sotho (Sesotho)</option>
+      <option value="venda">Venda (TshiVenda)</option>
+      <option value="tsonga">Tsonga (Xitsonga)</option>
       <option value="afrikaans">Afrikaans</option>
-      <option value="xhosa">Xhosa</option>
-      <option value="sotho">Sotho</option>
-      <option value="venda">Venda</option>
-      <option value="tsonga">Tsonga</option>
       <option value="sepedi">Sepedi</option>
-      <option value="swati">Swati</option>
-      <option value="ndebele">Ndebele</option>
+      <option value="swati">Swati (siSwati)</option>
+      <option value="ndebele">Ndebele (isiNdebele)</option>
     </select>
-  </div>
 
-  <div class="section" id="form-section">
-    <!-- Dynamic form will appear here -->
-  </div>
+    <div id="form-area">
+      <!-- dynamic forms inserted here -->
+    </div>
 
-  <button id="add-section">Add Section</button>
+    <div class="btn-row">
+      <button id="add-section-btn" class="btn primary">Add Section</button>
+      <button id="clear-btn" class="btn ghost">Clear All</button>
+    </div>
 
-  <div class="section">
-    <h2>Program Preview</h2>
-    <div id="program-preview"></div>
-  </div>
+    <p class="note">Tip: after adding a section you can click any preview text to edit directly. Rearrange sections later (coming soon).</p>
+    <div style="margin-top:10px; display:flex; gap:8px;">
+      <button id="download-btn" class="btn primary">Download Program (PNG)</button>
+      <button id="print-btn" class="btn ghost">Print</button>
+    </div>
+  </aside>
+
+  <!-- PREVIEW -->
+  <main class="preview-area">
+    <div style="display:flex; justify-content:space-between; align-items:center">
+      <h2 class="program-title">Program Preview</h2>
+      <div style="display:flex; gap:8px; align-items:center">
+        <button id="remove-last" class="small-btn">Remove Last</button>
+        <button id="clear-all" class="small-btn">Clear</button>
+      </div>
+    </div>
+
+    <div id="program-canvas" class="program-canvas tmpl-style-1" aria-live="polite">
+      <!-- Sections added here -->
+      <p style="color:rgba(255,255,255,0.7)">No sections yet — add a section on the left to begin building your program.</p>
+    </div>
+  </main>
 </div>
 
 <script>
-const sectionTypeSelect = document.getElementById('section-type');
-const templateSelect = document.getElementById('template');
-const languageSelect = document.getElementById('language');
-const formSection = document.getElementById('form-section');
-const programPreview = document.getElementById('program-preview');
-const addSectionBtn = document.getElementById('add-section');
-
-const languageMap = {
-  english: { obituary: "In Loving Memory", wedding:"Wedding Program", family:"Family Gathering", restaurant:"Menu", event:"Event Poster", survived:"Survived by" },
-  zulu: { obituary:"Sikhumbuzo Esithandekayo", wedding:"Uhlelo Lomshado", family:"Umndeni", restaurant:"Imenyu", event:"Isikhangiso Somcimbi", survived:"Usashiywe ngabani" },
-  tswana:{ obituary:"Ka Lerato le Legolo", wedding:"Lenaneo la Lenyalo", family:"Lelapa", restaurant:"Lenaneo la dijo", event:"Poster ya Ketsahalo", survived:"O siile morago…" },
-  afrikaans:{ obituary:"In Liefdevolle Herinnering", wedding:"Huwelik Program", family:"Familie", restaurant:"Spyskaart", event:"Event Plakkaat", survived:"Oorgebly deur" },
-  xhosa:{ obituary:"Ngokuthanda Okukhulu", wedding:"Inkqubo yomtshato", family:"Usapho", restaurant:"Imenyu", event:"Isimemo Somcimbi", survived:"Ushiywe ngubani" },
-  sotho:{ obituary:"Ka Lerato le Kgolo", wedding:"Lenaneo la Lenyalo", family:"Lelapa", restaurant:"Lenaneo la dijo", event:"Poster ya Ketsahalo", survived:"O siile morago…" },
-  venda:{ obituary:"Nga Lufuno Lukhulu", wedding:"Program ya Mutshelo", family:"Mhuri", restaurant:"Menu", event:"Tshikosi", survived:"O sivalela hani" },
-  tsonga:{ obituary:"Hi Rirhandzu Lerikulu", wedding:"Ntirho wa Vutsi", family:"Ndyangu", restaurant:"Xikolo xa Swihlawulelo", event:"Xikombelo xa Xiboho", survived:"U tshameke na" },
-  sepedi:{ obituary:"Ka Lerato Le Legolo", wedding:"Lenaneo la Lenyalo", family:"Lelapa", restaurant:"Lenaneo la dijo", event:"Poster ya Ketsahalo", survived:"O tlogetše ke" },
-  swati:{ obituary:"Ngokuthandeka Kakhulu", wedding:"Uhlelo Lomshado", family:"Umndeni", restaurant:"Imenyu", event:"Isikhangiso Somcimbi", survived:"Usashiywe ngubani" },
-  ndebele:{ obituary:"Ngothando Olukhulu", wedding:"Uhlelo Lomshado", family:"Umndeni", restaurant:"Imenyu", event:"Isimemo Somcimbi", survived:"Usalindwe ngabani" }
+/* -------- language defaults for key labels -------- */
+const languageText = {
+  english: { obituary: "In Loving Memory", survived: "Survived by", wedding: "Wedding Program", family: "Family Gathering", restaurant: "Menu", event: "Event Poster" },
+  zulu: { obituary: "Sikhumbuzo Esithandekayo", survived: "Usashiywe ngabani", wedding: "Uhlelo Lomshado", family: "Umndeni", restaurant: "Imenyu", event: "Isikhangiso Somcimbi" },
+  xhosa: { obituary: "Ngokuthanda Okukhulu", survived: "Ushiywe ngubani", wedding:"Inkqubo yomtshato", family:"Usapho", restaurant:"Imenyu", event:"Isimemo Somcimbi" },
+  tswana: { obituary: "Ka Lerato le Legolo", survived: "O siile morago…", wedding:"Lenaneo la Lenyalo", family:"Lelapa", restaurant:"Lenaneo la dijo", event:"Poster ya Ketsahalo" },
+  sotho: { obituary: "Ka Lerato le Kgolo", survived: "O siile morago…", wedding:"Lenaneo la Lenyalo", family:"Lelapa", restaurant:"Lenaneo la dijo", event:"Poster ya Ketsahalo" },
+  venda: { obituary: "Nga Lufuno Lukhulu", survived: "O sivalela hani", wedding:"Program ya Mutshelo", family:"Mhuri", restaurant:"Menu", event:"Tshikosi" },
+  tsonga: { obituary: "Hi Rirhandzu Lerikulu", survived: "U tshameke na", wedding:"Ntirho wa Vutsi", family:"Ndyangu", restaurant:"Xikolo xa Swihlawulelo", event:"Xikombelo xa Xiboho" },
+  afrikaans: { obituary: "In Liefdevolle Herinnering", survived: "Oorgebly deur", wedding:"Huwelik Program", family:"Familie", restaurant:"Spyskaart", event:"Event Plakkaat" },
+  sepedi: { obituary: "Ka Lerato Le Legolo", survived: "O tlogetše ke", wedding:"Lenaneo la Lenyalo", family:"Lelapa", restaurant:"Lenaneo la dijo", event:"Poster ya Ketsahalo" },
+  swati: { obituary: "Ngokuthandeka Kakhulu", survived: "Usashiywe ngubani", wedding:"Uhlelo Lomshado", family:"Umndeni", restaurant:"Imenyu", event:"Isikhangiso Somcimbi" },
+  ndebele: { obituary: "Ngothando Olukhulu", survived: "Usalindwe ngabani", wedding:"Uhlelo Lomshado", family:"Umndeni", restaurant:"Imenyu", event:"Isimemo Somcimbi" }
 };
 
-// Function to render dynamic form based on section type
-function renderForm() {
-  const type = sectionTypeSelect.value;
-  const lang = languageSelect.value;
-  const texts = languageMap[lang] || languageMap['english'];
+/* -------- elements -------- */
+const categoryEl = document.getElementById('category');
+const templateThumbs = Array.from(document.querySelectorAll('.tmpl-thumb'));
+const languageEl = document.getElementById('language');
+const formArea = document.getElementById('form-area');
+const addBtn = document.getElementById('add-section-btn');
+const programCanvas = document.getElementById('program-canvas');
+const downloadBtn = document.getElementById('download-btn');
+const printBtn = document.getElementById('print-btn');
+const clearAllBtn = document.getElementById('clear-btn');
+const removeLastBtn = document.getElementById('remove-last');
+const clearAllTop = document.getElementById('clear-all');
+
+/* track chosen template class */
+let chosenTemplateClass = 'tmpl-style-1';
+
+/* highlight template thumbs click */
+templateThumbs.forEach(t => {
+  t.addEventListener('click', () => {
+    templateThumbs.forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    chosenTemplateClass = t.dataset.tmpl;
+    programCanvas.className = 'program-canvas ' + chosenTemplateClass;
+  });
+});
+
+/* render dynamic form based on category */
+function renderForm(){
+  const cat = categoryEl.value;
+  const lang = languageEl.value;
+  const texts = languageText[lang] || languageText.english;
   let html = '';
 
-  if(type === 'obituary'){
+  if(cat === 'obituary'){
     html = `
-      <label>Name</label><input type="text" id="name" placeholder="Full Name">
-      <label>Date of Birth – Date of Death</label><input type="text" id="dates" placeholder="DD/MM/YYYY – DD/MM/YYYY">
-      <label>Survived By</label><input type="text" id="survived" placeholder="Spouse, Children">
-      <label>Funeral Details</label><textarea id="funeral" rows="3" placeholder="Service details"></textarea>
+      <label>Full name</label><input id="fld-name" placeholder="Full name (e.g. John Doe)">
+      <label>Date of birth – date of death</label><input id="fld-dates" placeholder="DD/MM/YYYY – DD/MM/YYYY">
+      <label>${texts.survived}</label><input id="fld-survived" placeholder="E.g. Wife, 3 children">
+      <label>Funeral details (date/time/venue)</label><textarea id="fld-funeral"></textarea>
+      <label>Optional short tribute / message</label><textarea id="fld-tribute"></textarea>
     `;
-  } else if(type === 'wedding'){
+  } else if(cat === 'wedding'){
     html = `
-      <label>Bride Name</label><input type="text" id="bride" placeholder="Bride Name">
-      <label>Groom Name</label><input type="text" id="groom" placeholder="Groom Name">
-      <label>Date</label><input type="text" id="date" placeholder="DD/MM/YYYY">
-      <label>Venue</label><input type="text" id="venue" placeholder="Venue">
-      <label>Order of Service</label><textarea id="service" rows="3"></textarea>
+      <label>Bride name</label><input id="fld-bride" placeholder="Bride full name">
+      <label>Groom name</label><input id="fld-groom" placeholder="Groom full name">
+      <label>Date</label><input id="fld-wdate" placeholder="DD/MM/YYYY">
+      <label>Venue</label><input id="fld-wvenue" placeholder="Venue">
+      <label>Order of service / program</label><textarea id="fld-order"></textarea>
     `;
-  } else if(type === 'family'){
+  } else if(cat === 'family'){
     html = `
-      <label>Event Name</label><input type="text" id="eventName" placeholder="Family Gathering Name">
-      <label>Date</label><input type="text" id="date" placeholder="DD/MM/YYYY">
-      <label>Venue</label><input type="text" id="venue" placeholder="Venue">
-      <label>Message</label><textarea id="message" rows="3"></textarea>
+      <label>Title (e.g. Family Reunion)</label><input id="fld-f-title" placeholder="Event title">
+      <label>Date</label><input id="fld-f-date" placeholder="DD/MM/YYYY">
+      <label>Venue</label><input id="fld-f-venue" placeholder="Venue">
+      <label>Message / details</label><textarea id="fld-f-message"></textarea>
     `;
-  } else if(type === 'restaurant'){
+  } else if(cat === 'restaurant'){
     html = `
-      <label>Dish Name</label><input type="text" id="dish" placeholder="Dish Name">
-      <label>Price</label><input type="text" id="price" placeholder="Price">
-      <label>Section</label><input type="text" id="section" placeholder="Starters/Main/Dessert">
+      <label>Section name (e.g. Starters)</label><input id="fld-sec" placeholder="Starters / Main / Desserts">
+      <label>Dish name</label><input id="fld-dish" placeholder="Dish name">
+      <label>Price (e.g. R45)</label><input id="fld-price" placeholder="Price">
+      <label>Notes / description</label><textarea id="fld-desc"></textarea>
     `;
-  } else if(type === 'event'){
+  } else if(cat === 'event'){
     html = `
-      <label>Event Name</label><input type="text" id="eventName" placeholder="Event Name">
-      <label>Date</label><input type="text" id="date" placeholder="DD/MM/YYYY">
-      <label>Venue</label><input type="text" id="venue" placeholder="Venue">
-      <label>Details</label><textarea id="details" rows="3"></textarea>
-    `;
-  }
-  formSection.innerHTML = html;
-}
-
-// Function to add section to program preview
-function addSection() {
-  const type = sectionTypeSelect.value;
-  const template = templateSelect.value;
-  const lang = languageSelect.value;
-  const texts = languageMap[lang] || languageMap['english'];
-  let sectionDiv = document.createElement('div');
-  sectionDiv.classList.add('section-preview');
-
-  if(type === 'obituary'){
-    sectionDiv.innerHTML = `
-      <h3 contenteditable="true">${texts.obituary}</h3>
-      <p contenteditable="true">${document.getElementById('name').value || 'Full Name'}</p>
-      <p contenteditable="true">${document.getElementById('dates').value || 'DOB – DOD'}</p>
-      <p contenteditable="true">${texts.survived} ${document.getElementById('survived').value || '…'}</p>
-      <p contenteditable="true">${document.getElementById('funeral').value || 'Funeral Details'}</p>
-    `;
-  } else if(type === 'wedding'){
-    sectionDiv.innerHTML = `
-      <h3 contenteditable="true">${texts.wedding}</h3>
-      <p contenteditable="true">Bride: ${document.getElementById('bride').value || ''}</p>
-      <p contenteditable="true">Groom: ${document.getElementById('groom').value || ''}</p>
-      <p contenteditable="true">Date: ${document.getElementById('date').value || ''}</p>
-      <p contenteditable="true">Venue: ${document.getElementById('venue').value || ''}</p>
-      <p contenteditable="true">Order: ${document.getElementById('service').value || ''}</p>
-    `;
-  } else if(type === 'family'){
-    sectionDiv.innerHTML = `
-      <h3 contenteditable="true">${texts.family}</h3>
-      <p contenteditable="true">${document.getElementById('eventName').value || 'Event Name'}</p>
-      <p contenteditable="true">Date: ${document.getElementById('date').value || ''}</p>
-      <p contenteditable="true">Venue: ${document.getElementById('venue').value || ''}</p>
-      <p contenteditable="true">${document.getElementById('message').value || ''}</p>
-    `;
-  } else if(type === 'restaurant'){
-    sectionDiv.innerHTML = `
-      <h3 contenteditable="true">${texts.restaurant}</h3>
-      <p contenteditable="true">Dish: ${document.getElementById('dish').value || ''}</p>
-      <p contenteditable="true">Price: ${document.getElementById('price').value || ''}</p>
-      <p contenteditable="true">Section: ${document.getElementById('section').value || ''}</p>
-    `;
-  } else if(type === 'event'){
-    sectionDiv.innerHTML = `
-      <h3 contenteditable="true">${texts.event}</h3>
-      <p contenteditable="true">${document.getElementById('eventName').value || 'Event Name'}</p>
-      <p contenteditable="true">Date: ${document.getElementById('date').value || ''}</p>
-      <p contenteditable="true">Venue: ${document.getElementById('venue').value || ''}</p>
-      <p contenteditable="true">${document.getElementById('details').value || ''}</p>
+      <label>Event title</label><input id="fld-e-title" placeholder="Event title">
+      <label>Date</label><input id="fld-e-date" placeholder="DD/MM/YYYY">
+      <label>Venue</label><input id="fld-e-venue" placeholder="Venue">
+      <label>Details / lineup</label><textarea id="fld-e-details"></textarea>
     `;
   }
 
-  programPreview.appendChild(sectionDiv);
+  formArea.innerHTML = html;
 }
 
-// Event listeners
-sectionTypeSelect.addEventListener('change', renderForm);
-languageSelect.addEventListener('change', renderForm);
-addSectionBtn.addEventListener('click', addSection);
+/* create a section block DOM from form values & append to canvas */
+function buildSection(){
+  const cat = categoryEl.value;
+  const lang = languageEl.value;
+  const texts = languageText[lang] || languageText.english;
 
-// Initialize first form
-renderForm();
+  // create block wrapper
+  const wrapper = document.createElement('div');
+  wrapper.className = 'section-block';
+  wrapper.setAttribute('data-cat', cat);
+
+  // choose structure per category and use chosenTemplateClass to style via programCanvas
+  if(cat === 'obituary'){
+    const name = (document.getElementById('fld-name')?.value || 'Full name');
+    const dates = (document.getElementById('fld-dates')?.value || 'DOB – DOD');
+    const survived = (document.getElementById('fld-survived')?.value || '…');
+    const funeral = (document.getElementById('fld-funeral')?.value || 'Funeral details');
+    const tribute = (document.getElementById('fld-tribute')?.value || '');
+
+    wrapper.innerHTML = `
+      <div class="title editable" contenteditable="true">${texts.obituary}</div>
+      <div class="meta editable" contenteditable="true" style="font-weight:700;font-size:1.05rem">${name}</div>
+      <div class="meta editable" contenteditable="true">${dates}</div>
+      <div class="meta editable" contenteditable="true">${texts.survived}: ${survived}</div>
+      <div class="meta editable" contenteditable="true" style="margin-top:8px">${funeral}</div>
+      ${tribute ? `<div class="meta editable" contenteditable="true" style="margin-top:8px;font-style:italic">${tribute}</div>` : ''}
+    `;
+  } else if(cat === 'wedding'){
+    const bride = (document.getElementById('fld-bride')?.value || 'Bride');
+    const groom = (document.getElementById('fld-groom')?.value || 'Groom');
+    const date = (document.getElementById('fld-wdate')?.value || 'Date');
+    const venue = (document.getElementById('fld-wvenue')?.value || 'Venue');
+    const order = (document.getElementById('fld-order')?.value || '');
+
+    wrapper.innerHTML = `
+      <div class="title editable" contenteditable="true">${texts.wedding}</div>
+      <div class="meta editable" contenteditable="true" style="font-weight:700">${bride} & ${groom}</div>
+      <div class="meta editable" contenteditable="true">${date} — ${venue}</div>
+      ${order ? `<div class="meta editable" contenteditable="true" style="margin-top:8px">${order}</div>` : ''}
+    `;
+  } else if(cat === 'family'){
+    const title = (document.getElementById('fld-f-title')?.value || 'Family Gathering');
+    const date = (document.getElementById('fld-f-date')?.value || 'Date');
+    const venue = (document.getElementById('fld-f-venue')?.value || 'Venue');
+    const msg = (document.getElementById('fld-f-message')?.value || '');
+
+    wrapper.innerHTML = `
+      <div class="title editable" contenteditable="true">${title}</div>
+      <div class="meta editable" contenteditable="true">${date} — ${venue}</div>
+      ${msg ? `<div class="meta editable" contenteditable="true" style="margin-top:8px">${msg}</div>` : ''}
+    `;
+  } else if(cat === 'restaurant'){
+    const section = (document.getElementById('fld-sec')?.value || 'Section');
+    const dish = (document.getElementById('fld-dish')?.value || 'Dish');
+    const price = (document.getElementById('fld-price')?.value || 'Price');
+    const desc = (document.getElementById('fld-desc')?.value || '');
+
+    wrapper.innerHTML = `
+      <div class="title editable" contenteditable="true">${section}</div>
+      <div class="meta editable" contenteditable="true" style="font-weight:700">${dish} — ${price}</div>
+      ${desc ? `<div class="meta editable" contenteditable="true" style="margin-top:8px">${desc}</div>` : ''}
+    `;
+  } else if(cat === 'event'){
+    const title = (document.getElementById('fld-e-title')?.value || 'Event Title');
+    const date = (document.getElementById('fld-e-date')?.value || 'Date');
+    const venue = (document.getElementById('fld-e-venue')?.value || 'Venue');
+    const details = (document.getElementById('fld-e-details')?.value || '');
+
+    wrapper.innerHTML = `
+      <div class="title editable" contenteditable="true">${title}</div>
+      <div class="meta editable" contenteditable="true">${date} — ${venue}</div>
+      ${details ? `<div class="meta editable" contenteditable="true" style="margin-top:8px">${details}</div>` : ''}
+    `;
+  }
+
+  // Add selected template class to wrapper for internal styling, but programCanvas also has main style
+  wrapper.classList.add(chosenTemplateClass + '-block');
+  programCanvas.appendChild(wrapper);
+
+  // remove placeholder notice if present
+  const placeholder = programCanvas.querySelector('p');
+  if(placeholder) placeholder.remove();
+
+  // scroll into view
+  wrapper.scrollIntoView({behavior:'smooth', block:'end'});
+}
+
+/* download canvas as PNG using html2canvas */
+function downloadProgramPNG(){
+  // temporarily set white background for exported program (makes PNG look cleaner)
+  const oldBg = programCanvas.style.background;
+  // Clone current program canvas into a white background wrapper to ensure text colors are visible
+  const exportWrapper = programCanvas.cloneNode(true);
+  exportWrapper.style.background = '#ffffff';
+  exportWrapper.style.color = '#111';
+  exportWrapper.style.padding = '28px';
+  exportWrapper.style.borderRadius = '12px';
+  exportWrapper.style.width = programCanvas.offsetWidth + 'px';
+
+  // place off-screen
+  exportWrapper.style.position = 'fixed';
+  exportWrapper.style.left = '-9999px';
+  document.body.appendChild(exportWrapper);
+
+  html2canvas(exportWrapper, {scale:2, useCORS:true, allowTaint:true}).then(canvas=>{
+    const url = canvas.toDataURL('image/png');
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'program.png';
+    a.click();
+    exportWrapper.remove();
+  }).catch(err=>{
+    alert('Export failed: ' + err.message);
+    exportWrapper.remove();
+  });
+}
+
+/* initial render and events */
+renderForm(); // first form
+
+categoryEl.addEventListener('change', renderForm);
+languageEl.addEventListener('change', renderForm);
+
+addBtn.addEventListener('click', ()=>{
+  buildSection();
+});
+
+downloadBtn.addEventListener('click', downloadProgramPNG);
+
+printBtn.addEventListener('click', ()=> {
+  // open printable window
+  const win = window.open('', '_blank');
+  const clone = programCanvas.cloneNode(true);
+  // minimal styles for print
+  const html = `
+    <html><head><title>Print Program</title>
+    <style>body{font-family:Arial;padding:28px;background:#fff;color:#111} .section-block{margin:12px 0;padding:14px;border-radius:8px}</style>
+    </head><body>${clone.outerHTML}</body></html>
+  `;
+  win.document.write(html);
+  win.document.close();
+  win.focus();
+  setTimeout(()=>win.print(), 600);
+});
+
+clearAllBtn.addEventListener('click', ()=>{
+  if(confirm('Clear all sections from the program?')){
+    programCanvas.innerHTML = '<p style="color:rgba(255,255,255,0.7)">No sections yet — add a section on the left to begin building your program.</p>';
+  }
+});
+clearAllTop.addEventListener('click', ()=> clearAllBtn.click());
+
+removeLastBtn.addEventListener('click', ()=>{
+  const blocks = programCanvas.querySelectorAll('.section-block');
+  if(blocks.length){
+    blocks[blocks.length-1].remove();
+  } else {
+    alert('No sections to remove.');
+  }
+});
+
+/* keyboard shortcut: Ctrl+S to download */
+document.addEventListener('keydown', (e)=>{
+  if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's'){
+    e.preventDefault();
+    downloadProgramPNG();
+  }
+});
 </script>
 
 </body>
-  </html>
+          </html>
