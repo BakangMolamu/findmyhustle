@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Premium Template Generator</title>
+<title>Premium Poster Generator</title>
 <style>
 /* Gradient background */
 body {
   font-family: 'Georgia', serif;
-  background: linear-gradient(135deg, #8f94fb, #4e54c8); /* Purple → Light Blue */
+  background: linear-gradient(135deg, #4e54c8, #8f94fb); /* Light blue → Purple */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -73,7 +73,7 @@ button:hover {
 </head>
 <body>
 
-<h1>Premium Template Generator</h1>
+<h1>Premium Poster Generator</h1>
 
 <div id="program">
   <div class="corner top-left"></div>
@@ -164,7 +164,7 @@ function updateInputs() {
   updateProgram();
 }
 
-// Update preview
+// Update preview with decorations
 function updateProgram() {
   const category = document.getElementById('category').value;
   const template = document.getElementById('template').value;
@@ -192,17 +192,24 @@ function updateProgram() {
     corners.forEach(c=>c.style.backgroundImage='url(https://i.ibb.co/3Rs0cZk/chef-hat.png)');
   }
 
-  // Populate content
+  // Populate content with inline decorative icons
   if(category==='wedding') {
     const names = document.getElementById('input-names').value || '[Couple Names]';
     const date = document.getElementById('input-date').value || '[Date & Venue]';
     preview.innerHTML = `<p style="font-size:1.3em;font-style:italic;">${names}</p><p>${date}</p>
       <div class="section"><h2>Ceremony</h2><ul>
-        <li>Welcome Presentation</li><li>Prayer of Consecration</li><li>First Reading</li>
-        <li>Exchange of Vows</li><li>Ring Ceremony</li><li>Closing Blessing</li>
+        <li>🌸 Welcome Presentation</li>
+        <li>🌸 Prayer of Consecration</li>
+        <li>🌸 First Reading</li>
+        <li>🌸 Exchange of Vows</li>
+        <li>🌸 Ring Ceremony</li>
+        <li>🌸 Closing Blessing</li>
       </ul></div>
       <div class="section"><h2>Reception</h2><ul>
-        <li>Cocktails</li><li>Dinner</li><li>Dancing</li><li>Night Full of Fun</li>
+        <li>🍷 Cocktails</li>
+        <li>🍽 Dinner</li>
+        <li>💃 Dancing</li>
+        <li>🎉 Night Full of Fun</li>
       </ul></div>`;
   } else if(category==='funeral') {
     const name = document.getElementById('input-name').value || '[Deceased Name]';
@@ -210,26 +217,30 @@ function updateProgram() {
     const dod = document.getElementById('input-dod').value || '[DOD]';
     const survivors = document.getElementById('input-survivors').value || '[Survived By]';
     const service = document.getElementById('input-service').value || '[Service Details]';
-    preview.innerHTML = `<p style="font-size:1.3em;font-style:italic;">${name}</p>
-      <p>${dob} – ${dod}</p><p>Survived by: ${survivors}</p><p>${service}</p>`;
+    preview.innerHTML = `<p>🎗 ${name}</p>
+      <p>📅 ${dob} – ${dod}</p>
+      <p>👨‍👩‍👧‍👦 Survived by: ${survivors}</p>
+      <p>🕯 ${service}</p>`;
   } else if(category==='event') {
     const title = document.getElementById('input-title').value || '[Event Title]';
     const datetime = document.getElementById('input-datetime').value || '[Date & Time]';
     const venue = document.getElementById('input-venue').value || '[Venue]';
     const desc = document.getElementById('input-desc').value || '[Description]';
-    preview.innerHTML = `<p style="font-size:1.5em;font-weight:bold;">${title}</p>
-      <p>${datetime}</p><p>${venue}</p><p>${desc}</p>`;
+    preview.innerHTML = `<p style="font-size:1.5em;font-weight:bold;">🎉 ${title}</p>
+      <p>📅 ${datetime}</p>
+      <p>📍 ${venue}</p>
+      <p>📝 ${desc}</p>`;
   } else if(category==='menu') {
     const restaurant = document.getElementById('input-restaurant').value || '[Restaurant Name]';
     const starters = document.getElementById('input-starters').value || 'Starters';
     const mains = document.getElementById('input-mains').value || 'Mains';
     const desserts = document.getElementById('input-desserts').value || 'Desserts';
     const drinks = document.getElementById('input-drinks').value || 'Drinks';
-    preview.innerHTML = `<p style="font-size:1.5em;font-weight:bold;">${restaurant}</p>
-      <div class="section"><h2>Starters</h2><p>${starters.replace(/\n/g,'<br>')}</p></div>
-      <div class="section"><h2>Main Courses</h2><p>${mains.replace(/\n/g,'<br>')}</p></div>
-      <div class="section"><h2>Desserts</h2><p>${desserts.replace(/\n/g,'<br>')}</p></div>
-      <div class="section"><h2>Drinks</h2><p>${drinks.replace(/\n/g,'<br>')}</p></div>`;
+    preview.innerHTML = `<p style="font-size:1.5em;font-weight:bold;">🍽 ${restaurant}</p>
+      <div class="section"><h2>Starters</h2><p>🥗 ${starters.replace(/\n/g,'<br>')}</p></div>
+      <div class="section"><h2>Main Courses</h2><p>🍛 ${mains.replace(/\n/g,'<br>')}</p></div>
+      <div class="section"><h2>Desserts</h2><p>🍰 ${desserts.replace(/\n/g,'<br>')}</p></div>
+      <div class="section"><h2>Drinks</h2><p>🥤 ${drinks.replace(/\n/g,'<br>')}</p></div>`;
   }
 }
 
@@ -237,7 +248,7 @@ function updateProgram() {
 function downloadProgram() {
   html2canvas(document.getElementById('program'), {scale: 2}).then(canvas => {
     const link = document.createElement('a');
-    link.download = 'template.png';
+    link.download = 'poster.png';
     link.href = canvas.toDataURL('image/png');
     link.click();
   });
