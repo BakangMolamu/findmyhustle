@@ -1,288 +1,304 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FindMyHustle</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #d4c1ff, #a0c4ff);
-      color: #333;
-      margin: 0;
-      padding: 0;
-      text-align: center;
-      transition: background 0.5s;
-    }
-    header {
-      background: linear-gradient(90deg, #6a0dad, #0073e6);
-      color: white;
-      padding: 20px;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 2rem;
-      transition: transform 0.3s;
-    }
-    header h1:hover {
-      transform: scale(1.05);
-    }
-    nav {
-      margin-top: 10px;
-    }
-    nav a {
-      text-decoration: none;
-      color: white;
-      margin: 0 15px;
-      font-weight: bold;
-      transition: color 0.3s, transform 0.3s;
-    }
-    nav a:hover {
-      color: #d4c1ff;
-      transform: scale(1.1);
-    }
-    .hero {
-      padding: 50px 20px;
-      background: linear-gradient(135deg, #e0c3fc, #8ec5fc);
-      border-radius: 10px;
-      margin: 20px;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-    .hero:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-    }
-    .hero h2 {
-      font-size: 1.8rem;
-      margin-bottom: 20px;
-      color: #4b0082;
-      transition: color 0.3s;
-    }
-    .hero h2:hover {
-      color: #6a0dad;
-    }
-    .hero p {
-      font-size: 1rem;
-      max-width: 700px;
-      margin: 0 auto 20px auto;
-    }
-    .cta {
-      margin-top: 20px;
-    }
-    .cta a {
-      display: inline-block;
-      padding: 12px 25px;
-      background: linear-gradient(90deg, #6a0dad, #0073e6);
-      color: white;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: bold;
-      margin: 10px;
-      transition: transform 0.3s, box-shadow 0.3s, opacity 0.3s;
-    }
-    .cta a.green {
-      background: linear-gradient(90deg, #8e2de2, #4a00e0);
-    }
-    .cta a:hover {
-      transform: scale(1.05);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-      opacity: 0.9;
-    }
-    section {
-      padding: 40px 20px;
-    }
-    section h3 {
-      font-size: 1.5rem;
-      margin-bottom: 20px;
-      color: #4b0082;
-      transition: color 0.3s;
-    }
-    section h3:hover {
-      color: #6a0dad;
-    }
-    .steps {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-    .step-card {
-      background: #ffffff;
-      border: 1px solid #dcdcdc;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      text-align: left;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-    .step-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 15px rgba(0,0,0,0.15);
-    }
-    .step-card h4 {
-      margin-top: 0;
-      color: #6a0dad;
-    }
-    /* Feedback form */
-    .feedback-form {
-      max-width: 600px;
-      margin: 0 auto;
-      text-align: left;
-      position: relative;
-    }
-    .feedback-form label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: bold;
-    }
-    .feedback-form input,
-    .feedback-form textarea {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 1rem;
-    }
-    .feedback-form button {
-      background: linear-gradient(90deg, #6a0dad, #0073e6);
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      font-size: 1rem;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: transform 0.3s, box-shadow 0.3s, opacity 0.3s;
-    }
-    .feedback-form button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-      opacity: 0.9;
-    }
-    .feedback-success {
-      display: none;
-      color: green;
-      font-weight: bold;
-      margin-top: 10px;
-    }
-    footer {
-      background: linear-gradient(90deg, #6a0dad, #0073e6);
-      color: white;
-      padding: 20px;
-      margin-top: 30px;
-    }
-    footer a {
-      color: #d4c1ff;
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-    footer a:hover {
-      color: #ffffff;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Poster/Program</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #6a0dad, #1e90ff);
+  color: #fff;
+}
+header {
+  text-align: center;
+  padding: 40px 20px;
+}
+header h1 { margin: 0; font-size: 2rem; }
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+.section {
+  background-color: rgba(255,255,255,0.1);
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+label { display: block; margin-top: 10px; font-weight: bold; }
+input, select, textarea {
+  width: 100%; padding: 8px; margin-top: 5px; border-radius: 6px;
+  border: none; font-size: 1rem;
+}
+textarea { resize: vertical; }
+.preview {
+  background-color: rgba(0,0,0,0.3);
+  padding: 20px;
+  border-radius: 12px;
+  margin-top: 20px;
+  width: 100%;
+  text-align: center;
+  min-height: 200px;
+}
+.preview [contenteditable] {
+  outline: 2px dashed #fff;
+  padding: 2px 4px;
+  border-radius: 4px;
+  cursor: text;
+  display: block;
+  margin: 8px 0;
+}
+button {
+  padding: 12px 25px;
+  margin-top: 15px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background-color: #fff;
+  color: #6a0dad;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+button:hover { background-color: #6a0dad; color: #fff; }
+</style>
 </head>
 <body>
 
-  <header>
-    <h1>FindMyHustle</h1>
-    <nav>
-      <a href="upload.html">Upload</a>
-      <a href="browse.html">Browse</a>
-    </nav>
-  </header>
+<header>
+  <h1>Create Your Poster / Program</h1>
+</header>
 
-  <div class="hero">
-    <h2>Connecting Local Hustlers with Retail Stores</h2>
-    <p>
-        FindMyHustle connects local brands selling <strong>(Caps,Hats,T-shirts)</strong> with retail stores, helping small businesses showcase their products and reach new customers. Our platform makes it easy for retailers to discover authentic, affordable, locally made goods and connect directly with sellers—supporting growth, opportunity, and the local economy <>
-  
-    </p>
-    <div class="cta">
-      <a href="upload.html">Upload Products</a>
-      <a href="browse.html" class="green">Browse Products</a>
-    </div>
+<div class="container">
+
+  <!-- Category Selection -->
+  <div class="section">
+    <label for="category">Select Category</label>
+    <select id="category">
+      <option value="obituary">🕊️ Obituary</option>
+      <option value="wedding">💍 Wedding Program</option>
+      <option value="family">👨‍👩‍👧 Family Gathering</option>
+      <option value="restaurant">🍽️ Restaurant Menu</option>
+      <option value="event">🎉 Event Poster</option>
+    </select>
   </div>
 
-  <section>
-    <h3>How It Works</h3>
-    <div class="steps">
-      <div class="step-card">
-        <h4>Step 1: Upload</h4>
-        <p>Local hustlers upload their products on the <a href="upload.html">Upload Page</a> by filling in product details such as type, name, price, image, and contact information.</p>
-      </div>
-      <div class="step-card">
-        <h4>Step 2: Browse</h4>
-        <p>Retailers visit the <a href="browse.html">Browse Page</a> to view all uploaded products in a clean and professional layout.</p>
-      </div>
-      <div class="step-card">
-        <h4>Step 3: Connect</h4>
-        <p>Retailers search by location or city, view seller details, and connect directly through WhatsApp or call buttons.</p>
-      </div>
-      <div class="step-card">
-        <h4>Step 4: Grow Together</h4>
-        <p>Once connected, hustlers and retailers agree on delivery, payment, and sales terms — bringing local products to shelves.</p>
-      </div>
-    </div>
-  </section>
+  <!-- Language Selection -->
+  <div class="section">
+    <label for="language">Select Language</label>
+    <select id="language">
+      <option value="english">English</option>
+      <option value="zulu">Zulu (isiZulu)</option>
+      <option value="xhosa">Xhosa (isiXhosa)</option>
+      <option value="tswana">Tswana (Setswana)</option>
+      <option value="sotho">Sotho (Sesotho)</option>
+      <option value="venda">Venda (TshiVenda)</option>
+      <option value="tsonga">Tsonga (Xitsonga)</option>
+      <option value="afrikaans">Afrikaans</option>
+      <option value="sepedi">Sepedi</option>
+      <option value="swati">Swati (siSwati)</option>
+      <option value="ndebele">Ndebele (isiNdebele)</option>
+    </select>
+  </div>
 
-  <section>
-    <h3>Feedback</h3>
-    <p>We value your input! Share your thoughts about FindMyHustle:</p>
-    <form class="feedback-form" id="feedbackForm" method="POST" action="https://script.google.com/macros/s/AKfycbwzjSOn9OquqLXjPQI4BkocySVa78OuvNtGT8QphvgqzsYPI7NZrWwgqVd_AwLSR_xe/exec">
-      <label for="name">Your Name</label>
-      <input type="text" id="name" name="Name" required>
+  <!-- Dynamic Form -->
+  <div class="section" id="form-section"></div>
 
-      <label for="email">Your Email</label>
-      <input type="email" id="email" name="Email" required>
+  <!-- Live Preview -->
+  <div class="preview" id="preview"></div>
 
-      <label for="message">Your Feedback</label>
-      <textarea id="message" name="Message" rows="5" required></textarea>
+</div>
 
-      <button type="submit">Send Feedback</button>
-      <div class="feedback-success" id="feedbackSuccess">Submitted successfully! Thank you for your feedback.</div>
-    </form>
-  </section>
+<script>
+const languageMap = {
+  english: { obituaryTitle: "In Loving Memory", survived: "Survived by", weddingTitle: "Wedding Program", familyTitle: "Family Gathering", menuTitle: "Menu", eventTitle: "Event Poster" },
+  zulu: { obituaryTitle: "Sikhumbuzo Esithandekayo", survived: "Usashiywe ngabani", weddingTitle: "Uhlelo Lomshado", familyTitle: "Umndeni", menuTitle: "Imenyu", eventTitle: "Isikhangiso Somcimbi" },
+  xhosa: { obituaryTitle: "Ngokuthanda Okukhulu", survived: "Ushiywe ngubani", weddingTitle: "Inkqubo yomtshato", familyTitle: "Usapho", menuTitle: "Imenyu", eventTitle: "Isimemo Somcimbi" },
+  tswana: { obituaryTitle: "Ka Lerato le Legolo", survived: "O siile morago…", weddingTitle: "Lenaneo la Lenyalo", familyTitle: "Lelapa", menuTitle: "Lenaneo la dijo", eventTitle: "Poster ya Ketsahalo" },
+  sotho: { obituaryTitle: "Ka Lerato le Kgolo", survived: "O siile morago…", weddingTitle: "Lenaneo la Lenyalo", familyTitle: "Lelapa", menuTitle: "Lenaneo la dijo", eventTitle: "Poster ya Ketsahalo" },
+  venda: { obituaryTitle: "Nga Lufuno Lukhulu", survived: "O sivalela hani", weddingTitle: "Program ya Mutshelo", familyTitle: "Mhuri", menuTitle: "Menu", eventTitle: "Tshikosi" },
+  tsonga: { obituaryTitle: "Hi Rirhandzu Lerikulu", survived: "U tshameke na", weddingTitle: "Ntirho wa Vutsi", familyTitle: "Ndyangu", menuTitle: "Xikolo xa Swihlawulelo", eventTitle: "Xikombelo xa Xiboho" },
+  afrikaans: { obituaryTitle: "In Liefdevolle Herinnering", survived: "Oorgebly deur", weddingTitle: "Huwelik Program", familyTitle: "Familie", menuTitle: "Spyskaart", eventTitle: "Event Plakkaat" },
+  sepedi: { obituaryTitle: "Ka Lerato Le Legolo", survived: "O tlogetše ke", weddingTitle: "Lenaneo la Lenyalo", familyTitle: "Lelapa", menuTitle: "Lenaneo la dijo", eventTitle: "Poster ya Ketsahalo" },
+  swati: { obituaryTitle: "Ngokuthandeka Kakhulu", survived: "Usashiywe ngubani", weddingTitle: "Uhlelo Lomshado", familyTitle: "Umndeni", menuTitle: "Imenyu", eventTitle: "Isikhangiso Somcimbi" },
+  ndebele: { obituaryTitle: "Ngothando Olukhulu", survived: "Usalindwe ngabani", weddingTitle: "Uhlelo Lomshado", familyTitle: "Umndeni", menuTitle: "Imenyu", eventTitle: "Isimemo Somcimbi" }
+};
 
-  <section>
-    <h3>Why FindMyHustle?</h3>
-    <p>
-      We help local hustlers gain exposure and grow their businesses,  
-      while retail stores discover new, affordable products to stock.  
-      Simple. Fair. Professional.
-    </p>
-  </section>
+const categorySelect = document.getElementById("category");
+const languageSelect = document.getElementById("language");
+const formSection = document.getElementById("form-section");
+const preview = document.getElementById("preview");
 
-  <footer>
-    <p>&copy; 2025 FindMyHustle. All Rights Reserved.</p>
-    <p>
-      <a href="terms.html">Terms & Conditions</a> | 
-      <a href="privacy.html">Privacy Policy</a> | 
-      <a href="mailto:findmyh619@gmail.com">Support</a>
-    </p>
-  </footer>
+let currentInputs = {};
 
-  <script>
-    const form = document.getElementById('feedbackForm');
-    const successMsg = document.getElementById('feedbackSuccess');
+function createForm(category){
+  formSection.innerHTML = "";
+  preview.innerHTML = "";
+  currentInputs = {};
+  const lang = languageSelect.value;
+  const texts = languageMap[lang] || languageMap['english'];
 
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
+  if(category==="obituary"){
+    formSection.innerHTML = `
+      <label>Name</label><input type="text" placeholder="Full Name" id="name">
+      <label>Date of Birth – Date of Death</label><input type="text" placeholder="DD/MM/YYYY – DD/MM/YYYY" id="dates">
+      <label>Survived By</label><input type="text" placeholder="E.g. Spouse, Children" id="survived">
+      <label>Funeral Details</label><textarea rows="3" placeholder="Service date, time, venue" id="funeral"></textarea>
+    `;
+    preview.innerHTML = `
+      <h2 contenteditable="true" id="preview-title">${texts.obituaryTitle}</h2>
+      <p contenteditable="true" id="preview-name">Full Name</p>
+      <p contenteditable="true" id="preview-dates">DOB – DOD</p>
+      <p contenteditable="true" id="preview-survived">${texts.survived} …</p>
+      <p contenteditable="true" id="preview-funeral">Funeral Details</p>
+    `;
+    currentInputs = {
+      name: document.getElementById("name"),
+      dates: document.getElementById("dates"),
+      survived: document.getElementById("survived"),
+      funeral: document.getElementById("funeral")
+    };
+  } else if(category==="wedding"){
+    formSection.innerHTML = `
+      <label>Bride Name</label><input type="text" id="bride" placeholder="Bride Name">
+      <label>Groom Name</label><input type="text" id="groom" placeholder="Groom Name">
+      <label>Date</label><input type="text" id="date" placeholder="DD/MM/YYYY">
+      <label>Venue</label><input type="text" id="venue" placeholder="Venue">
+      <label>Order of Service</label><textarea rows="3" id="service" placeholder="Ceremony order"></textarea>
+    `;
+    preview.innerHTML = `
+      <h2 contenteditable="true" id="preview-title">${texts.weddingTitle}</h2>
+      <p contenteditable="true" id="preview-bride">Bride Name</p>
+      <p contenteditable="true" id="preview-groom">Groom Name</p>
+      <p contenteditable="true" id="preview-date">Date</p>
+      <p contenteditable="true" id="preview-venue">Venue</p>
+      <p contenteditable="true" id="preview-service">Order of Service</p>
+    `;
+    currentInputs = {
+      bride: document.getElementById("bride"),
+      groom: document.getElementById("groom"),
+      date: document.getElementById("date"),
+      venue: document.getElementById("venue"),
+      service: document.getElementById("service")
+    };
+  } else if(category==="restaurant"){
+    formSection.innerHTML = `
+      <label>Dish Name</label><input type="text" id="dish" placeholder="Dish Name">
+      <label>Price</label><input type="text" id="price" placeholder="Price">
+      <label>Section</label><input type="text" id="section" placeholder="Starters/Main/Dessert">
+    `;
+    preview.innerHTML = `
+      <h2 contenteditable="true" id="preview-title">${texts.menuTitle}</h2>
+      <p contenteditable="true" id="preview-dish">Dish Name</p>
+      <p contenteditable="true" id="preview-price">Price</p>
+      <p contenteditable="true" id="preview-section">Section</p>
+    `;
+    currentInputs = {
+      dish: document.getElementById("dish"),
+      price: document.getElementById("price"),
+      section: document.getElementById("section")
+    };
+  } else if(category==="family"){
+    formSection.innerHTML = `
+      <label>Event Name</label><input type="text" id="eventName" placeholder="Family Gathering Name">
+      <label>Date</label><input type="text" id="date" placeholder="DD/MM/YYYY">
+      <label>Venue</label><input type="text" id="venue" placeholder="Venue">
+      <label>Message</label><textarea rows="3" id="message" placeholder="Details"></textarea>
+    `;
+    preview.innerHTML = `
+      <h2 contenteditable="true" id="preview-title">${texts.familyTitle}</h2>
+      <p contenteditable="true" id="preview-eventName">Event Name</p>
+      <p contenteditable="true" id="preview-date">Date</p>
+      <p contenteditable="true" id="preview-venue">Venue</p>
+      <p contenteditable="true" id="preview-message">Message</p>
+    `;
+    currentInputs = {
+      eventName: document.getElementById("eventName"),
+      date: document.getElementById("date"),
+      venue: document.getElementById("venue"),
+      message: document.getElementById("message")
+    };
+  } else if(category==="event"){
+    formSection.innerHTML = `
+      <label>Event Name</label><input type="text" id="eventName" placeholder="Event Name">
+      <label>Date</label><input type="text" id="date" placeholder="DD/MM/YYYY">
+      <label>Venue</label><input type="text" id="venue" placeholder="Venue">
+      <label>Details</label><textarea rows="3" id="details" placeholder="Details"></textarea>
+    `;
+    preview.innerHTML = `
+      <h2 contenteditable="true" id="preview-title">${texts.eventTitle}</h2>
+      <p contenteditable="true" id="preview-eventName">Event Name</p>
+      <p contenteditable="true" id="preview-date">Date</p>
+      <p contenteditable="true" id="preview-venue">Venue</p>
+      <p contenteditable="true" id="preview-details">Details</p>
+    `;
+    currentInputs = {
+      eventName: document.getElementById("eventName"),
+      date: document.getElementById("date"),
+      venue: document.getElementById("venue"),
+      details: document.getElementById("details")
+    };
+  }
+  attachListeners();
+}
 
-      fetch(form.action, {
-        method: 'POST',
-        body: new FormData(form),
-      })
-      .then(response => {
-        successMsg.style.display = 'block';
-        form.reset();
-      })
-      .catch(error => {
-        alert('Error submitting feedback. Please try again.');
-        console.error(error);
-      });
-    });
-  </script>
+function attachListeners(){
+  Object.keys(currentInputs).forEach(key=>{
+    currentInputs[key].addEventListener("input", updatePreview);
+  });
+}
+
+function updatePreview(){
+  const lang = languageSelect.value;
+  const texts = languageMap[lang] || languageMap['english'];
+  const cat = categorySelect.value;
+
+  if(cat==="obituary"){
+    preview.querySelector("#preview-title").textContent = texts.obituaryTitle;
+    preview.querySelector("#preview-name").textContent = currentInputs.name.value || "Full Name";
+    preview.querySelector("#preview-dates").textContent = currentInputs.dates.value || "DOB – DOD";
+    preview.querySelector("#preview-survived").textContent = texts.survived + " " + (currentInputs.survived.value || "…");
+    preview.querySelector("#preview-funeral").textContent = currentInputs.funeral.value || "Funeral Details";
+  } else if(cat==="wedding"){
+    preview.querySelector("#preview-title").textContent = texts.weddingTitle;
+    preview.querySelector("#preview-bride").textContent = currentInputs.bride.value || "Bride Name";
+    preview.querySelector("#preview-groom").textContent = currentInputs.groom.value || "Groom Name";
+    preview.querySelector("#preview-date").textContent = currentInputs.date.value || "Date";
+    preview.querySelector("#preview-venue").textContent = currentInputs.venue.value || "Venue";
+    preview.querySelector("#preview-service").textContent = currentInputs.service.value || "Order of Service";
+  } else if(cat==="restaurant"){
+    preview.querySelector("#preview-title").textContent = texts.menuTitle;
+    preview.querySelector("#preview-dish").textContent = currentInputs.dish.value || "Dish Name";
+    preview.querySelector("#preview-price").textContent = currentInputs.price.value || "Price";
+    preview.querySelector("#preview-section").textContent = currentInputs.section.value || "Section";
+  } else if(cat==="family"){
+    preview.querySelector("#preview-title").textContent = texts.familyTitle;
+    preview.querySelector("#preview-eventName").textContent = currentInputs.eventName.value || "Event Name";
+    preview.querySelector("#preview-date").textContent = currentInputs.date.value || "Date";
+    preview.querySelector("#preview-venue").textContent = currentInputs.venue.value || "Venue";
+    preview.querySelector("#preview-message").textContent = currentInputs.message.value || "Message";
+  } else if(cat==="event"){
+    preview.querySelector("#preview-title").textContent = texts.eventTitle;
+    preview.querySelector("#preview-eventName").textContent = currentInputs.eventName.value || "Event Name";
+    preview.querySelector("#preview-date").textContent = currentInputs.date.value || "Date";
+    preview.querySelector("#preview-venue").textContent = currentInputs.venue.value || "Venue";
+    preview.querySelector("#preview-details").textContent = currentInputs.details.value || "Details";
+  }
+}
+
+categorySelect.addEventListener("change", ()=>createForm(categorySelect.value));
+languageSelect.addEventListener("change", ()=>createForm(categorySelect.value));
+
+// Initialize
+createForm(categorySelect.value);
+</script>
 
 </body>
 </html>
