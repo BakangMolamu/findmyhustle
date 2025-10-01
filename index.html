@@ -3,54 +3,71 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wedding Program Generator</title>
+<title>Premium Template Generator</title>
 <style>
-  body {
-    font-family: 'Georgia', serif;
-    background: #f5f5f5;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-  }
+body {
+  font-family: 'Georgia', serif;
+  background: #f0f4f8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+}
+h1 { text-align: center; font-size: 2.5em; margin-bottom: 20px; color: #333; }
 
-  h1 { text-align: center; font-size: 2em; margin-bottom: 10px; }
+#program {
+  width: 700px;
+  min-height: 500px;
+  background: #fff;
+  border-radius: 20px;
+  padding: 50px 40px;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  margin-bottom: 30px;
+  transition: all 0.3s ease;
+}
 
-  #program {
-    width: 600px;
-    background: #fff;
-    border: 5px solid #d4af7f;
-    border-radius: 15px;
-    padding: 40px;
-    position: relative;
-    box-shadow: 0 0 20px rgba(0,0,0,0.1);
-    margin-bottom: 20px;
-  }
+/* Corner graphics placeholders */
+.corner {
+  width: 70px; height: 70px;
+  position: absolute;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+.top-left { top: -5px; left: -5px; }
+.top-right { top: -5px; right: -5px; transform: rotate(90deg); }
+.bottom-left { bottom: -5px; left: -5px; transform: rotate(270deg); }
+.bottom-right { bottom: -5px; right: -5px; transform: rotate(180deg); }
 
-  /* Floral corners (placeholder squares, replace with actual images if needed) */
-  .corner {
-    width: 60px; height: 60px;
-    position: absolute;
-    background: url('https://i.ibb.co/2MZgM3L/flower.png') no-repeat center center;
-    background-size: contain;
-  }
-  .top-left { top: -5px; left: -5px; }
-  .top-right { top: -5px; right: -5px; transform: rotate(90deg); }
-  .bottom-left { bottom: -5px; left: -5px; transform: rotate(270deg); }
-  .bottom-right { bottom: -5px; right: -5px; transform: rotate(180deg); }
+#title { text-align: center; font-size: 2em; font-weight: bold; margin-bottom: 15px; }
 
-  .section { margin-top: 20px; }
-  .section h2 { font-size: 1.5em; text-decoration: underline; }
-  .section ul { margin-left: 20px; font-style: italic; }
+#preview-fields p, #preview-fields ul { text-align: center; color: #333; }
+.section { margin-top: 25px; }
+.section h2 { font-size: 1.5em; text-decoration: underline; margin-bottom: 10px; }
+.section ul { margin-left: 20px; font-style: italic; text-align: left; }
 
-  label { display: block; margin-top: 10px; }
-  input, textarea { width: 300px; padding: 5px; margin-top: 5px; }
-  button { margin-top: 15px; padding: 10px 20px; font-size: 1em; cursor: pointer; }
+/* Inputs */
+label { display: block; margin-top: 12px; font-weight: bold; color: #333; }
+input, select, textarea { width: 320px; padding: 8px; margin-top: 5px; border-radius: 8px; border: 1px solid #ccc; font-size: 1em; }
+
+button {
+  margin-top: 20px; padding: 12px 25px; font-size: 1.1em;
+  font-weight: bold; border: none; border-radius: 10px;
+  cursor: pointer; color: white;
+  background: linear-gradient(135deg, #4e54c8, #8f94fb);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.input-container { display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 15px; }
 </style>
 </head>
 <body>
 
-<h1>Wedding Program Generator</h1>
+<h1>Premium Template Generator</h1>
 
 <div id="program">
   <div class="corner top-left"></div>
@@ -58,64 +75,170 @@
   <div class="corner bottom-left"></div>
   <div class="corner bottom-right"></div>
 
-  <h1 id="title">Wedding Program</h1>
-  <p id="names" style="text-align:center; font-size:1.2em; margin-bottom: 10px;">[Couple Names]</p>
-  <p id="date" style="text-align:center; margin-bottom: 20px;">[Date & Venue]</p>
-
-  <div class="section">
-    <h2>Ceremony</h2>
-    <ul id="ceremony-list">
-      <li>Welcome Presentation</li>
-      <li>Prayer of Consecration</li>
-      <li>First Reading</li>
-      <li>Exchange of Vows</li>
-      <li>Ring Ceremony</li>
-      <li>Closing Blessing</li>
-    </ul>
-  </div>
-
-  <div class="section">
-    <h2>Reception</h2>
-    <ul id="reception-list">
-      <li>Cocktails</li>
-      <li>Dinner</li>
-      <li>Dancing</li>
-      <li>Night Full of Fun</li>
-    </ul>
-  </div>
+  <h1 id="title">Template Preview</h1>
+  <div id="preview-fields"></div>
 </div>
 
-<div>
-  <label>Couple Names:</label>
-  <input type="text" id="input-names" placeholder="e.g. John & Jane">
-  
-  <label>Date & Venue:</label>
-  <input type="text" id="input-date" placeholder="e.g. 10 Oct 2025, Cape Town">
+<div class="input-container">
+  <label>Category:</label>
+  <select id="category" onchange="updateInputs()">
+    <option value="wedding">Wedding Program</option>
+    <option value="funeral">Funeral Program</option>
+    <option value="event">Event Poster</option>
+    <option value="menu">Restaurant Menu</option>
+  </select>
 
-  <button onclick="updateProgram()">Generate Program</button>
+  <label>Template:</label>
+  <select id="template" onchange="updateProgram()"></select>
+
+  <label>Style:</label>
+  <select id="template-style" onchange="updateProgram()">
+    <option value="classic">Classic</option>
+    <option value="modern">Modern</option>
+    <option value="floral">Floral</option>
+    <option value="minimal">Minimal</option>
+  </select>
+
+  <div id="dynamic-inputs"></div>
+
+  <button onclick="updateProgram()">Generate Preview</button>
   <button onclick="downloadProgram()">Download as PNG</button>
 </div>
 
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <script>
-function updateProgram() {
-  const names = document.getElementById('input-names').value || '[Couple Names]';
-  const date = document.getElementById('input-date').value || '[Date & Venue]';
-  
-  document.getElementById('names').textContent = names;
-  document.getElementById('date').textContent = date;
+// Template options per category
+const templates = {
+  wedding: ['Classic', 'Modern', 'Floral', 'Minimal'],
+  funeral: ['Elegant', 'Simple', 'Memorial', 'Modern'],
+  event: ['Bold', 'Pastel', 'Minimal', 'Fun'],
+  menu: ['Elegant', 'Rustic', 'Minimal', 'Modern']
+};
+
+function updateInputs() {
+  const category = document.getElementById('category').value;
+  const templateSelect = document.getElementById('template');
+  templateSelect.innerHTML = '';
+  templates[category].forEach(t => {
+    const option = document.createElement('option');
+    option.value = t.toLowerCase();
+    option.textContent = t;
+    templateSelect.appendChild(option);
+  });
+
+  const container = document.getElementById('dynamic-inputs');
+  container.innerHTML = '';
+  if(category === 'wedding') {
+    container.innerHTML = `
+      <label>Couple Names:</label><input id="input-names" placeholder="John & Jane">
+      <label>Date & Venue:</label><input id="input-date" placeholder="10 Oct 2025, Cape Town">`;
+  } else if(category === 'funeral') {
+    container.innerHTML = `
+      <label>Deceased Name:</label><input id="input-name" placeholder="John Doe">
+      <label>Date of Birth:</label><input id="input-dob" placeholder="1 Jan 1950">
+      <label>Date of Death:</label><input id="input-dod" placeholder="20 Sep 2025">
+      <label>Survived By:</label><input id="input-survivors" placeholder="2 Children, Spouse">
+      <label>Service Details:</label><textarea id="input-service" placeholder="Funeral at St. Mary Church"></textarea>`;
+  } else if(category === 'event') {
+    container.innerHTML = `
+      <label>Event Title:</label><input id="input-title" placeholder="Community Gathering">
+      <label>Date & Time:</label><input id="input-datetime" placeholder="15 Oct 2025, 18:00">
+      <label>Venue:</label><input id="input-venue" placeholder="Community Hall">
+      <label>Description:</label><textarea id="input-desc" placeholder="Short description of the event"></textarea>`;
+  } else if(category === 'menu') {
+    container.innerHTML = `
+      <label>Restaurant Name:</label><input id="input-restaurant" placeholder="Mama's Kitchen">
+      <label>Starters:</label><textarea id="input-starters" placeholder="List of starters"></textarea>
+      <label>Main Courses:</label><textarea id="input-mains" placeholder="List of main courses"></textarea>
+      <label>Desserts:</label><textarea id="input-desserts" placeholder="List of desserts"></textarea>
+      <label>Drinks:</label><textarea id="input-drinks" placeholder="List of drinks"></textarea>`;
+  }
+
+  updateProgram();
 }
 
-function downloadProgram() {
+// Generate preview
+function updateProgram() {
+  const category = document.getElementById('category').value;
+  const template = document.getElementById('template').value;
+  const style = document.getElementById('template-style').value;
+  const preview = document.getElementById('preview-fields');
+
   const program = document.getElementById('program');
-  html2canvas(program).then(canvas => {
+
+  // Apply style
+  switch(style){
+    case 'classic': program.style.border = '6px solid #d4af7f'; program.style.background = '#fff'; break;
+    case 'modern': program.style.border = '3px solid #4e54c8'; program.style.background = '#e8ebf7'; break;
+    case 'floral': program.style.border = '5px dashed #a86dc3'; program.style.background = '#fff0f7'; break;
+    case 'minimal': program.style.border = 'none'; program.style.background = '#ffffff'; break;
+  }
+
+  // Apply template graphics (placeholder)
+  const corners = document.querySelectorAll('.corner');
+  if(category === 'wedding') {
+    corners.forEach(c=>c.style.backgroundImage='url(https://i.ibb.co/2MZgM3L/flower.png)');
+  } else if(category === 'funeral') {
+    corners.forEach(c=>c.style.backgroundImage='url(https://i.ibb.co/D8xGpJR/ribbon.png)');
+  } else if(category === 'event') {
+    corners.forEach(c=>c.style.backgroundImage='url(https://i.ibb.co/1zbz3Yn/confetti.png)');
+  } else if(category === 'menu') {
+    corners.forEach(c=>c.style.backgroundImage='url(https://i.ibb.co/3Rs0cZk/chef-hat.png)');
+  }
+
+  // Populate fields
+  if(category==='wedding') {
+    const names = document.getElementById('input-names').value || '[Couple Names]';
+    const date = document.getElementById('input-date').value || '[Date & Venue]';
+    preview.innerHTML = `<p style="font-size:1.3em;font-style:italic;">${names}</p><p>${date}</p>
+      <div class="section"><h2>Ceremony</h2><ul>
+        <li>Welcome Presentation</li><li>Prayer of Consecration</li><li>First Reading</li>
+        <li>Exchange of Vows</li><li>Ring Ceremony</li><li>Closing Blessing</li>
+      </ul></div>
+      <div class="section"><h2>Reception</h2><ul>
+        <li>Cocktails</li><li>Dinner</li><li>Dancing</li><li>Night Full of Fun</li>
+      </ul></div>`;
+  } else if(category==='funeral') {
+    const name = document.getElementById('input-name').value || '[Deceased Name]';
+    const dob = document.getElementById('input-dob').value || '[DOB]';
+    const dod = document.getElementById('input-dod').value || '[DOD]';
+    const survivors = document.getElementById('input-survivors').value || '[Survived By]';
+    const service = document.getElementById('input-service').value || '[Service Details]';
+    preview.innerHTML = `<p style="font-size:1.3em;font-style:italic;">${name}</p>
+      <p>${dob} – ${dod}</p><p>Survived by: ${survivors}</p><p>${service}</p>`;
+  } else if(category==='event') {
+    const title = document.getElementById('input-title').value || '[Event Title]';
+    const datetime = document.getElementById('input-datetime').value || '[Date & Time]';
+    const venue = document.getElementById('input-venue').value || '[Venue]';
+    const desc = document.getElementById('input-desc').value || '[Description]';
+    preview.innerHTML = `<p style="font-size:1.5em;font-weight:bold;">${title}</p>
+      <p>${datetime}</p><p>${venue}</p><p>${desc}</p>`;
+  } else if(category==='menu') {
+    const restaurant = document.getElementById('input-restaurant').value || '[Restaurant Name]';
+    const starters = document.getElementById('input-starters').value || 'Starters';
+    const mains = document.getElementById('input-mains').value || 'Mains';
+    const desserts = document.getElementById('input-desserts').value || 'Desserts';
+    const drinks = document.getElementById('input-drinks').value || 'Drinks';
+    preview.innerHTML = `<p style="font-size:1.5em;font-weight:bold;">${restaurant}</p>
+      <div class="section"><h2>Starters</h2><p>${starters.replace(/\n/g,'<br>')}</p></div>
+      <div class="section"><h2>Main Courses</h2><p>${mains.replace(/\n/g,'<br>')}</p></div>
+      <div class="section"><h2>Desserts</h2><p>${desserts.replace(/\n/g,'<br>')}</p></div>
+      <div class="section"><h2>Drinks</h2><p>${drinks.replace(/\n/g,'<br>')}</p></div>`;
+  }
+}
+
+// Download PNG
+function downloadProgram() {
+  html2canvas(document.getElementById('program'), {scale: 2}).then(canvas => {
     const link = document.createElement('a');
-    link.download = 'wedding_program.png';
-    link.href = canvas.toDataURL();
+    link.download = 'template.png';
+    link.href = canvas.toDataURL('image/png');
     link.click();
   });
 }
+
+updateInputs();
 </script>
 
 </body>
-  </html>
+</html>
