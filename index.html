@@ -5,29 +5,35 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Premium Template Generator</title>
 <style>
+/* Gradient background */
 body {
   font-family: 'Georgia', serif;
-  background: #f0f4f8;
+  background: linear-gradient(135deg, #8f94fb, #4e54c8); /* Purple → Light Blue */
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 30px;
+  min-height: 100vh;
+  margin: 0;
+  color: #333;
 }
-h1 { text-align: center; font-size: 2.5em; margin-bottom: 20px; color: #333; }
 
+h1 { text-align: center; font-size: 2.5em; margin-bottom: 20px; }
+
+/* Program container */
 #program {
   width: 700px;
   min-height: 500px;
-  background: #fff;
+  background: #fff; /* White for template */
   border-radius: 20px;
   padding: 50px 40px;
   position: relative;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
   margin-bottom: 30px;
   transition: all 0.3s ease;
 }
 
-/* Corner graphics placeholders */
+/* Corner graphics */
 .corner {
   width: 70px; height: 70px;
   position: absolute;
@@ -47,14 +53,14 @@ h1 { text-align: center; font-size: 2.5em; margin-bottom: 20px; color: #333; }
 .section ul { margin-left: 20px; font-style: italic; text-align: left; }
 
 /* Inputs */
-label { display: block; margin-top: 12px; font-weight: bold; color: #333; }
+label { display: block; margin-top: 12px; font-weight: bold; }
 input, select, textarea { width: 320px; padding: 8px; margin-top: 5px; border-radius: 8px; border: 1px solid #ccc; font-size: 1em; }
 
 button {
   margin-top: 20px; padding: 12px 25px; font-size: 1.1em;
   font-weight: bold; border: none; border-radius: 10px;
   cursor: pointer; color: white;
-  background: linear-gradient(135deg, #4e54c8, #8f94fb);
+  background: linear-gradient(135deg, #4e54c8, #8f94fb); /* Gradient button */
   transition: transform 0.2s, box-shadow 0.2s;
 }
 button:hover {
@@ -107,7 +113,7 @@ button:hover {
 
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <script>
-// Template options per category
+// Templates per category
 const templates = {
   wedding: ['Classic', 'Modern', 'Floral', 'Minimal'],
   funeral: ['Elegant', 'Simple', 'Memorial', 'Modern'],
@@ -115,6 +121,7 @@ const templates = {
   menu: ['Elegant', 'Rustic', 'Minimal', 'Modern']
 };
 
+// Update dynamic inputs
 function updateInputs() {
   const category = document.getElementById('category').value;
   const templateSelect = document.getElementById('template');
@@ -157,16 +164,15 @@ function updateInputs() {
   updateProgram();
 }
 
-// Generate preview
+// Update preview
 function updateProgram() {
   const category = document.getElementById('category').value;
   const template = document.getElementById('template').value;
   const style = document.getElementById('template-style').value;
   const preview = document.getElementById('preview-fields');
-
   const program = document.getElementById('program');
 
-  // Apply style
+  // Style
   switch(style){
     case 'classic': program.style.border = '6px solid #d4af7f'; program.style.background = '#fff'; break;
     case 'modern': program.style.border = '3px solid #4e54c8'; program.style.background = '#e8ebf7'; break;
@@ -174,7 +180,7 @@ function updateProgram() {
     case 'minimal': program.style.border = 'none'; program.style.background = '#ffffff'; break;
   }
 
-  // Apply template graphics (placeholder)
+  // Decorative corners
   const corners = document.querySelectorAll('.corner');
   if(category === 'wedding') {
     corners.forEach(c=>c.style.backgroundImage='url(https://i.ibb.co/2MZgM3L/flower.png)');
@@ -186,7 +192,7 @@ function updateProgram() {
     corners.forEach(c=>c.style.backgroundImage='url(https://i.ibb.co/3Rs0cZk/chef-hat.png)');
   }
 
-  // Populate fields
+  // Populate content
   if(category==='wedding') {
     const names = document.getElementById('input-names').value || '[Couple Names]';
     const date = document.getElementById('input-date').value || '[Date & Venue]';
@@ -237,6 +243,7 @@ function downloadProgram() {
   });
 }
 
+// Initialize
 updateInputs();
 </script>
 
