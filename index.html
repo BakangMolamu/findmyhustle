@@ -3,302 +3,211 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Create Poster/Program</title>
+<title>Multi-Section Program Creator</title>
 <style>
 body {
   font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
+  margin: 0; padding: 0;
   background: linear-gradient(135deg, #6a0dad, #1e90ff);
   color: #fff;
 }
-header {
-  text-align: center;
-  padding: 40px 20px;
-}
-header h1 { margin: 0; font-size: 2rem; }
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 20px;
-}
-.section {
-  background-color: rgba(255,255,255,0.1);
-  padding: 20px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  width: 100%;
-}
-label { display: block; margin-top: 10px; font-weight: bold; }
-input, select, textarea {
-  width: 100%; padding: 8px; margin-top: 5px; border-radius: 6px;
-  border: none; font-size: 1rem;
-}
-textarea { resize: vertical; }
-.preview {
-  background-color: rgba(0,0,0,0.3);
-  padding: 20px;
-  border-radius: 12px;
-  margin-top: 20px;
-  width: 100%;
-  text-align: center;
-  min-height: 200px;
-}
-.preview [contenteditable] {
-  outline: 2px dashed #fff;
-  padding: 2px 4px;
-  border-radius: 4px;
-  cursor: text;
-  display: block;
-  margin: 8px 0;
-}
-button {
-  padding: 12px 25px;
-  margin-top: 15px;
-  font-size: 1rem;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  background-color: #fff;
-  color: #6a0dad;
-  font-weight: bold;
-  transition: all 0.3s ease;
-}
-button:hover { background-color: #6a0dad; color: #fff; }
+header { text-align:center; padding:40px 20px; }
+header h1 { margin:0; font-size:2rem; }
+.container { max-width:1000px; margin:0 auto; padding:20px; }
+.section { background-color: rgba(255,255,255,0.1); padding:20px; border-radius:12px; margin-bottom:20px; }
+label { display:block; margin-top:10px; font-weight:bold; }
+input, select, textarea { width:100%; padding:8px; margin-top:5px; border-radius:6px; border:none; font-size:1rem; }
+textarea { resize:vertical; }
+button { padding:12px 25px; margin-top:15px; font-size:1rem; border-radius:8px; border:none; cursor:pointer; background-color:#fff; color:#6a0dad; font-weight:bold; transition:0.3s; }
+button:hover { background-color:#6a0dad; color:#fff; }
+.preview { background-color: rgba(0,0,0,0.3); padding:20px; border-radius:12px; margin-top:10px; }
+.preview h2, .preview h3 { margin:10px 0; }
+.preview p { margin:5px 0; }
+.section-preview { border:2px dashed #fff; padding:10px; margin-top:10px; border-radius:8px; cursor:text; }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>Create Your Poster / Program</h1>
+  <h1>Multi-Section Program Creator</h1>
 </header>
 
 <div class="container">
-
-  <!-- Category Selection -->
   <div class="section">
-    <label for="category">Select Category</label>
-    <select id="category">
+    <label for="section-type">Choose Section Type</label>
+    <select id="section-type">
       <option value="obituary">🕊️ Obituary</option>
       <option value="wedding">💍 Wedding Program</option>
       <option value="family">👨‍👩‍👧 Family Gathering</option>
       <option value="restaurant">🍽️ Restaurant Menu</option>
       <option value="event">🎉 Event Poster</option>
     </select>
-  </div>
 
-  <!-- Language Selection -->
-  <div class="section">
-    <label for="language">Select Language</label>
+    <label for="template">Choose Template</label>
+    <select id="template">
+      <option value="template1">Template 1</option>
+      <option value="template2">Template 2</option>
+      <option value="template3">Template 3</option>
+    </select>
+
+    <label for="language">Choose Language</label>
     <select id="language">
       <option value="english">English</option>
-      <option value="zulu">Zulu (isiZulu)</option>
-      <option value="xhosa">Xhosa (isiXhosa)</option>
-      <option value="tswana">Tswana (Setswana)</option>
-      <option value="sotho">Sotho (Sesotho)</option>
-      <option value="venda">Venda (TshiVenda)</option>
-      <option value="tsonga">Tsonga (Xitsonga)</option>
+      <option value="zulu">Zulu</option>
+      <option value="tswana">Tswana</option>
       <option value="afrikaans">Afrikaans</option>
+      <option value="xhosa">Xhosa</option>
+      <option value="sotho">Sotho</option>
+      <option value="venda">Venda</option>
+      <option value="tsonga">Tsonga</option>
       <option value="sepedi">Sepedi</option>
-      <option value="swati">Swati (siSwati)</option>
-      <option value="ndebele">Ndebele (isiNdebele)</option>
+      <option value="swati">Swati</option>
+      <option value="ndebele">Ndebele</option>
     </select>
   </div>
 
-  <!-- Dynamic Form -->
-  <div class="section" id="form-section"></div>
+  <div class="section" id="form-section">
+    <!-- Dynamic form will appear here -->
+  </div>
 
-  <!-- Live Preview -->
-  <div class="preview" id="preview"></div>
+  <button id="add-section">Add Section</button>
 
+  <div class="section">
+    <h2>Program Preview</h2>
+    <div id="program-preview"></div>
+  </div>
 </div>
 
 <script>
+const sectionTypeSelect = document.getElementById('section-type');
+const templateSelect = document.getElementById('template');
+const languageSelect = document.getElementById('language');
+const formSection = document.getElementById('form-section');
+const programPreview = document.getElementById('program-preview');
+const addSectionBtn = document.getElementById('add-section');
+
 const languageMap = {
-  english: { obituaryTitle: "In Loving Memory", survived: "Survived by", weddingTitle: "Wedding Program", familyTitle: "Family Gathering", menuTitle: "Menu", eventTitle: "Event Poster" },
-  zulu: { obituaryTitle: "Sikhumbuzo Esithandekayo", survived: "Usashiywe ngabani", weddingTitle: "Uhlelo Lomshado", familyTitle: "Umndeni", menuTitle: "Imenyu", eventTitle: "Isikhangiso Somcimbi" },
-  xhosa: { obituaryTitle: "Ngokuthanda Okukhulu", survived: "Ushiywe ngubani", weddingTitle: "Inkqubo yomtshato", familyTitle: "Usapho", menuTitle: "Imenyu", eventTitle: "Isimemo Somcimbi" },
-  tswana: { obituaryTitle: "Ka Lerato le Legolo", survived: "O siile morago…", weddingTitle: "Lenaneo la Lenyalo", familyTitle: "Lelapa", menuTitle: "Lenaneo la dijo", eventTitle: "Poster ya Ketsahalo" },
-  sotho: { obituaryTitle: "Ka Lerato le Kgolo", survived: "O siile morago…", weddingTitle: "Lenaneo la Lenyalo", familyTitle: "Lelapa", menuTitle: "Lenaneo la dijo", eventTitle: "Poster ya Ketsahalo" },
-  venda: { obituaryTitle: "Nga Lufuno Lukhulu", survived: "O sivalela hani", weddingTitle: "Program ya Mutshelo", familyTitle: "Mhuri", menuTitle: "Menu", eventTitle: "Tshikosi" },
-  tsonga: { obituaryTitle: "Hi Rirhandzu Lerikulu", survived: "U tshameke na", weddingTitle: "Ntirho wa Vutsi", familyTitle: "Ndyangu", menuTitle: "Xikolo xa Swihlawulelo", eventTitle: "Xikombelo xa Xiboho" },
-  afrikaans: { obituaryTitle: "In Liefdevolle Herinnering", survived: "Oorgebly deur", weddingTitle: "Huwelik Program", familyTitle: "Familie", menuTitle: "Spyskaart", eventTitle: "Event Plakkaat" },
-  sepedi: { obituaryTitle: "Ka Lerato Le Legolo", survived: "O tlogetše ke", weddingTitle: "Lenaneo la Lenyalo", familyTitle: "Lelapa", menuTitle: "Lenaneo la dijo", eventTitle: "Poster ya Ketsahalo" },
-  swati: { obituaryTitle: "Ngokuthandeka Kakhulu", survived: "Usashiywe ngubani", weddingTitle: "Uhlelo Lomshado", familyTitle: "Umndeni", menuTitle: "Imenyu", eventTitle: "Isikhangiso Somcimbi" },
-  ndebele: { obituaryTitle: "Ngothando Olukhulu", survived: "Usalindwe ngabani", weddingTitle: "Uhlelo Lomshado", familyTitle: "Umndeni", menuTitle: "Imenyu", eventTitle: "Isimemo Somcimbi" }
+  english: { obituary: "In Loving Memory", wedding:"Wedding Program", family:"Family Gathering", restaurant:"Menu", event:"Event Poster", survived:"Survived by" },
+  zulu: { obituary:"Sikhumbuzo Esithandekayo", wedding:"Uhlelo Lomshado", family:"Umndeni", restaurant:"Imenyu", event:"Isikhangiso Somcimbi", survived:"Usashiywe ngabani" },
+  tswana:{ obituary:"Ka Lerato le Legolo", wedding:"Lenaneo la Lenyalo", family:"Lelapa", restaurant:"Lenaneo la dijo", event:"Poster ya Ketsahalo", survived:"O siile morago…" },
+  afrikaans:{ obituary:"In Liefdevolle Herinnering", wedding:"Huwelik Program", family:"Familie", restaurant:"Spyskaart", event:"Event Plakkaat", survived:"Oorgebly deur" },
+  xhosa:{ obituary:"Ngokuthanda Okukhulu", wedding:"Inkqubo yomtshato", family:"Usapho", restaurant:"Imenyu", event:"Isimemo Somcimbi", survived:"Ushiywe ngubani" },
+  sotho:{ obituary:"Ka Lerato le Kgolo", wedding:"Lenaneo la Lenyalo", family:"Lelapa", restaurant:"Lenaneo la dijo", event:"Poster ya Ketsahalo", survived:"O siile morago…" },
+  venda:{ obituary:"Nga Lufuno Lukhulu", wedding:"Program ya Mutshelo", family:"Mhuri", restaurant:"Menu", event:"Tshikosi", survived:"O sivalela hani" },
+  tsonga:{ obituary:"Hi Rirhandzu Lerikulu", wedding:"Ntirho wa Vutsi", family:"Ndyangu", restaurant:"Xikolo xa Swihlawulelo", event:"Xikombelo xa Xiboho", survived:"U tshameke na" },
+  sepedi:{ obituary:"Ka Lerato Le Legolo", wedding:"Lenaneo la Lenyalo", family:"Lelapa", restaurant:"Lenaneo la dijo", event:"Poster ya Ketsahalo", survived:"O tlogetše ke" },
+  swati:{ obituary:"Ngokuthandeka Kakhulu", wedding:"Uhlelo Lomshado", family:"Umndeni", restaurant:"Imenyu", event:"Isikhangiso Somcimbi", survived:"Usashiywe ngubani" },
+  ndebele:{ obituary:"Ngothando Olukhulu", wedding:"Uhlelo Lomshado", family:"Umndeni", restaurant:"Imenyu", event:"Isimemo Somcimbi", survived:"Usalindwe ngabani" }
 };
 
-const categorySelect = document.getElementById("category");
-const languageSelect = document.getElementById("language");
-const formSection = document.getElementById("form-section");
-const preview = document.getElementById("preview");
-
-let currentInputs = {};
-
-function createForm(category){
-  formSection.innerHTML = "";
-  preview.innerHTML = "";
-  currentInputs = {};
+// Function to render dynamic form based on section type
+function renderForm() {
+  const type = sectionTypeSelect.value;
   const lang = languageSelect.value;
   const texts = languageMap[lang] || languageMap['english'];
+  let html = '';
 
-  if(category==="obituary"){
-    formSection.innerHTML = `
-      <label>Name</label><input type="text" placeholder="Full Name" id="name">
-      <label>Date of Birth – Date of Death</label><input type="text" placeholder="DD/MM/YYYY – DD/MM/YYYY" id="dates">
-      <label>Survived By</label><input type="text" placeholder="E.g. Spouse, Children" id="survived">
-      <label>Funeral Details</label><textarea rows="3" placeholder="Service date, time, venue" id="funeral"></textarea>
+  if(type === 'obituary'){
+    html = `
+      <label>Name</label><input type="text" id="name" placeholder="Full Name">
+      <label>Date of Birth – Date of Death</label><input type="text" id="dates" placeholder="DD/MM/YYYY – DD/MM/YYYY">
+      <label>Survived By</label><input type="text" id="survived" placeholder="Spouse, Children">
+      <label>Funeral Details</label><textarea id="funeral" rows="3" placeholder="Service details"></textarea>
     `;
-    preview.innerHTML = `
-      <h2 contenteditable="true" id="preview-title">${texts.obituaryTitle}</h2>
-      <p contenteditable="true" id="preview-name">Full Name</p>
-      <p contenteditable="true" id="preview-dates">DOB – DOD</p>
-      <p contenteditable="true" id="preview-survived">${texts.survived} …</p>
-      <p contenteditable="true" id="preview-funeral">Funeral Details</p>
-    `;
-    currentInputs = {
-      name: document.getElementById("name"),
-      dates: document.getElementById("dates"),
-      survived: document.getElementById("survived"),
-      funeral: document.getElementById("funeral")
-    };
-  } else if(category==="wedding"){
-    formSection.innerHTML = `
+  } else if(type === 'wedding'){
+    html = `
       <label>Bride Name</label><input type="text" id="bride" placeholder="Bride Name">
       <label>Groom Name</label><input type="text" id="groom" placeholder="Groom Name">
       <label>Date</label><input type="text" id="date" placeholder="DD/MM/YYYY">
       <label>Venue</label><input type="text" id="venue" placeholder="Venue">
-      <label>Order of Service</label><textarea rows="3" id="service" placeholder="Ceremony order"></textarea>
+      <label>Order of Service</label><textarea id="service" rows="3"></textarea>
     `;
-    preview.innerHTML = `
-      <h2 contenteditable="true" id="preview-title">${texts.weddingTitle}</h2>
-      <p contenteditable="true" id="preview-bride">Bride Name</p>
-      <p contenteditable="true" id="preview-groom">Groom Name</p>
-      <p contenteditable="true" id="preview-date">Date</p>
-      <p contenteditable="true" id="preview-venue">Venue</p>
-      <p contenteditable="true" id="preview-service">Order of Service</p>
+  } else if(type === 'family'){
+    html = `
+      <label>Event Name</label><input type="text" id="eventName" placeholder="Family Gathering Name">
+      <label>Date</label><input type="text" id="date" placeholder="DD/MM/YYYY">
+      <label>Venue</label><input type="text" id="venue" placeholder="Venue">
+      <label>Message</label><textarea id="message" rows="3"></textarea>
     `;
-    currentInputs = {
-      bride: document.getElementById("bride"),
-      groom: document.getElementById("groom"),
-      date: document.getElementById("date"),
-      venue: document.getElementById("venue"),
-      service: document.getElementById("service")
-    };
-  } else if(category==="restaurant"){
-    formSection.innerHTML = `
+  } else if(type === 'restaurant'){
+    html = `
       <label>Dish Name</label><input type="text" id="dish" placeholder="Dish Name">
       <label>Price</label><input type="text" id="price" placeholder="Price">
       <label>Section</label><input type="text" id="section" placeholder="Starters/Main/Dessert">
     `;
-    preview.innerHTML = `
-      <h2 contenteditable="true" id="preview-title">${texts.menuTitle}</h2>
-      <p contenteditable="true" id="preview-dish">Dish Name</p>
-      <p contenteditable="true" id="preview-price">Price</p>
-      <p contenteditable="true" id="preview-section">Section</p>
-    `;
-    currentInputs = {
-      dish: document.getElementById("dish"),
-      price: document.getElementById("price"),
-      section: document.getElementById("section")
-    };
-  } else if(category==="family"){
-    formSection.innerHTML = `
-      <label>Event Name</label><input type="text" id="eventName" placeholder="Family Gathering Name">
-      <label>Date</label><input type="text" id="date" placeholder="DD/MM/YYYY">
-      <label>Venue</label><input type="text" id="venue" placeholder="Venue">
-      <label>Message</label><textarea rows="3" id="message" placeholder="Details"></textarea>
-    `;
-    preview.innerHTML = `
-      <h2 contenteditable="true" id="preview-title">${texts.familyTitle}</h2>
-      <p contenteditable="true" id="preview-eventName">Event Name</p>
-      <p contenteditable="true" id="preview-date">Date</p>
-      <p contenteditable="true" id="preview-venue">Venue</p>
-      <p contenteditable="true" id="preview-message">Message</p>
-    `;
-    currentInputs = {
-      eventName: document.getElementById("eventName"),
-      date: document.getElementById("date"),
-      venue: document.getElementById("venue"),
-      message: document.getElementById("message")
-    };
-  } else if(category==="event"){
-    formSection.innerHTML = `
+  } else if(type === 'event'){
+    html = `
       <label>Event Name</label><input type="text" id="eventName" placeholder="Event Name">
       <label>Date</label><input type="text" id="date" placeholder="DD/MM/YYYY">
       <label>Venue</label><input type="text" id="venue" placeholder="Venue">
-      <label>Details</label><textarea rows="3" id="details" placeholder="Details"></textarea>
+      <label>Details</label><textarea id="details" rows="3"></textarea>
     `;
-    preview.innerHTML = `
-      <h2 contenteditable="true" id="preview-title">${texts.eventTitle}</h2>
-      <p contenteditable="true" id="preview-eventName">Event Name</p>
-      <p contenteditable="true" id="preview-date">Date</p>
-      <p contenteditable="true" id="preview-venue">Venue</p>
-      <p contenteditable="true" id="preview-details">Details</p>
-    `;
-    currentInputs = {
-      eventName: document.getElementById("eventName"),
-      date: document.getElementById("date"),
-      venue: document.getElementById("venue"),
-      details: document.getElementById("details")
-    };
   }
-  attachListeners();
+  formSection.innerHTML = html;
 }
 
-function attachListeners(){
-  Object.keys(currentInputs).forEach(key=>{
-    currentInputs[key].addEventListener("input", updatePreview);
-  });
-}
-
-function updatePreview(){
+// Function to add section to program preview
+function addSection() {
+  const type = sectionTypeSelect.value;
+  const template = templateSelect.value;
   const lang = languageSelect.value;
   const texts = languageMap[lang] || languageMap['english'];
-  const cat = categorySelect.value;
+  let sectionDiv = document.createElement('div');
+  sectionDiv.classList.add('section-preview');
 
-  if(cat==="obituary"){
-    preview.querySelector("#preview-title").textContent = texts.obituaryTitle;
-    preview.querySelector("#preview-name").textContent = currentInputs.name.value || "Full Name";
-    preview.querySelector("#preview-dates").textContent = currentInputs.dates.value || "DOB – DOD";
-    preview.querySelector("#preview-survived").textContent = texts.survived + " " + (currentInputs.survived.value || "…");
-    preview.querySelector("#preview-funeral").textContent = currentInputs.funeral.value || "Funeral Details";
-  } else if(cat==="wedding"){
-    preview.querySelector("#preview-title").textContent = texts.weddingTitle;
-    preview.querySelector("#preview-bride").textContent = currentInputs.bride.value || "Bride Name";
-    preview.querySelector("#preview-groom").textContent = currentInputs.groom.value || "Groom Name";
-    preview.querySelector("#preview-date").textContent = currentInputs.date.value || "Date";
-    preview.querySelector("#preview-venue").textContent = currentInputs.venue.value || "Venue";
-    preview.querySelector("#preview-service").textContent = currentInputs.service.value || "Order of Service";
-  } else if(cat==="restaurant"){
-    preview.querySelector("#preview-title").textContent = texts.menuTitle;
-    preview.querySelector("#preview-dish").textContent = currentInputs.dish.value || "Dish Name";
-    preview.querySelector("#preview-price").textContent = currentInputs.price.value || "Price";
-    preview.querySelector("#preview-section").textContent = currentInputs.section.value || "Section";
-  } else if(cat==="family"){
-    preview.querySelector("#preview-title").textContent = texts.familyTitle;
-    preview.querySelector("#preview-eventName").textContent = currentInputs.eventName.value || "Event Name";
-    preview.querySelector("#preview-date").textContent = currentInputs.date.value || "Date";
-    preview.querySelector("#preview-venue").textContent = currentInputs.venue.value || "Venue";
-    preview.querySelector("#preview-message").textContent = currentInputs.message.value || "Message";
-  } else if(cat==="event"){
-    preview.querySelector("#preview-title").textContent = texts.eventTitle;
-    preview.querySelector("#preview-eventName").textContent = currentInputs.eventName.value || "Event Name";
-    preview.querySelector("#preview-date").textContent = currentInputs.date.value || "Date";
-    preview.querySelector("#preview-venue").textContent = currentInputs.venue.value || "Venue";
-    preview.querySelector("#preview-details").textContent = currentInputs.details.value || "Details";
+  if(type === 'obituary'){
+    sectionDiv.innerHTML = `
+      <h3 contenteditable="true">${texts.obituary}</h3>
+      <p contenteditable="true">${document.getElementById('name').value || 'Full Name'}</p>
+      <p contenteditable="true">${document.getElementById('dates').value || 'DOB – DOD'}</p>
+      <p contenteditable="true">${texts.survived} ${document.getElementById('survived').value || '…'}</p>
+      <p contenteditable="true">${document.getElementById('funeral').value || 'Funeral Details'}</p>
+    `;
+  } else if(type === 'wedding'){
+    sectionDiv.innerHTML = `
+      <h3 contenteditable="true">${texts.wedding}</h3>
+      <p contenteditable="true">Bride: ${document.getElementById('bride').value || ''}</p>
+      <p contenteditable="true">Groom: ${document.getElementById('groom').value || ''}</p>
+      <p contenteditable="true">Date: ${document.getElementById('date').value || ''}</p>
+      <p contenteditable="true">Venue: ${document.getElementById('venue').value || ''}</p>
+      <p contenteditable="true">Order: ${document.getElementById('service').value || ''}</p>
+    `;
+  } else if(type === 'family'){
+    sectionDiv.innerHTML = `
+      <h3 contenteditable="true">${texts.family}</h3>
+      <p contenteditable="true">${document.getElementById('eventName').value || 'Event Name'}</p>
+      <p contenteditable="true">Date: ${document.getElementById('date').value || ''}</p>
+      <p contenteditable="true">Venue: ${document.getElementById('venue').value || ''}</p>
+      <p contenteditable="true">${document.getElementById('message').value || ''}</p>
+    `;
+  } else if(type === 'restaurant'){
+    sectionDiv.innerHTML = `
+      <h3 contenteditable="true">${texts.restaurant}</h3>
+      <p contenteditable="true">Dish: ${document.getElementById('dish').value || ''}</p>
+      <p contenteditable="true">Price: ${document.getElementById('price').value || ''}</p>
+      <p contenteditable="true">Section: ${document.getElementById('section').value || ''}</p>
+    `;
+  } else if(type === 'event'){
+    sectionDiv.innerHTML = `
+      <h3 contenteditable="true">${texts.event}</h3>
+      <p contenteditable="true">${document.getElementById('eventName').value || 'Event Name'}</p>
+      <p contenteditable="true">Date: ${document.getElementById('date').value || ''}</p>
+      <p contenteditable="true">Venue: ${document.getElementById('venue').value || ''}</p>
+      <p contenteditable="true">${document.getElementById('details').value || ''}</p>
+    `;
   }
+
+  programPreview.appendChild(sectionDiv);
 }
 
-categorySelect.addEventListener("change", ()=>createForm(categorySelect.value));
-languageSelect.addEventListener("change", ()=>createForm(categorySelect.value));
+// Event listeners
+sectionTypeSelect.addEventListener('change', renderForm);
+languageSelect.addEventListener('change', renderForm);
+addSectionBtn.addEventListener('click', addSection);
 
-// Initialize
-createForm(categorySelect.value);
+// Initialize first form
+renderForm();
 </script>
 
 </body>
-</html>
+  </html>
