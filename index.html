@@ -3,199 +3,118 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Poster Studio</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto&display=swap" rel="stylesheet">
+<title>Wedding Program Generator</title>
 <style>
   body {
-    font-family: 'Roboto', sans-serif;
-    background: #f2f4f7;
-    margin: 0;
+    font-family: 'Georgia', serif;
+    background: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     padding: 20px;
   }
-  h1 { text-align: center; margin-bottom: 20px; }
-  .container { display: flex; flex-wrap: wrap; gap: 20px; }
-  .form-container, .preview-container { flex: 1 1 400px; background: #fff; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);}
-  
-  label { display: block; margin-top: 10px; font-weight: bold; }
-  input, textarea, select { width: 100%; padding: 8px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; }
-  
-  .poster { width: 100%; min-height: 600px; background: #fff; border-radius: 15px; padding: 30px; box-sizing: border-box; position: relative; overflow: hidden; }
-  .poster h2 { font-family: 'Playfair Display', serif; margin: 10px 0; }
-  .poster .section { margin-bottom: 20px; }
-  
-  .decorative { position: absolute; width: 100px; height: 100px; opacity: 0.2; }
-  .decorative.top-left { top: 0; left: 0; }
-  .decorative.bottom-right { bottom: 0; right: 0; transform: rotate(180deg); }
-  
-  button { margin-top: 15px; padding: 10px 15px; font-size: 16px; border: none; border-radius: 8px; background: #1e90ff; color: #fff; cursor: pointer; }
-  button:hover { background: #1c7cd6; }
+
+  h1 { text-align: center; font-size: 2em; margin-bottom: 10px; }
+
+  #program {
+    width: 600px;
+    background: #fff;
+    border: 5px solid #d4af7f;
+    border-radius: 15px;
+    padding: 40px;
+    position: relative;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+  }
+
+  /* Floral corners (placeholder squares, replace with actual images if needed) */
+  .corner {
+    width: 60px; height: 60px;
+    position: absolute;
+    background: url('https://i.ibb.co/2MZgM3L/flower.png') no-repeat center center;
+    background-size: contain;
+  }
+  .top-left { top: -5px; left: -5px; }
+  .top-right { top: -5px; right: -5px; transform: rotate(90deg); }
+  .bottom-left { bottom: -5px; left: -5px; transform: rotate(270deg); }
+  .bottom-right { bottom: -5px; right: -5px; transform: rotate(180deg); }
+
+  .section { margin-top: 20px; }
+  .section h2 { font-size: 1.5em; text-decoration: underline; }
+  .section ul { margin-left: 20px; font-style: italic; }
+
+  label { display: block; margin-top: 10px; }
+  input, textarea { width: 300px; padding: 5px; margin-top: 5px; }
+  button { margin-top: 15px; padding: 10px 20px; font-size: 1em; cursor: pointer; }
 </style>
 </head>
 <body>
 
-<h1>Poster Studio</h1>
+<h1>Wedding Program Generator</h1>
 
-<div class="container">
-  <div class="form-container">
-    <label for="template">Select Template</label>
-    <select id="template">
-      <option value="wedding">Wedding</option>
-      <option value="funeral">Funeral</option>
-      <option value="menu">Menu</option>
-      <option value="event">Event</option>
-    </select>
-    
-    <div id="form-fields">
-      <!-- Dynamic fields inserted here -->
-    </div>
+<div id="program">
+  <div class="corner top-left"></div>
+  <div class="corner top-right"></div>
+  <div class="corner bottom-left"></div>
+  <div class="corner bottom-right"></div>
 
-    <button id="generate">Generate Poster</button>
-    <button id="download">Download as PNG</button>
+  <h1 id="title">Wedding Program</h1>
+  <p id="names" style="text-align:center; font-size:1.2em; margin-bottom: 10px;">[Couple Names]</p>
+  <p id="date" style="text-align:center; margin-bottom: 20px;">[Date & Venue]</p>
+
+  <div class="section">
+    <h2>Ceremony</h2>
+    <ul id="ceremony-list">
+      <li>Welcome Presentation</li>
+      <li>Prayer of Consecration</li>
+      <li>First Reading</li>
+      <li>Exchange of Vows</li>
+      <li>Ring Ceremony</li>
+      <li>Closing Blessing</li>
+    </ul>
   </div>
 
-  <div class="preview-container">
-    <div id="poster" class="poster">
-      <!-- Poster preview -->
-      <img src="https://i.imgur.com/6y0Z7Sx.png" class="decorative top-left" />
-      <img src="https://i.imgur.com/6y0Z7Sx.png" class="decorative bottom-right" />
-    </div>
+  <div class="section">
+    <h2>Reception</h2>
+    <ul id="reception-list">
+      <li>Cocktails</li>
+      <li>Dinner</li>
+      <li>Dancing</li>
+      <li>Night Full of Fun</li>
+    </ul>
   </div>
+</div>
+
+<div>
+  <label>Couple Names:</label>
+  <input type="text" id="input-names" placeholder="e.g. John & Jane">
+  
+  <label>Date & Venue:</label>
+  <input type="text" id="input-date" placeholder="e.g. 10 Oct 2025, Cape Town">
+
+  <button onclick="updateProgram()">Generate Program</button>
+  <button onclick="downloadProgram()">Download as PNG</button>
 </div>
 
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <script>
-  const templateSelect = document.getElementById('template');
-  const formFields = document.getElementById('form-fields');
-  const poster = document.getElementById('poster');
-  const generateBtn = document.getElementById('generate');
-  const downloadBtn = document.getElementById('download');
+function updateProgram() {
+  const names = document.getElementById('input-names').value || '[Couple Names]';
+  const date = document.getElementById('input-date').value || '[Date & Venue]';
+  
+  document.getElementById('names').textContent = names;
+  document.getElementById('date').textContent = date;
+}
 
-  const templates = {
-    wedding: [
-      { label: 'Couple Names', id: 'names' },
-      { label: 'Date', id: 'date' },
-      { label: 'Venue', id: 'venue' },
-      { label: 'Ceremony Details', id: 'ceremony' },
-      { label: 'Reception Details', id: 'reception' }
-    ],
-    funeral: [
-      { label: 'Deceased Name', id: 'names' },
-      { label: 'Date of Death', id: 'date' },
-      { label: 'Funeral Venue', id: 'venue' },
-      { label: 'Tribute / Memories', id: 'tribute' },
-      { label: 'Survived By', id: 'survived' }
-    ],
-    menu: [
-      { label: 'Restaurant Name', id: 'names' },
-      { label: 'Section', id: 'section' },
-      { label: 'Items & Prices', id: 'items' }
-    ],
-    event: [
-      { label: 'Event Name', id: 'names' },
-      { label: 'Date', id: 'date' },
-      { label: 'Venue', id: 'venue' },
-      { label: 'Highlights / Details', id: 'details' }
-    ]
-  };
-
-  function loadFormFields() {
-    formFields.innerHTML = '';
-    const fields = templates[templateSelect.value];
-    fields.forEach(f => {
-      const label = document.createElement('label');
-      label.textContent = f.label;
-      const input = f.id === 'items' || f.id === 'tribute' || f.id === 'details' || f.id === 'ceremony' || f.id === 'reception'
-        ? document.createElement('textarea')
-        : document.createElement('input');
-      input.id = f.id;
-      formFields.appendChild(label);
-      formFields.appendChild(input);
-    });
-  }
-
-  templateSelect.addEventListener('change', loadFormFields);
-  loadFormFields();
-
-  function generatePoster() {
-    poster.innerHTML = '';
-    const decoTop = document.createElement('img');
-    decoTop.src = "https://i.imgur.com/6y0Z7Sx.png";
-    decoTop.className = 'decorative top-left';
-    const decoBottom = document.createElement('img');
-    decoBottom.src = "https://i.imgur.com/6y0Z7Sx.png";
-    decoBottom.className = 'decorative bottom-right';
-    poster.appendChild(decoTop);
-    poster.appendChild(decoBottom);
-
-    const type = templateSelect.value;
-    const data = {};
-    templates[type].forEach(f => {
-      data[f.id] = document.getElementById(f.id).value;
-    });
-
-    if(type === 'wedding') {
-      const h = document.createElement('h2'); h.textContent = data.names; poster.appendChild(h);
-      const sections = ['ceremony','reception'];
-      sections.forEach(s => {
-        if(data[s]) {
-          const div = document.createElement('div');
-          div.className = 'section';
-          div.innerHTML = `<strong>${s.charAt(0).toUpperCase()+s.slice(1)}:</strong> ${data[s]}`;
-          poster.appendChild(div);
-        }
-      });
-      if(data.date || data.venue) {
-        const div = document.createElement('div'); div.className='section';
-        div.innerHTML = `${data.date ? `<strong>Date:</strong> ${data.date}<br>` : ''}${data.venue ? `<strong>Venue:</strong> ${data.venue}` : ''}`;
-        poster.appendChild(div);
-      }
-    }
-
-    if(type === 'funeral') {
-      const h = document.createElement('h2'); h.textContent = data.names; poster.appendChild(h);
-      ['tribute','survived'].forEach(s=>{
-        if(data[s]) {
-          const div = document.createElement('div'); div.className='section';
-          div.innerHTML = `<strong>${s.charAt(0).toUpperCase()+s.slice(1)}:</strong> ${data[s]}`;
-          poster.appendChild(div);
-        }
-      });
-      if(data.date || data.venue) {
-        const div = document.createElement('div'); div.className='section';
-        div.innerHTML = `${data.date ? `<strong>Date of Death:</strong> ${data.date}<br>` : ''}${data.venue ? `<strong>Funeral Venue:</strong> ${data.venue}` : ''}`;
-        poster.appendChild(div);
-      }
-    }
-
-    if(type==='menu') {
-      const h = document.createElement('h2'); h.textContent = data.names; poster.appendChild(h);
-      if(data.section && data.items){
-        const div = document.createElement('div'); div.className='section';
-        div.innerHTML = `<strong>${data.section}:</strong><br>${data.items.replace(/\n/g,'<br>')}`;
-        poster.appendChild(div);
-      }
-    }
-
-    if(type==='event'){
-      const h = document.createElement('h2'); h.textContent = data.names; poster.appendChild(h);
-      if(data.date || data.venue || data.details){
-        const div = document.createElement('div'); div.className='section';
-        div.innerHTML = `${data.date ? `<strong>Date:</strong> ${data.date}<br>` : ''}${data.venue ? `<strong>Venue:</strong> ${data.venue}<br>` : ''}${data.details ? `<strong>Details:</strong> ${data.details}` : ''}`;
-        poster.appendChild(div);
-      }
-    }
-  }
-
-  generateBtn.addEventListener('click', generatePoster);
-
-  downloadBtn.addEventListener('click', () => {
-    html2canvas(poster).then(canvas => {
-      const link = document.createElement('a');
-      link.download = 'poster.png';
-      link.href = canvas.toDataURL();
-      link.click();
-    });
+function downloadProgram() {
+  const program = document.getElementById('program');
+  html2canvas(program).then(canvas => {
+    const link = document.createElement('a');
+    link.download = 'wedding_program.png';
+    link.href = canvas.toDataURL();
+    link.click();
   });
+}
 </script>
 
 </body>
