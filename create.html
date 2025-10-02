@@ -1,12 +1,14 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>QuickPoster — Create Posters & Programs</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QuickPoster — Canva Style Editor</title>
 
+<!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
 
+<!-- html2canvas & jsPDF -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
@@ -18,255 +20,223 @@
   --muted:#666;
   --paper-white:#fffdfb;
 }
-body{margin:0;font-family:'Poppins',sans-serif;background:linear-gradient(135deg,var(--bg1),var(--bg2));color:#111}
-h1{margin:0;padding:12px;text-align:center;color:#fff;background:linear-gradient(90deg,#6dd5fa,#8e54e9);border-radius:10px;font-weight:800}
-.wrap{max-width:1200px;margin:20px auto;display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:10px}
-.panel{background:var(--card-bg);border-radius:12px;padding:18px;box-shadow:0 6px 20px rgba(17,24,39,0.12)}
-.left label{display:block;margin-top:12px;font-weight:600;color:var(--accent)}
-.left input, .left textarea, .left select{width:100%;padding:10px;border-radius:8px;border:1px solid #e6e6e6;margin-top:6px;font-size:15px}
-textarea{min-height:80px;resize:vertical}
-.templates-grid{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}
-.tp{width:120px;border-radius:10px;padding:8px;background:#fafafa;border:2px solid transparent;cursor:pointer;text-align:center}
-.tp img{width:100%;height:80px;object-fit:cover;border-radius:6px}
-.tp.active{border-color:var(--accent);box-shadow:0 6px 18px rgba(63,55,201,0.12);transform:translateY(-4px)}
-.right{display:flex;flex-direction:column;gap:12px;align-items:center}
-.preview-wrap{width:100%;max-width:520px;background:var(--paper-white);padding:20px;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,0.08)}
-.poster{width:100%;margin-bottom:20px;padding:18px;border-radius:8px;background:#fff;box-sizing:border-box}
-.poster .title{font-size:28px;font-weight:800;margin:8px 0;text-align:center}
-.poster .sub{font-size:14px;color:var(--muted);margin:2px 0;text-align:center}
-.poster .bio{font-size:15px;margin-top:12px;line-height:1.4;text-align:center}
-.btn{background:var(--accent);color:white;border:none;padding:10px 14px;border-radius:8px;font-weight:700;cursor:pointer}
-.btn.ghost{background:transparent;color:var(--accent);border:2px solid var(--accent)}
-.controls, .preview-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-@media(max-width:980px){.wrap{grid-template-columns:1fr}}
+body{margin:0;font-family:'Poppins',sans-serif;background:linear-gradient(135deg,var(--bg1),var(--bg2));color:#111;}
+h1{text-align:center;color:#fff;background:linear-gradient(90deg,#6dd5fa,#8e54e9);padding:15px;border-radius:10px;}
+.wrap{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:1200px;margin:20px auto;padding:10px;}
+.panel{background:var(--card-bg);padding:15px;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,0.1);}
+.left input, .left select, .left textarea{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:1px solid #e6e6e6;font-size:15px;box-sizing:border-box;}
+textarea{resize:vertical;min-height:80px;}
+.templates-grid{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px;}
+.tp{width:100px;border-radius:10px;padding:6px;background:#fafafa;border:2px solid transparent;cursor:pointer;text-align:center;}
+.tp img{width:100%;height:70px;object-fit:cover;border-radius:6px;}
+.tp.active{border-color:var(--accent);box-shadow:0 6px 18px rgba(63,55,201,0.12);}
+.right{display:flex;flex-direction:column;align-items:center;}
+.preview-wrap{background:var(--paper-white);padding:15px;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,0.08);position:relative;width:100%;max-width:520px;}
+.poster{width:100%;min-height:400px;padding:15px;border-radius:8px;overflow:hidden;box-sizing:border-box;background:#fff;}
+.poster .title{font-size:28px;font-weight:800;text-align:center;margin:8px 0;}
+.poster .sub{font-size:14px;text-align:center;margin:2px 0;color:var(--muted);}
+.poster .bio{font-size:15px;margin-top:12px;line-height:1.4;text-align:center;white-space:pre-line;}
+.small-ctrls{display:flex;gap:8px;position:absolute;top:12px;right:12px;}
+.preview-actions{display:flex;gap:8px;margin-top:8px;justify-content:center;}
+.page-thumbs{display:flex;gap:6px;margin-top:8px;justify-content:center;}
+.page-thumb{width:50px;height:70px;border:2px solid transparent;cursor:pointer;}
+.page-thumb.active{border-color:var(--accent);}
+@media(max-width:980px){.wrap{grid-template-columns:1fr;}}
+button{padding:6px 10px;border:none;border-radius:6px;background:var(--accent);color:#fff;cursor:pointer;}
+button.ghost{background:#fff;color:var(--accent);border:1px solid var(--accent);}
 </style>
 </head>
 <body>
 
-<h1>QuickPoster — Create Posters & Programs</h1>
-
+<h1>QuickPoster — Canva Style Editor</h1>
 <div class="wrap">
-  <!-- LEFT: form & templates -->
-  <div class="panel left">
-    <h2 style="margin:0 0 10px;font-size:18px;color:var(--accent)">Step 1 — Pick Type & Template</h2>
 
-    <label>Poster Type</label>
-    <select id="posterType">
-      <option value="">-- Select Poster Type --</option>
-      <option value="obituary">🕊 Obituary / Funeral</option>
-      <option value="wedding">💍 Wedding Program</option>
-      <option value="gathering">👨‍👩‍👧 Family Gathering</option>
-      <option value="menu">🍽 Restaurant Menu</option>
-    </select>
+<!-- LEFT: type, template, fields -->
+<div class="panel left">
+  <label>Poster Type</label>
+  <select id="posterType">
+    <option value="obituary">🕊 Obituary</option>
+    <option value="wedding">💍 Wedding Program</option>
+    <option value="event">🎉 Event / Gathering</option>
+    <option value="menu">🍽 Restaurant Menu</option>
+  </select>
 
+  <div id="templateArea">
     <label>Choose Template</label>
     <div class="templates-grid" id="templateGrid"></div>
-
-    <div id="extraFields"></div>
-
-    <div class="controls">
-      <button class="btn" id="btnPreview">Live Preview</button>
-      <button class="btn ghost" id="btnReset">Reset</button>
-    </div>
   </div>
 
-  <!-- RIGHT: live preview -->
-  <div class="panel right">
-    <h2 style="margin:0 0 10px;font-size:18px;color:var(--accent)">Step 2 — Preview & Download</h2>
-    <div class="preview-wrap" id="previewWrap"></div>
+  <div id="extraFields"></div>
+
+  <div class="controls">
+    <button id="btnPreview">Live Preview</button>
+    <button id="btnReset">Reset</button>
+  </div>
+</div>
+
+<!-- RIGHT: live preview -->
+<div class="panel right">
+  <div class="preview-wrap">
+    <div class="small-ctrls">
+      <button id="btnFontSmall">A-</button>
+      <button id="btnFontBig">A+</button>
+    </div>
+
+    <div id="previewPoster" class="poster t-classic" data-page="0">
+      <div class="title" id="pvTitle">[Title]</div>
+      <div class="sub" id="pvDates">Date(s)</div>
+      <div class="bio" id="pvDetails">Details / message</div>
+    </div>
+
+    <div class="page-thumbs" id="pageThumbs"></div>
+
     <div class="preview-actions">
-      <button class="btn" id="downloadPNG">Download PNG</button>
-      <button class="btn" id="downloadPDF">Download PDF</button>
+      <button id="downloadPNG">Download PNG</button>
+      <button id="downloadPDF">Download PDF</button>
+      <button class="ghost" id="shareLink">Copy Share Link</button>
     </div>
   </div>
 </div>
 
+</div>
+
 <script>
-// --- Poster templates per type ---
+// --------------- Template Definitions ----------------
 const TEMPLATES = {
   obituary:[
-    {name:'Classic', pages:['https://i.imgur.com/Lt2d8KX.png','https://i.imgur.com/YuO7Svn.png']},
-    {name:'Elegant', pages:['https://i.imgur.com/uQfZ2Tq.png','https://i.imgur.com/F0Xx3l7.png']}
+    {name:"Classic",img:"https://images.unsplash.com/photo-1503264116251-35a269479413?q=80&w=600"},
+    {name:"Elegant",img:"https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?q=80&w=600"}
   ],
   wedding:[
-    {name:'Modern', pages:['https://i.imgur.com/kH5ZbO5.png','https://i.imgur.com/If9FhRw.png']},
-    {name:'Elegant', pages:['https://i.imgur.com/0nH5aD6.png','https://i.imgur.com/Hvdp0Fg.png']}
+    {name:"Floral",img:"https://images.unsplash.com/photo-1517511620798-cec17d428bc0?q=80&w=600"},
+    {name:"Modern",img:"https://images.unsplash.com/photo-1501436513143-8d431f65d6d0?q=80&w=600"}
   ],
-  gathering:[
-    {name:'Classic', pages:['https://i.imgur.com/fXkZr0M.png']},
-    {name:'Modern', pages:['https://i.imgur.com/3qwlZ6b.png']}
+  event:[
+    {name:"Simple",img:"https://images.unsplash.com/photo-1509474520651-1dc98258b593?q=80&w=600"},
+    {name:"Colorful",img:"https://images.unsplash.com/photo-1515187029135-18ee286d815b?q=80&w=600"}
   ],
   menu:[
-    {name:'Modern', pages:['https://i.imgur.com/0eWnH3l.png']},
-    {name:'Classic', pages:['https://i.imgur.com/4l7QgRt.png']}
+    {name:"Modern",img:"https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=600"},
+    {name:"Classic",img:"https://images.unsplash.com/photo-1499028344343-cd173ffc68a9?q=80&w=600"}
   ]
 };
 
 const posterType = document.getElementById('posterType');
 const templateGrid = document.getElementById('templateGrid');
 const extraFields = document.getElementById('extraFields');
-const previewWrap = document.getElementById('previewWrap');
-let selectedTemplate = null;
+const pvTitle = document.getElementById('pvTitle');
+const pvDates = document.getElementById('pvDates');
+const pvDetails = document.getElementById('pvDetails');
+const previewPoster = document.getElementById('previewPoster');
 
-// --- Render templates grid ---
-posterType.addEventListener('change', ()=>{
-  selectedTemplate=null;
-  renderTemplates();
-  renderExtraFields();
-  previewWrap.innerHTML='';
-});
+let selectedTemplate = '';
+let titleSize=28;
 
+// ---------------- Render Templates -----------------
 function renderTemplates(){
   templateGrid.innerHTML='';
   const type = posterType.value;
-  if(!type) return;
-  TEMPLATES[type].forEach((t,idx)=>{
+  TEMPLATES[type].forEach(tp=>{
     const div=document.createElement('div');
     div.className='tp';
-    div.dataset.idx=idx;
-    div.innerHTML=`<img src="${t.pages[0]}" alt="${t.name}"><div>${t.name}</div>`;
+    div.dataset.template=tp.name;
+    div.innerHTML=`<img src="${tp.img}"><div class="name">${tp.name}</div>`;
     div.addEventListener('click',()=>{
       templateGrid.querySelectorAll('.tp').forEach(x=>x.classList.remove('active'));
       div.classList.add('active');
-      selectedTemplate=t;
-      renderPreview();
+      selectedTemplate=tp.name;
+      refreshPreview();
     });
     templateGrid.appendChild(div);
   });
+  templateGrid.querySelector('.tp').classList.add('active');
+  selectedTemplate=TEMPLATES[type][0].name;
 }
 
-// --- Render type-specific fields ---
-function renderExtraFields(){
+// ---------------- Extra Fields -------------------
+function renderExtra(){
   extraFields.innerHTML='';
   const type = posterType.value;
   if(type==='obituary'){
-    extraFields.innerHTML=`
-      <label>Full Name</label><input id="nameField" type="text">
-      <label>Date of Birth</label><input id="dobField" type="date">
-      <label>Date of Passing</label><input id="dodField" type="date">
-      <label>Survived By</label><input id="survivedField" type="text">
-      <label>Service Venue</label><input id="venueField" type="text">
-      <label>Message / Details</label><textarea id="detailsField"></textarea>
-    `;
+    extraFields.innerHTML=`<label>Full Name</label><input id="nameField" type="text">
+      <label>Date of Birth</label><input id="dob" type="date">
+      <label>Date of Passing</label><input id="dop" type="date">
+      <label>Message</label><textarea id="msg"></textarea>`;
   } else if(type==='wedding'){
-    extraFields.innerHTML=`
-      <label>Bride & Groom</label><input id="bgField" type="text">
-      <label>Date</label><input id="dateField" type="date">
-      <label>Venue & Time</label><input id="venueField" type="text">
-      <label>Notes / Order of Service</label><textarea id="detailsField"></textarea>
-    `;
-  } else if(type==='gathering'){
-    extraFields.innerHTML=`
-      <label>Host Name</label><input id="hostField" type="text">
-      <label>Date</label><input id="dateField" type="date">
-      <label>Venue</label><input id="venueField" type="text">
-      <label>Notes</label><textarea id="detailsField"></textarea>
-    `;
+    extraFields.innerHTML=`<label>Bride & Groom</label><input id="bgNames" type="text">
+      <label>Date</label><input id="wedDate" type="date">
+      <label>Venue & Time</label><input id="venueTime" type="text">
+      <label>Message / Order of Service</label><textarea id="msg"></textarea>`;
+  } else if(type==='event'){
+    extraFields.innerHTML=`<label>Event Name</label><input id="eventName" type="text">
+      <label>Host</label><input id="hostName" type="text">
+      <label>Date</label><input id="eventDate" type="date">
+      <label>Venue</label><input id="venue" type="text">
+      <label>Message</label><textarea id="msg"></textarea>`;
   } else if(type==='menu'){
-    extraFields.innerHTML=`
-      <label>Restaurant Name</label><input id="restField" type="text">
-      <label>Menu Items (one per line)</label><textarea id="itemsField"></textarea>
-    `;
+    extraFields.innerHTML=`<label>Restaurant Name</label><input id="restName" type="text">
+      <label>Menu Note</label><input id="menuNote" type="text">
+      <label>Menu Items (one per line)</label><textarea id="menuItems"></textarea>`;
   }
 }
 
-// --- Render live preview ---
-function renderPreview(){
-  if(!selectedTemplate) return;
-  const type=posterType.value;
-  previewWrap.innerHTML='';
-  selectedTemplate.pages.forEach((page,idx)=>{
-    const div=document.createElement('div');
-    div.className='poster';
-    div.innerHTML=`<img src="${page}" style="width:100%;border-radius:8px;margin-bottom:12px">`;
-    // inject text
-    if(type==='obituary'){
-      const name=document.getElementById('nameField')?.value||'Full Name';
-      const dob=document.getElementById('dobField')?.value||'Date of Birth';
-      const dod=document.getElementById('dodField')?.value||'Date of Passing';
-      const survived=document.getElementById('survivedField')?.value||'Survived By';
-      const venue=document.getElementById('venueField')?.value||'Venue';
-      const details=document.getElementById('detailsField')?.value||'Message';
-      div.innerHTML+=`
-        <div class="title">${name}</div>
-        <div class="sub">${dob} - ${dod}</div>
-        <div class="sub">Survived By: ${survived}</div>
-        <div class="sub">Service: ${venue}</div>
-        <div class="bio">${details}</div>
-      `;
-    } else if(type==='wedding'){
-      const bg=document.getElementById('bgField')?.value||'Bride & Groom';
-      const date=document.getElementById('dateField')?.value||'Date';
-      const venue=document.getElementById('venueField')?.value||'Venue';
-      const details=document.getElementById('detailsField')?.value||'Notes';
-      div.innerHTML+=`
-        <div class="title">${bg}</div>
-        <div class="sub">${date}</div>
-        <div class="sub">${venue}</div>
-        <div class="bio">${details}</div>
-      `;
-    } else if(type==='gathering'){
-      const host=document.getElementById('hostField')?.value||'Host';
-      const date=document.getElementById('dateField')?.value||'Date';
-      const venue=document.getElementById('venueField')?.value||'Venue';
-      const details=document.getElementById('detailsField')?.value||'Notes';
-      div.innerHTML+=`
-        <div class="title">${host}</div>
-        <div class="sub">${date}</div>
-        <div class="sub">${venue}</div>
-        <div class="bio">${details}</div>
-      `;
-    } else if(type==='menu'){
-      const rest=document.getElementById('restField')?.value||'Restaurant';
-      const items=document.getElementById('itemsField')?.value.split('\n').map(i=>`<div>${i}</div>`).join('');
-      div.innerHTML+=`
-        <div class="title">${rest}</div>
-        <div class="bio">${items}</div>
-      `;
-    }
-    previewWrap.appendChild(div);
-  });
+// ---------------- Refresh Preview ----------------
+function refreshPreview(){
+  const type = posterType.value;
+  if(type==='obituary'){
+    const n=document.getElementById('nameField').value||'[Name]';
+    const d1=document.getElementById('dob').value;
+    const d2=document.getElementById('dop').value;
+    const msg=document.getElementById('msg').value||'Message / tribute';
+    pvTitle.textContent=n;
+    pvDates.textContent=(d1 && d2)?`${new Date(d1).toLocaleDateString()} — ${new Date(d2).toLocaleDateString()}`:'Date(s)';
+    pvDetails.textContent=msg;
+  } else if(type==='wedding'){
+    const bg=document.getElementById('bgNames').value||'Bride & Groom';
+    const d=document.getElementById('wedDate').value;
+    const v=document.getElementById('venueTime').value;
+    const msg=document.getElementById('msg').value||'Order of Service';
+    pvTitle.textContent=bg;
+    pvDates.textContent=d?new Date(d).toLocaleDateString(): 'Date';
+    pvDetails.textContent=(msg+'\n'+v).trim();
+  } else if(type==='event'){
+    const en=document.getElementById('eventName').value||'Event Name';
+    const h=document.getElementById('hostName').value||'Host';
+    const d=document.getElementById('eventDate').value;
+    const v=document.getElementById('venue').value;
+    const msg=document.getElementById('msg').value||'Message';
+    pvTitle.textContent=en;
+    pvDates.textContent=d?new Date(d).toLocaleDateString(): 'Date';
+    pvDetails.textContent=`Host: ${h}\nVenue: ${v}\n${msg}`;
+  } else if(type==='menu'){
+    const r=document.getElementById('restName').value||'Restaurant';
+    const mn=document.getElementById('menuNote').value;
+    const items=document.getElementById('menuItems').value||'Dish - RPrice';
+    pvTitle.textContent=r;
+    pvDates.textContent=mn;
+    pvDetails.textContent=items;
+  }
+  previewPoster.style.fontSize=titleSize+'px';
 }
 
-// --- Button events ---
-document.getElementById('btnPreview').addEventListener('click',renderPreview);
-document.getElementById('btnReset').addEventListener('click',()=>{
-  posterType.value='';
-  templateGrid.innerHTML='';
-  extraFields.innerHTML='';
-  previewWrap.innerHTML='';
-  selectedTemplate=null;
+// ---------------- Font Size Controls ----------------
+document.getElementById('btnFontSmall').addEventListener('click',()=>{titleSize=Math.max(14,titleSize-2); refreshPreview();});
+document.getElementById('btnFontBig').addEventListener('click',()=>{titleSize=Math.min(60,titleSize+2); refreshPreview();});
+
+// ---------------- Poster Type Change ----------------
+posterType.addEventListener('change',()=>{
+  renderTemplates();
+  renderExtra();
+  refreshPreview();
 });
 
-// --- Download PNG ---
-document.getElementById('downloadPNG').addEventListener('click',()=>{
-  const posters = previewWrap.querySelectorAll('.poster');
-  posters.forEach((p,idx)=>{
-    html2canvas(p).then(canvas=>{
-      const link=document.createElement('a');
-      link.download=`poster_page${idx+1}.png`;
-      link.href=canvas.toDataURL();
-      link.click();
-    });
-  });
-});
+// ---------------- Extra Field Listeners ----------------
+extraFields.addEventListener('input',refreshPreview);
 
-// --- Download PDF ---
-document.getElementById('downloadPDF').addEventListener('click',()=>{
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  const posters = previewWrap.querySelectorAll('.poster');
-  let promises = [];
-  posters.forEach((p,idx)=>{
-    promises.push(html2canvas(p).then(canvas=>{
-      const imgData = canvas.toDataURL('image/png');
-      if(idx>0) doc.addPage();
-      doc.addImage(imgData,'PNG',10,10,190,0);
-    }));
-  });
-  Promise.all(promises).then(()=>doc.save('poster.pdf'));
-});
+// ---------------- Initial Render ----------------
+renderTemplates();
+renderExtra();
+refreshPreview();
 </script>
-
 </body>
 </html>
