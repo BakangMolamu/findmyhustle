@@ -1,747 +1,652 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Event Poster Generator — vNext (drag & resize + AI templates)</title>
-
-<!-- Fonts -->
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Event Poster Generator — vAI-Dummy</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
-
 <style>
-  :root{
-    --bg: linear-gradient(135deg,#cfe9ff,#e8d6ff);
-    --card:#fff; --accent:#6366f1; --radius:12px;
-    font-family: Inter, system-ui, Arial;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;min-height:100vh;background:var(--bg);color:#0f172a;font-family:Inter,system-ui,Arial}
-  .app{max-width:1200px;margin:18px auto;padding:14px;display:grid;grid-template-columns:320px 1fr 320px;gap:14px}
-  .panel{background:var(--card);border-radius:var(--radius);padding:12px;box-shadow:0 8px 30px rgba(12,15,30,.06)}
-  h1{margin:6px 0 12px;font-size:18px}
-  label{font-size:13px;color:#374151}
-  input,select,textarea,button{font-family:inherit}
-  input[type=text],input[type=file],select,textarea{width:100%;padding:8px;border-radius:8px;border:1px solid #e6e9ef;margin-top:6px}
-  textarea{min-height:72px}
-  .btn{display:inline-block;padding:10px 14px;border-radius:10px;background:linear-gradient(90deg,#6366f1,#8b5cf6);color:white;border:none;cursor:pointer}
-  .muted{background:transparent;border:1px solid #edf2f7;padding:8px;border-radius:8px;cursor:pointer}
-  .templates{display:flex;flex-direction:column;gap:8px;margin-top:10px;max-height:420px;overflow:auto}
-  .tpl-card{display:flex;gap:8px;align-items:center;padding:10px;border-radius:10px;border:1px solid #eef2ff;cursor:pointer}
-  .tpl-thumb{width:90px;height:120px;border-radius:6px;overflow:hidden;background:#fff;border:1px solid #eee;display:flex;align-items:center;justify-content:center;font-size:12px;color:#666}
-  .canvas-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;position:relative}
-  canvas{background:#fff;border-radius:10px;box-shadow:0 12px 36px rgba(12,15,30,.12);touch-action:none}
-  .controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;align-items:center}
-  .small{font-size:13px;color:#6b7280}
-  .elements-list{display:flex;flex-direction:column;gap:8px;margin-top:8px;max-height:520px;overflow:auto}
-  .element-row{display:flex;align-items:center;gap:8px;padding:8px;border-radius:8px;border:1px solid #f1f5f9}
-  .crop-popup{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:9999}
-  .crop-content{background:#fff;padding:12px;border-radius:12px;display:flex;flex-direction:column;align-items:center}
-  #cropCanvas{border:1px solid #ccc}
-  .handle{width:12px;height:12px;background:#fff;border:2px solid var(--accent);position:absolute;border-radius:3px;box-shadow:0 2px 6px rgba(0,0,0,.12);display:none;touch-action:none}
-  @media(max-width:1100px){.app{grid-template-columns:1fr}}
+:root{
+  --bg:linear-gradient(135deg,#cfe9ff,#e8d6ff);
+  --card:#fff; --accent:#6366f1; --radius:12px;
+  font-family:Inter,system-ui,Arial;
+}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--bg);color:#0f172a;font-family:Inter,system-ui,Arial}
+.app{max-width:1200px;margin:18px auto;padding:14px;display:grid;grid-template-columns:320px 1fr 320px;gap:14px}
+.panel{background:var(--card);border-radius:var(--radius);padding:12px;box-shadow:0 8px 30px rgba(12,15,30,.06)}
+h1{margin:6px 0 12px;font-size:18px}
+label{font-size:13px;color:#374151}
+input,select,textarea,button{font-family:inherit}
+input[type=text],input[type=file],select,textarea{width:100%;padding:8px;border-radius:8px;border:1px solid #e6e9ef;margin-top:6px}
+textarea{min-height:72px}
+.btn{display:inline-block;padding:10px 14px;border-radius:10px;background:linear-gradient(90deg,#6366f1,#8b5cf6);color:white;border:none;cursor:pointer}
+.muted{background:transparent;border:1px solid #edf2f7;padding:8px;border-radius:8px;cursor:pointer}
+.templates{display:flex;flex-direction:column;gap:8px;margin-top:10px;max-height:420px;overflow:auto}
+.tpl-card{display:flex;gap:8px;align-items:center;padding:10px;border-radius:10px;border:1px solid #eef2ff;cursor:pointer}
+.tpl-thumb{width:90px;height:120px;border-radius:6px;overflow:hidden;background:#fff;border:1px solid #eee;display:flex;align-items:center;justify-content:center;font-size:12px;color:#666}
+.canvas-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;position:relative}
+canvas{background:#fff;border-radius:10px;box-shadow:0 12px 36px rgba(12,15,30,.12);touch-action:none;max-width:100%}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;align-items:center}
+.small{font-size:13px;color:#6b7280}
+.elements-list{display:flex;flex-direction:column;gap:8px;margin-top:8px;max-height:520px;overflow:auto}
+.element-row{display:flex;align-items:center;gap:8px;padding:8px;border-radius:8px;border:1px solid #f1f5f9}
+.crop-popup{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:9999}
+.crop-content{background:#fff;padding:12px;border-radius:12px;display:flex;flex-direction:column;align-items:center}
+#cropCanvas{border:1px solid #ccc;max-width:95vw;height:auto}
+.handle{width:12px;height:12px;background:#fff;border:2px solid var(--accent);position:absolute;border-radius:3px;box-shadow:0 2px 6px rgba(0,0,0,.12);display:none;pointer-events:auto;z-index:50}
+@media(max-width:1100px){.app{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-  <div class="app">
 
-    <!-- LEFT: Inputs & AI Template -->
-    <aside class="panel">
-      <h1>Create Poster</h1>
-      <div class="small">Fill details → Suggest templates → pick one → customize → export</div>
+<div class="app">
 
-      <label>Event Name</label>
-      <input id="eventName" type="text" placeholder="Community Jazz Night" value="Community Jazz Night">
+  <!-- LEFT: Inputs & Dummy AI Template -->
+  <aside class="panel">
+    <h1>Create Poster</h1>
+    <div class="small">Fill details → Suggest templates → pick one → customize → export</div>
 
-      <label>Date & Time</label>
-      <input id="eventDate" type="datetime-local">
+    <label>Event Name</label>
+    <input id="eventName" type="text" placeholder="Community Jazz Night" value="Community Jazz Night">
 
-      <label>Location</label>
-      <input id="eventLocation" type="text" placeholder="Town Hall, Johannesburg">
+    <label>Date & Time</label>
+    <input id="eventDate" type="datetime-local">
 
-      <label>Event Type</label>
-      <select id="eventType">
-        <option>Concert</option><option>Wedding</option><option>Birthday</option><option>Sale</option><option>Workshop</option><option>Other</option>
+    <label>Location</label>
+    <input id="eventLocation" type="text" placeholder="Town Hall, Johannesburg">
+
+    <label>Event Type</label>
+    <select id="eventType"><option>Concert</option><option>Wedding</option><option>Birthday</option><option>Sale</option><option>Workshop</option><option>Other</option></select>
+
+    <label>Short Description</label>
+    <textarea id="eventDesc">An evening of live jazz and local food stalls.</textarea>
+
+    <label>Upload Images</label>
+    <input id="imageUpload" type="file" accept="image/*" multiple>
+
+    <label>QR Code Link</label>
+    <input id="qrLink" type="text" placeholder="https://...">
+
+    <div style="display:flex;gap:8px;margin-top:10px">
+      <button id="suggestTemplates" class="btn">Suggest Templates</button>
+      <button id="localTemplates" class="muted">Local Templates</button>
+    </div>
+
+    <div class="templates" id="templates"></div>
+  </aside>
+
+  <!-- CENTER: Canvas + controls -->
+  <main class="panel">
+    <h1>Poster Editor</h1>
+    <div class="canvas-wrap" id="canvasWrap" style="width:100%;display:flex;flex-direction:column;align-items:center;">
+      <!-- handles will be absolute-positioned in body -->
+      <canvas id="posterCanvas" width="1080" height="1350"></canvas>
+    </div>
+
+    <div class="controls">
+      <label class="small">Size</label>
+      <select id="sizeSelect">
+        <option value="1080x1350">Instagram (1080×1350)</option>
+        <option value="1080x1080">Square (1080×1080)</option>
+        <option value="1080x1920">Story (1080×1920)</option>
+        <option value="2480x3508">A4 Print (2480×3508)</option>
       </select>
 
-      <label>Short Description</label>
-      <textarea id="eventDesc">An evening of live jazz and local food stalls.</textarea>
+      <button id="exportPng" class="btn">Download PNG</button>
+      <button id="exportPdf" class="btn">Download PDF</button>
 
-      <label>Upload Images</label>
-      <input id="imageUpload" type="file" accept="image/*" multiple>
+      <button id="addText" class="muted">+ Text</button>
+      <button id="addQr" class="muted">+ QR</button>
+      <button id="clearAll" class="muted">Clear</button>
 
-      <label>QR Code Link (optional)</label>
-      <input id="qrLink" type="text" placeholder="https://...">
-
-      <div style="display:flex;gap:8px;margin-top:10px">
-        <button id="suggestTemplates" class="btn">Suggest Templates (AI)</button>
-        <button id="localTemplates" class="muted">Local Templates</button>
-      </div>
-
-      <div class="templates" id="templates"></div>
-    </aside>
-
-    <!-- CENTER: Canvas + controls -->
-    <main class="panel">
-      <h1>Poster Editor</h1>
-      <div class="canvas-wrap">
-        <div id="handles-container" style="position:absolute;pointer-events:none;top:0;left:0;width:100%;height:100%"></div>
-        <canvas id="posterCanvas" width="1080" height="1350"></canvas>
-      </div>
-
-      <div class="controls">
-        <label class="small">Size</label>
-        <select id="sizeSelect">
-          <option value="1080x1350">Instagram Post (1080×1350)</option>
-          <option value="1080x1080">Instagram Square (1080×1080)</option>
-          <option value="1080x1920">Story (1080×1920)</option>
-          <option value="2480x3508">A4 Print (2480×3508)</option>
-        </select>
-
-        <button id="exportPng" class="btn">Download PNG</button>
-        <button id="exportPdf" class="btn">Download PDF</button>
-        <button id="addText" class="muted">+ Text</button>
-        <button id="addQr" class="muted">+ QR from Link</button>
-        <button id="clearAll" class="muted">Clear</button>
-        <div class="small" style="margin-left:auto">Hold <strong>Shift</strong> while resizing to keep aspect ratio</div>
-      </div>
-    </main>
-
-    <!-- RIGHT: Elements list and quick edit -->
-    <aside class="panel">
-      <h1>Elements</h1>
-      <div class="small">Select elements on the canvas to move, resize, edit or delete.</div>
-      <div style="height:12px"></div>
-
-      <div id="elementsList" class="elements-list"></div>
-      <div style="height:12px"></div>
-      <div style="display:flex;gap:8px">
-        <button id="bringFront" class="muted">Bring Front</button>
-        <button id="sendBack" class="muted">Send Back</button>
-        <button id="deleteEl" class="muted">Delete</button>
-      </div>
-    </aside>
-  </div>
-
-  <!-- Crop popup -->
-  <div class="crop-popup" id="cropPopup">
-    <div class="crop-content">
-      <canvas id="cropCanvas" width="600" height="400"></canvas>
-      <div style="margin-top:8px;display:flex;gap:8px">
-        <button id="cropApply" class="btn">Apply Crop</button>
-        <button id="cropCancel" class="muted">Cancel</button>
-      </div>
+      <div class="small" style="margin-left:auto">Hold <strong>Shift</strong> while resizing to keep aspect</div>
     </div>
-  </div>
+  </main>
 
-  <!-- JS libraries -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- RIGHT: Elements list -->
+  <aside class="panel">
+    <h1>Elements</h1>
+    <div class="small">Select elements on the canvas to move, resize, or edit.</div>
+    <div style="height:12px"></div>
+
+    <div id="elementsList" class="elements-list"></div>
+
+    <div style="height:12px"></div>
+    <div style="display:flex;gap:8px">
+      <button id="bringFront" class="muted">Bring Front</button>
+      <button id="sendBack" class="muted">Send Back</button>
+      <button id="deleteEl" class="muted">Delete</button>
+    </div>
+  </aside>
+</div>
+
+<!-- Crop popup -->
+<div class="crop-popup" id="cropPopup">
+  <div class="crop-content" role="dialog" aria-modal="true">
+    <div style="display:flex;gap:8px;align-items:center">
+      <div class="small">Zoom</div>
+      <input id="cropZoom" type="range" min="1" max="3" step="0.01" value="1" style="width:180px">
+    </div>
+    <canvas id="cropCanvas" width="800" height="500"></canvas>
+    <div style="margin-top:8px;display:flex;gap:8px">
+      <button id="cropApply" class="btn">Apply Crop</button>
+      <button id="cropCancel" class="muted">Cancel</button>
+    </div>
+    <div class="small" style="margin-top:8px">Drag the crop rectangle to reposition; zoom adjusts scale.</div>
+  </div>
+</div>
+
+<!-- handles DOM nodes (4 corners) -->
+<div id="handle_tl" class="handle"></div>
+<div id="handle_tr" class="handle"></div>
+<div id="handle_bl" class="handle"></div>
+<div id="handle_br" class="handle"></div>
+
+<!-- JS libs: jsPDF for PDF export -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script>
-/*
-  Event Poster Generator — vNext
-  - Drag & Move elements
-  - Corner resize handles (Shift to maintain aspect ratio)
-  - Image upload with cropping popup
-  - AI template generation (POST /api/generate-templates) + local fallback
-  - QR via external API
-  - PNG & PDF export
+/* Event Poster Generator vAI-Dummy
+   Features implemented in this file:
+   - canvas rendering with elements []
+   - drag to move
+   - 4-corner resize handles with shift to keep aspect
+   - image upload + cropping with selection rectangle & zoom
+   - dummy AI templates (3 templates) and local fallback
+   - QR insertion via public API
+   - PNG & PDF export
+   - elements list UI, bring front, send back, delete
 */
 
-/* ---------- Utilities ---------- */
+/* --------- helpers --------- */
+const $ = id => document.getElementById(id);
 const uid = () => Math.random().toString(36).slice(2,9);
-const el = id => document.getElementById(id);
 
-function setCanvasSize(w,h){
-  const canvas = el('posterCanvas');
-  // support high-DPI
-  const ratio = window.devicePixelRatio || 1;
-  canvas.style.width = w + 'px';
-  canvas.style.height = h + 'px';
-  canvas.width = Math.round(w * ratio);
-  canvas.height = Math.round(h * ratio);
-  ctx.setTransform(ratio, 0, 0, ratio, 0, 0); // scale drawing to CSS pixels
-  render();
-}
-
-/* ---------- State ---------- */
-const canvas = el('posterCanvas');
+/* --------- state --------- */
+const canvas = $('posterCanvas');
 const ctx = canvas.getContext('2d');
-let elements = []; // ordered stack; each element { id, type, x,y,width,height, ... }
+let DPR = window.devicePixelRatio || 1;
+let elements = []; // z-order bottom->top
 let selectedId = null;
 let mode = null; // 'drag'|'resize'|null
 let dragOffset = {x:0,y:0};
 let activeHandle = null;
 let keepAspect = false;
 
-/* ---------- Handles (DOM) ---------- */
-const handlesContainer = el('handles-container');
-const handles = {
-  tl: createHandle(), tr: createHandle(), bl: createHandle(), br: createHandle()
-};
-Object.values(handles).forEach(h => handlesContainer.appendChild(h));
+/* --------- handle elements --------- */
+const handle_tl = $('handle_tl'), handle_tr = $('handle_tr'), handle_bl = $('handle_bl'), handle_br = $('handle_br');
+const handles = {tl: handle_tl, tr: handle_tr, bl: handle_bl, br: handle_br};
+Object.values(handles).forEach(h => { h.style.display = 'none'; h.style.position='absolute'; h.style.zIndex=9999; });
 
-function createHandle(){
-  const d = document.createElement('div');
-  d.className = 'handle';
-  d.style.display = 'none';
-  return d;
+/* position handles based on selected element in CSS pixels */
+function updateHandles(){
+  const rect = canvas.getBoundingClientRect();
+  if(!selectedElement()) { Object.values(handles).forEach(h=>h.style.display='none'); return; }
+  const el = selectedElement();
+  // convert canvas coords -> CSS pixels
+  const cssScaleX = rect.width / canvas.width;
+  const cssScaleY = rect.height / canvas.height;
+  const left = rect.left + el.x * cssScaleX;
+  const top  = rect.top  + el.y * cssScaleY;
+  const right = rect.left + (el.x + el.width) * cssScaleX;
+  const bottom = rect.top + (el.y + el.height) * cssScaleY;
+  // position
+  place(handles.tl, left-8, top-8); place(handles.tr, right-8, top-8);
+  place(handles.bl, left-8, bottom-8); place(handles.br, right-8, bottom-8);
+  Object.values(handles).forEach(h => h.style.display='block');
 }
 
-/* ---------- Drawing ---------- */
-function render(){
-  // clear
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  // draw background
-  ctx.fillStyle = '#fff';
-  ctx.fillRect(0,0,canvas.width,canvas.height);
+function place(dom, px, py){
+  dom.style.left = px + 'px'; dom.style.top = py + 'px';
+}
 
-  // draw elements in order
-  for(const elmt of elements){
-    if(elmt.type === 'rect'){
-      ctx.fillStyle = elmt.color || '#000';
-      ctx.globalAlpha = elmt.opacity ?? 1;
-      ctx.fillRect(elmt.x, elmt.y, elmt.width, elmt.height);
+function selectedElement(){ return elements.find(e => e.id === selectedId) || null; }
+
+/* --------- canvas sizing (support DPR) --------- */
+function setCanvasSize(w,h){
+  // store width/height in CSS pixels
+  canvas.style.width = w + 'px';
+  canvas.style.height = h + 'px';
+  DPR = window.devicePixelRatio || 1;
+  canvas.width = Math.round(w * DPR);
+  canvas.height = Math.round(h * DPR);
+  ctx.setTransform(DPR,0,0,DPR,0,0); // make drawing use CSS pixel coords
+  render();
+}
+setCanvasSize(1080,1350);
+
+/* --------- render loop --------- */
+function render(){
+  // clear background
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0,0,canvas.width/DPR,canvas.height/DPR);
+
+  // draw each element in order
+  for(const el of elements){
+    if(el.type === 'rect'){
+      ctx.globalAlpha = el.opacity ?? 1;
+      ctx.fillStyle = el.color || '#000';
+      ctx.fillRect(el.x, el.y, el.width, el.height);
       ctx.globalAlpha = 1;
     }
-    if(elmt.type === 'image' || elmt.type === 'qr'){
-      if(elmt.img && elmt.img.complete){
-        ctx.globalAlpha = elmt.opacity ?? 1;
-        ctx.drawImage(elmt.img, elmt.x, elmt.y, elmt.width, elmt.height);
+    if(el.type === 'image' || el.type === 'qr'){
+      if(el.img && el.img.complete){
+        ctx.globalAlpha = el.opacity ?? 1;
+        ctx.drawImage(el.img, el.x, el.y, el.width, el.height);
         ctx.globalAlpha = 1;
       }
     }
-    if(elmt.type === 'text'){
-      ctx.globalAlpha = elmt.opacity ?? 1;
-      ctx.fillStyle = elmt.color || '#111';
-      ctx.font = `${elmt.weight || 700} ${elmt.size || 48}px ${elmt.font || 'Inter'}`;
-      ctx.textAlign = elmt.align || 'left';
-      const lines = (elmt.text || '').split('\\n');
-      let y = elmt.y;
+    if(el.type === 'text'){
+      ctx.globalAlpha = el.opacity ?? 1;
+      ctx.fillStyle = el.color || '#111';
+      ctx.font = `${el.weight||700} ${el.size||48}px ${el.font||'Inter'}`;
+      ctx.textAlign = el.align || 'left';
+      const lines = (el.text||'').split('\\n');
+      let y = el.y;
       for(const line of lines){
-        ctx.fillText(line, elmt.x, y);
-        y += (elmt.size || 48) * 1.15;
+        ctx.fillText(line, el.x, y);
+        y += (el.size || 48) * 1.15;
       }
       ctx.globalAlpha = 1;
     }
   }
 
-  // draw selection box / handles
+  // draw selection box
+  const sel = selectedElement();
+  if(sel){
+    ctx.save();
+    ctx.strokeStyle = 'rgba(0,0,0,0.6)';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(sel.x - 4, sel.y - 4, sel.width + 8, sel.height + 8);
+    ctx.restore();
+  }
   updateHandles();
 }
 
-/* ---------- Hit testing & selection ---------- */
+/* --------- hit testing --------- */
 function getElementAt(x,y){
   for(let i = elements.length - 1; i >= 0; i--){
-    const elmt = elements[i];
-    if(x >= elmt.x && x <= elmt.x + elmt.width && y >= elmt.y && y <= elmt.y + elmt.height){
-      return elmt;
-    }
+    const el = elements[i];
+    if(x >= el.x && x <= el.x + el.width && y >= el.y && y <= el.y + el.height) return el;
   }
   return null;
 }
 
-function selectElementById(id){
-  selectedId = id;
-  updateElementsList();
-  updateHandles();
-}
-
-/* ---------- Handles placement ---------- */
-function updateHandles(){
-  // hide all first
-  Object.values(handles).forEach(h => h.style.display = 'none');
-  if(!selectedId){ return; }
-  const elmt = elements.find(e => e.id === selectedId);
-  if(!elmt) return;
-
-  // show handles at corners (in CSS pixels)
-  const rect = canvas.getBoundingClientRect();
-  // compute scale between canvas coordinate and CSS pixels (canvas.width is scaled with DPR)
-  const scaleX = canvas.width / rect.width;
-  const scaleY = canvas.height / rect.height;
-  // convert element coordinates (canvas units) to CSS pixels
-  const left = elmt.x / scaleX + rect.left;
-  const top = elmt.y / scaleY + rect.top;
-  const right = (elmt.x + elmt.width) / scaleX + rect.left;
-  const bottom = (elmt.y + elmt.height) / scaleY + rect.top;
-
-  // position DOM handles
-  positionHandle(handles.tl, left - 6, top - 6);
-  positionHandle(handles.tr, right - 6, top - 6);
-  positionHandle(handles.bl, left - 6, bottom - 6);
-  positionHandle(handles.br, right - 6, bottom - 6);
-
-  Object.values(handles).forEach(h => h.style.display = 'block');
-}
-
-function positionHandle(dom, px, py){
-  dom.style.left = px + 'px';
-  dom.style.top = py + 'px';
-  dom.style.position = 'absolute';
-  dom.style.pointerEvents = 'auto';
-}
-
-/* ---------- Pointer events for canvas (move + resize) ---------- */
+/* --------- pointer events: drag + resize ---------- */
 let pointerDown = false;
-
-function canvasPointerToCanvasCoords(clientX, clientY){
-  const rect = canvas.getBoundingClientRect();
-  const ratioX = canvas.width / rect.width;
-  const ratioY = canvas.height / rect.height;
-  return {
-    x: (clientX - rect.left) * ratioX,
-    y: (clientY - rect.top) * ratioY
-  };
-}
-
-// canvas drag
-canvas.addEventListener('mousedown', (ev) => {
+canvas.addEventListener('pointerdown', (ev) => {
   ev.preventDefault();
+  const p = clientToCanvas(ev.clientX, ev.clientY);
   pointerDown = true;
   keepAspect = ev.shiftKey;
-  const p = canvasPointerToCanvasCoords(ev.clientX, ev.clientY);
+  // check if pressing a handle
+  const handleName = whichHandleHit(ev.clientX, ev.clientY);
+  if(handleName && selectedElement()){ activeHandle = handleName; mode = 'resize'; return; }
   const hit = getElementAt(p.x, p.y);
   if(hit){
-    selectElementById(hit.id);
-    mode = 'drag';
+    selectedId = hit.id;
     dragOffset.x = p.x - hit.x;
     dragOffset.y = p.y - hit.y;
+    mode = 'drag';
+    updateElementsList();
+    render();
   } else {
     selectedId = null;
     updateElementsList();
-    updateHandles();
+    render();
   }
 });
-
-window.addEventListener('mousemove', (ev) => {
+window.addEventListener('pointermove', (ev) => {
   if(!pointerDown) return;
-  const p = canvasPointerToCanvasCoords(ev.clientX, ev.clientY);
-  if(mode === 'drag' && selectedId){
-    const elmt = elements.find(e => e.id === selectedId);
-    if(!elmt) return;
-    elmt.x = p.x - dragOffset.x;
-    elmt.y = p.y - dragOffset.y;
+  const p = clientToCanvas(ev.clientX, ev.clientY);
+  if(mode === 'drag' && selectedElement()){
+    const el = selectedElement();
+    el.x = p.x - dragOffset.x;
+    el.y = p.y - dragOffset.y;
     render();
-  } else if(mode === 'resize' && selectedId && activeHandle){
-    const elmt = elements.find(e => e.id === selectedId);
-    if(!elmt) return;
-    // compute new width/height based on handle
-    const start = { x: elmt.x, y: elmt.y, w: elmt.width, h: elmt.height };
-    const ratioLock = keepAspect || ev.shiftKey;
+  } else if(mode === 'resize' && selectedElement()){
+    const el = selectedElement();
+    const start = {x:el.x, y:el.y, w:el.width, h:el.height};
+    const ratio = start.w / (start.h || 1);
     if(activeHandle === 'br'){
-      let newW = p.x - start.x;
-      let newH = p.y - start.y;
-      if(ratioLock){
-        const aspect = start.w / start.h || 1;
-        if(newW / newH > aspect) newH = newW / aspect; else newW = newH * aspect;
-      }
-      elmt.width = Math.max(10, newW);
-      elmt.height = Math.max(10, newH);
+      let nw = p.x - start.x; let nh = p.y - start.y;
+      if(keepAspect || ev.shiftKey){ if(nw / nh > ratio) nh = nw / ratio; else nw = nh * ratio; }
+      el.width = Math.max(10, nw); el.height = Math.max(10, nh);
     } else if(activeHandle === 'tl'){
-      let newX = p.x;
-      let newY = p.y;
-      let newW = start.x + start.w - newX;
-      let newH = start.y + start.h - newY;
-      if(ratioLock){
-        const aspect = start.w / start.h || 1;
-        if(newW / newH > aspect) newH = newW / aspect; else newW = newH * aspect;
-      }
-      elmt.x = start.x + start.w - newW;
-      elmt.y = start.y + start.h - newH;
-      elmt.width = Math.max(10,newW);
-      elmt.height = Math.max(10,newH);
+      let nx = p.x, ny = p.y;
+      let nw = start.x + start.w - nx, nh = start.y + start.h - ny;
+      if(keepAspect || ev.shiftKey){ if(nw / nh > ratio) nh = nw / ratio; else nw = nh * ratio; }
+      el.x = start.x + start.w - nw; el.y = start.y + start.h - nh; el.width = Math.max(10, nw); el.height = Math.max(10, nh);
     } else if(activeHandle === 'tr'){
-      let newY = p.y;
-      let newW = p.x - start.x;
-      let newH = start.y + start.h - newY;
-      if(ratioLock){
-        const aspect = start.w / start.h || 1;
-        newH = newW / aspect;
-      }
-      elmt.y = start.y + start.h - newH;
-      elmt.width = Math.max(10,newW);
-      elmt.height = Math.max(10,newH);
+      let nw = p.x - start.x; let nh = start.y + start.h - p.y;
+      if(keepAspect || ev.shiftKey){ nh = nw / ratio; }
+      el.y = start.y + start.h - nh; el.width = Math.max(10,nw); el.height = Math.max(10,nh);
     } else if(activeHandle === 'bl'){
-      let newX = p.x;
-      let newW = start.x + start.w - newX;
-      let newH = p.y - start.y;
-      if(ratioLock){
-        const aspect = start.w / start.h || 1;
-        newW = newH * aspect;
-        elmt.x = start.x + start.w - newW;
-      } else {
-        elmt.x = start.x + start.w - newW;
-      }
-      elmt.width = Math.max(10,newW);
-      elmt.height = Math.max(10,newH);
+      let nw = start.x + start.w - p.x; let nh = p.y - start.y;
+      if(keepAspect || ev.shiftKey){ nw = nh * ratio; el.x = start.x + start.w - nw; } else { el.x = start.x + start.w - nw; }
+      el.width = Math.max(10,nw); el.height = Math.max(10,nh);
     }
     render();
   }
 });
-
-window.addEventListener('mouseup', (ev) => {
-  pointerDown = false;
-  mode = null;
-  activeHandle = null;
+window.addEventListener('pointerup', (ev) => {
+  pointerDown = false; mode = null; activeHandle = null; updateHandles();
 });
 
-/* ---------- Handle pointer events ---------- */
-Object.entries(handles).forEach(([name, dom]) => {
-  dom.addEventListener('mousedown', (ev) => {
-    ev.stopPropagation(); ev.preventDefault();
-    activeHandle = name;
-    mode = 'resize';
-    pointerDown = true;
-    keepAspect = ev.shiftKey;
-  });
-});
+/* detect if pointer is over a handle (return name or null) */
+function whichHandleHit(clientX, clientY){
+  for(const [name, dom] of Object.entries(handles)){
+    const r = dom.getBoundingClientRect();
+    if(clientX >= r.left && clientX <= r.right && clientY >= r.top && clientY <= r.bottom) return name;
+  }
+  return null;
+}
 
-/* ---------- UI: Size selector ---------- */
-el('sizeSelect').addEventListener('change', () => {
-  const [w,h] = el('sizeSelect').value.split('x').map(Number);
-  setCanvasSize(w,h);
-});
+/* convert client coords to canvas coords (CSS->canvas units) */
+function clientToCanvas(cx, cy){
+  const rect = canvas.getBoundingClientRect();
+  const rx = canvas.width / rect.width;
+  const ry = canvas.height / rect.height;
+  return { x: (cx - rect.left) * rx / DPR, y: (cy - rect.top) * ry / DPR }; // dividing DPR since ctx uses CSS pixels
+}
 
-/* ---------- Elements list UI ---------- */
-function updateElementsList(){
-  const list = el('elementsList');
-  list.innerHTML = '';
-  elements.forEach(it => {
-    const row = document.createElement('div'); row.className = 'element-row';
-    const label = document.createElement('div'); label.textContent = `${it.type} ${it.type==='text' ? '• '+(it.text||'') : ''}`;
-    row.appendChild(label);
-    const actions = document.createElement('div'); actions.style.marginLeft = 'auto';
-    const selectBtn = document.createElement('button'); selectBtn.className='muted'; selectBtn.textContent='Select';
-    selectBtn.onclick = () => { selectElementById(it.id); render(); };
-    actions.appendChild(selectBtn);
-    row.appendChild(actions);
-    list.appendChild(row);
-    // highlight
-    if(it.id === selectedId) row.style.background = '#f8fafc';
+/* --------- handle DOM clicks for handles (also support touch) ---------- */
+for(const [name, dom] of Object.entries(handles)){
+  dom.addEventListener('pointerdown', (ev) => {
+    ev.preventDefault(); ev.stopPropagation();
+    activeHandle = name; mode = 'resize'; pointerDown = true; keepAspect = ev.shiftKey;
   });
 }
 
-/* ---------- Add text element ---------- */
-el('addText').addEventListener('click', () => {
-  const txt = prompt('Enter text','New Event');
-  if(!txt) return;
-  const newEl = {
-    id: uid(), type: 'text', text: txt,
-    x: 80, y: 140, width: 600, height: 60,
-    size: 56, font: 'Playfair Display', weight: 700, color: '#111827', opacity: 1, align: 'left'
-  };
-  elements.push(newEl);
-  selectElementById(newEl.id);
-  updateElementsList();
-  render();
+/* --------- elements list UI ---------- */
+function updateElementsList(){
+  const list = $('elementsList'); list.innerHTML = '';
+  elements.forEach(el => {
+    const row = document.createElement('div'); row.className='element-row';
+    row.textContent = el.type + (el.type==='text' ? ' • ' + (el.text||'') : '');
+    const selectBtn = document.createElement('button'); selectBtn.className='muted'; selectBtn.textContent='Select';
+    selectBtn.onclick = () => { selectedId = el.id; render(); updateElementsList(); };
+    row.appendChild(selectBtn);
+    list.appendChild(row);
+    if(el.id === selectedId) row.style.background='#f8fafc';
+  });
+}
+
+/* bring/sendt/delete */
+$('bringFront').addEventListener('click', () => {
+  if(!selectedId) return;
+  const i = elements.findIndex(e=>e.id===selectedId); if(i>=0){ const [it]=elements.splice(i,1); elements.push(it); render(); updateElementsList(); }
+});
+$('sendBack').addEventListener('click', () => {
+  if(!selectedId) return;
+  const i = elements.findIndex(e=>e.id===selectedId); if(i>=0){ const [it]=elements.splice(i,1); elements.unshift(it); render(); updateElementsList(); }
+});
+$('deleteEl').addEventListener('click', () => {
+  if(!selectedId) return; elements = elements.filter(e=>e.id!==selectedId); selectedId=null; render(); updateElementsList();
 });
 
-/* ---------- Image upload with cropping ---------- */
-const cropPopup = el('cropPopup');
-const cropCanvas = el('cropCanvas');
-const cropCtx = cropCanvas.getContext('2d');
-let cropSourceImg = null;
-let lastCropDataUrl = null;
+/* --------- add text button ---------- */
+$('addText').addEventListener('click', () => {
+  const txt = prompt('Enter text','New Event');
+  if(!txt) return;
+  const newEl = { id: uid(), type: 'text', text: txt, x: 60, y: 140, width: 600, height: 80, size: 56, font:'Playfair Display', weight:700, color:'#111827', opacity:1, align:'left' };
+  elements.push(newEl); selectedId = newEl.id; render(); updateElementsList();
+});
 
-el('imageUpload').addEventListener('change', (ev) => {
+/* --------- image upload + crop UI --------- */
+const cropPopup = $('cropPopup'), cropCanvas = $('cropCanvas'), cropCtx = cropCanvas.getContext('2d');
+let cropSource = null; let cropZoom = 1; let cropRect = null; let cropDrag = false; let cropOffset = {x:0,y:0};
+
+$('imageUpload').addEventListener('change', (ev) => {
   const files = Array.from(ev.target.files || []);
   if(files.length === 0) return;
-  // show first file at a time for cropping; allow multiple by re-trigger
   const file = files[0];
   const reader = new FileReader();
-  reader.onload = e => {
-    cropSourceImg = new Image();
-    cropSourceImg.onload = () => {
-      // draw fit into cropCanvas
-      const cw = cropCanvas.width, ch = cropCanvas.height;
-      cropCtx.clearRect(0,0,cw,ch);
-      // fit image preserving aspect
-      const arSrc = cropSourceImg.width / cropSourceImg.height;
-      const arDst = cw/ch;
-      let dw = cw, dh = ch, dx=0, dy=0;
-      if(arSrc > arDst) {
-        // source wider -> fit height
-        dh = ch; dw = ch * arSrc; dx = (cw - dw)/2;
-      } else {
-        dw = cw; dh = cw / arSrc; dy = (ch - dh)/2;
-      }
-      cropCtx.drawImage(cropSourceImg, dx, dy, dw, dh);
+  reader.onload = () => {
+    cropSource = new Image(); cropSource.onload = () => {
+      // initialize crop state
+      cropZoom = 1; $('cropZoom').value = 1;
+      cropRect = { x: 50, y: 50, w: cropCanvas.width - 100, h: cropCanvas.height - 100 };
+      drawCropCanvas();
       cropPopup.style.display = 'flex';
     };
-    cropSourceImg.src = e.target.result;
+    cropSource.src = reader.result;
   };
   reader.readAsDataURL(file);
 });
 
-el('cropCancel').addEventListener('click', () => { cropPopup.style.display = 'none'; });
+// cropping interactions: drag cropRect
+cropCanvas.addEventListener('pointerdown', (ev) => {
+  const rect = cropCanvas.getBoundingClientRect();
+  const x = ev.clientX - rect.left, y = ev.clientY - rect.top;
+  if(cropRect && x >= cropRect.x && x <= cropRect.x+cropRect.w && y >= cropRect.y && y <= cropRect.y+cropRect.h){
+    cropDrag = true; cropOffset.x = x - cropRect.x; cropOffset.y = y - cropRect.y;
+  }
+});
+window.addEventListener('pointermove', (ev) => {
+  if(!cropDrag) return;
+  const rect = cropCanvas.getBoundingClientRect();
+  const x = ev.clientX - rect.left, y = ev.clientY - rect.top;
+  cropRect.x = Math.max(0, Math.min(cropCanvas.width - cropRect.w, x - cropOffset.x));
+  cropRect.y = Math.max(0, Math.min(cropCanvas.height - cropRect.h, y - cropOffset.y));
+  drawCropCanvas();
+});
+window.addEventListener('pointerup', () => { cropDrag = false; });
 
-el('cropApply').addEventListener('click', () => {
-  const dataUrl = cropCanvas.toDataURL('image/png');
-  const img = new Image();
+$('cropZoom').addEventListener('input', (ev) => {
+  const val = parseFloat(ev.target.value);
+  cropZoom = val; drawCropCanvas();
+});
+
+$('cropCancel').addEventListener('click', () => { cropPopup.style.display = 'none'; });
+$('cropApply').addEventListener('click', () => {
+  // extract crop area as image data
+  if(!cropSource || !cropRect) { cropPopup.style.display = 'none'; return; }
+  // draw source scaled and translated to temporary canvas to get selected area
+  const tmp = document.createElement('canvas'); tmp.width = cropRect.w; tmp.height = cropRect.h;
+  const tctx = tmp.getContext('2d');
+  // compute draw params: fit cropSource to cropCanvas with current zoom
+  const arSrc = cropSource.width / cropSource.height;
+  const arDst = cropCanvas.width / cropCanvas.height;
+  // find draw width/height used on cropCanvas (same logic as drawCropCanvas)
+  let drawW = cropCanvas.width * cropZoom, drawH = drawW / arSrc;
+  if(drawH < cropCanvas.height * cropZoom){ drawH = cropCanvas.height * cropZoom; drawW = drawH * arSrc; }
+  // center
+  const dx = (cropCanvas.width - drawW) / 2, dy = (cropCanvas.height - drawH) / 2;
+  // source region corresponding to cropRect:
+  // map cropRect area back to source image coords
+  const sx = (cropRect.x - dx) * (cropSource.width / drawW);
+  const sy = (cropRect.y - dy) * (cropSource.height / drawH);
+  const sw = cropRect.w * (cropSource.width / drawW);
+  const sh = cropRect.h * (cropSource.height / drawH);
+  tctx.drawImage(cropSource, sx, sy, sw, sh, 0, 0, tmp.width, tmp.height);
+  const img = new Image(); img.onload = () => {
+    const newEl = { id: uid(), type: 'image', img: img, x: 80, y: 300, width: Math.min(900, tmp.width), height: Math.min(700, tmp.height), opacity:1 };
+    elements.push(newEl); selectedId = newEl.id; updateElementsList(); render();
+  };
+  img.src = tmp.toDataURL('image/png');
+  cropPopup.style.display = 'none';
+});
+
+/* draw cropCanvas preview */
+function drawCropCanvas(){
+  if(!cropSource) return;
+  const cw = cropCanvas.width, ch = cropCanvas.height;
+  cropCtx.clearRect(0,0,cw,ch);
+  // compute draw size to fit and zoom
+  const ar = cropSource.width / cropSource.height;
+  let dw = cw * cropZoom, dh = dw / ar;
+  if(dh < ch * cropZoom){ dh = ch * cropZoom; dw = dh * ar; }
+  const dx = (cw - dw)/2, dy = (ch - dh)/2;
+  cropCtx.drawImage(cropSource, dx, dy, dw, dh);
+  // draw translucent overlay except cropRect
+  if(!cropRect) cropRect = {x:50,y:50,w:cw-100,h:ch-100};
+  cropCtx.fillStyle = 'rgba(0,0,0,0.4)';
+  cropCtx.fillRect(0,0,cw,ch);
+  // clear crop rect
+  cropCtx.clearRect(cropRect.x, cropRect.y, cropRect.w, cropRect.h);
+  // draw border
+  cropCtx.strokeStyle = '#fff'; cropCtx.lineWidth = 2; cropCtx.strokeRect(cropRect.x, cropRect.y, cropRect.w, cropRect.h);
+}
+
+/* --------- QR insertion (via free API) ---------- */
+$('addQr').addEventListener('click', () => {
+  const link = $('qrLink').value.trim(); if(!link){ alert('Enter QR link first'); return; }
+  const img = new Image(); img.crossOrigin='anonymous';
   img.onload = () => {
-    const newEl = {
-      id: uid(), type: 'image', img: img,
-      x: 80, y: 260, width: Math.min(900, img.width), height: Math.min(600, img.height),
-      opacity: 1
-    };
-    elements.push(newEl);
-    selectElementById(newEl.id);
-    updateElementsList();
-    render();
-    cropPopup.style.display = 'none';
+    elements.push({ id: uid(), type: 'qr', img: img, x: 80, y: 320, width: 240, height:240, opacity:1 });
+    selectedId = elements[elements.length-1].id; updateElementsList(); render();
   };
-  img.src = dataUrl;
+  img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(link);
 });
 
-/* ---------- Simple crop drag (move within cropCanvas) ---------- */
-(function setupCropInteraction(){
-  let dragging = false, dx=0, dy=0;
-  cropCanvas.addEventListener('mousedown', (ev) => {
-    dragging = true;
-    dx = ev.offsetX; dy = ev.offsetY;
-  });
-  window.addEventListener('mousemove', (ev) => {
-    if(!dragging || !cropSourceImg) return;
-    // allow panning by redrawing the image offset slightly based on mouse movement
-    // For simplicity, we won't implement full crop selection UI — this is a simple pan/fit preview.
-  });
-  window.addEventListener('mouseup', () => { dragging = false; });
-})();
-
-/* ---------- QR code add ---------- */
-el('addQr').addEventListener('click', () => {
-  const link = el('qrLink').value.trim();
-  if(!link){ alert('Enter a QR link first'); return; }
-  const qrImg = new Image();
-  // using a free QR API; you may replace with local generator
-  qrImg.crossOrigin = 'anonymous';
-  qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(link);
-  qrImg.onload = () => {
-    const newEl = { id: uid(), type: 'qr', img: qrImg, x: 80, y: 320, width: 240, height: 240, opacity: 1 };
-    elements.push(newEl);
-    selectElementById(newEl.id);
-    updateElementsList();
-    render();
-  };
-});
-
-/* ---------- Export PNG & PDF ---------- */
-el('exportPng').addEventListener('click', () => {
-  // Use current canvas bitmap (canvas is already high-res)
-  const cssW = canvas.style.width.replace('px','') || canvas.width;
+/* --------- exports --------- */
+$('exportPng').addEventListener('click', () => {
   const dataUrl = canvas.toDataURL('image/png');
   const a = document.createElement('a'); a.href = dataUrl; a.download = 'poster.png'; a.click();
 });
-
-el('exportPdf').addEventListener('click', () => {
+$('exportPdf').addEventListener('click', () => {
   const { jsPDF } = window.jspdf;
-  // Convert canvas to image and add to PDF sized to canvas px
-  const imgData = canvas.toDataURL('image/png');
-  const pdf = new jsPDF({
-    orientation: canvas.width > canvas.height ? 'landscape' : 'portrait',
-    unit: 'pt',
-    format: [canvas.width, canvas.height]
-  });
-  pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+  // Ensure canvas drawn at final size
+  const img = canvas.toDataURL('image/png');
+  // create PDF sized to canvas px
+  const pdf = new jsPDF({unit:'pt',format:[canvas.width/DPR, canvas.height/DPR]});
+  pdf.addImage(img, 'PNG', 0, 0, canvas.width/DPR, canvas.height/DPR);
   pdf.save('poster.pdf');
 });
 
-/* ---------- Clear, Bring Front/Back, Delete ---------- */
-el('clearAll').addEventListener('click', () => {
-  if(confirm('Clear all elements?')) { elements = []; selectedId = null; updateElementsList(); render(); }
-});
-el('bringFront').addEventListener('click', () => {
-  if(!selectedId) return;
-  const idx = elements.findIndex(e => e.id === selectedId);
-  if(idx >= 0){ const [e] = elements.splice(idx,1); elements.push(e); render(); updateElementsList(); }
-});
-el('sendBack').addEventListener('click', () => {
-  if(!selectedId) return;
-  const idx = elements.findIndex(e => e.id === selectedId);
-  if(idx >= 0){ const [e] = elements.splice(idx,1); elements.unshift(e); render(); updateElementsList(); }
-});
-el('deleteEl').addEventListener('click', () => {
-  if(!selectedId) return;
-  elements = elements.filter(e => e.id !== selectedId);
-  selectedId = null;
-  updateElementsList(); render();
+/* --------- clear --------- */
+$('clearAll').addEventListener('click', () => {
+  if(confirm('Clear all elements?')){ elements = []; selectedId = null; updateElementsList(); render(); }
 });
 
-/* ---------- Template generation (AI + fallback) ---------- */
-el('suggestTemplates').addEventListener('click', async () => {
-  const payload = {
-    name: el('eventName').value,
-    date: el('eventDate').value,
-    type: el('eventType').value,
-    desc: el('eventDesc').value
-  };
-
-  // Try server AI endpoint first (replace with your endpoint)
-  try {
-    const resp = await fetch('/api/generate-templates', {
-      method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload)
-    });
-    if(resp.ok){
-      const json = await resp.json();
-      renderTemplates(json);
-      return;
-    }
-    // else fallback
-    console.warn('AI endpoint returned non-OK, using fallback');
-  } catch (err) {
-    console.warn('AI endpoint error, using local fallback', err);
-  }
-
-  // Fallback local templates
-  const fallback = localTemplateGenerator(payload);
-  renderTemplates(fallback);
+/* --------- size selector ---------- */
+$('sizeSelect').addEventListener('change', () => {
+  const [w,h] = $('sizeSelect').value.split('x').map(Number);
+  setCanvasSize(w,h);
+  render();
 });
 
-el('localTemplates').addEventListener('click', () => {
-  const data = {
-    name: el('eventName').value,
-    date: el('eventDate').value,
-    type: el('eventType').value,
-    desc: el('eventDesc').value
-  };
-  renderTemplates(localTemplateGenerator(data));
+/* --------- templates (dummy AI) ---------- */
+$('suggestTemplates').addEventListener('click', () => {
+  // this dummy generator simulates what AI would return
+  const data = { name: $('eventName').value, date: $('eventDate').value, type: $('eventType').value, desc: $('eventDesc').value };
+  const templates = dummyAIGenerate(data);
+  showTemplateCards(templates);
+});
+$('localTemplates').addEventListener('click', () => {
+  const data = { name: $('eventName').value, date: $('eventDate').value, type: $('eventType').value, desc: $('eventDesc').value };
+  showTemplateCards(dummyAIGenerate(data));
 });
 
-function renderTemplates(list){
-  const container = el('templates'); container.innerHTML = '';
-  for(const t of list){
+function showTemplateCards(list){
+  const c = $('templates'); c.innerHTML = '';
+  list.forEach(t => {
     const card = document.createElement('div'); card.className='tpl-card';
-    const thumb = document.createElement('div'); thumb.className='tpl-thumb';
-    thumb.textContent = 'Preview';
+    const thumb = document.createElement('div'); thumb.className='tpl-thumb'; thumb.textContent='Preview';
     const meta = document.createElement('div'); meta.style.flex='1';
-    const title = document.createElement('div'); title.textContent = t.title || 'Template';
-    const applyBtn = document.createElement('button'); applyBtn.className='muted'; applyBtn.textContent='Apply';
-    applyBtn.onclick = () => { applyTemplate(t); };
-    meta.appendChild(title); meta.appendChild(applyBtn);
+    const title = document.createElement('div'); title.textContent = t.title;
+    const btn = document.createElement('button'); btn.className='muted'; btn.textContent='Apply';
+    btn.onclick = () => applyTemplate(t);
+    meta.appendChild(title); meta.appendChild(btn);
     card.appendChild(thumb); card.appendChild(meta);
-    container.appendChild(card);
-  }
+    c.appendChild(card);
+  });
 }
 
-/* Local template generator — simple layouts */
-function localTemplateGenerator(data){
+function applyTemplate(t){
+  elements = []; selectedId = null;
+  for(const el of t.elements){
+    if(el.type === 'text'){
+      elements.push({
+        id: uid(), type: 'text', text: el.text, x: el.x, y: el.y, width: el.width||400, height: el.height||60,
+        size: el.size||48, font: el.font||'Inter', weight: el.weight||700, color: el.color||'#111', opacity: el.opacity||1, align: el.align||'left'
+      });
+    } else if(el.type === 'rect'){
+      elements.push({ id: uid(), type:'rect', x:el.x,y:el.y,width:el.width,height:el.height,color:el.color||'#fff',opacity:el.opacity||1 });
+    } else if(el.type === 'image'){
+      const img = new Image(); img.crossOrigin='anonymous'; img.onload = () => render();
+      img.src = el.src || ''; elements.push({ id: uid(), type:'image', img: img, x:el.x,y:el.y,width:el.width,height:el.height,opacity:el.opacity||1 });
+    }
+  }
+  updateElementsList(); render();
+}
+
+/* Dummy AI template generator — returns simple JSON templates */
+function dummyAIGenerate(data){
   const name = data.name || 'Event';
   const desc = data.desc || '';
-  const dateStr = data.date ? new Date(data.date).toLocaleString() : '';
-  return [
-    {
-      id: 'local-1',
-      title: 'Minimal Center',
-      elements: [
-        { type: 'rect', color:'#ffffff', x:0, y:0, width: canvas.width, height: canvas.height },
-        { type: 'text', text: name, x: canvas.width/2 - 360, y: 220, size: 72, font:'Inter', weight:800, color:'#111827', align:'left' },
-        { type: 'text', text: desc, x: canvas.width/2 - 360, y: 320, size: 28, font:'Inter', weight:400, color:'#374151', align:'left' },
-        { type: 'text', text: dateStr + (data.type ? ' • ' + data.type : ''), x: canvas.width/2 - 360, y: 380, size: 20, font:'Inter', weight:400, color:'#6b7280', align:'left' }
-      ]
-    },
-    {
-      id: 'local-2',
-      title: 'Bold Side',
-      elements: [
-        { type:'rect', color: '#0f172a', x:0, y:0, width: Math.round(canvas.width*0.44), height: canvas.height },
-        { type:'text', text: name, x: 60, y: 160, size:64, font:'Playfair Display', weight:700, color:'#fff' },
-        { type:'text', text: desc, x: 60, y: 240, size:20, font:'Inter', weight:400, color:'#fff' },
-        { type:'text', text: dateStr, x: Math.round(canvas.width*0.5), y: 320, size:22, font:'Inter', weight:600, color:'#111' }
-      ]
-    },
-    {
-      id: 'local-3',
-      title: 'Photo top',
-      elements:[
-        { type:'image', src: '', x:0, y:0, width: canvas.width, height: Math.round(canvas.height*0.45) },
-        { type:'text', text: name, x: 80, y: Math.round(canvas.height*0.45)+120, size:64, font:'Playfair Display', weight:700, color:'#111' },
-        { type:'text', text: desc, x: 80, y: Math.round(canvas.height*0.45)+200, size:20, font:'Inter', weight:400, color:'#374151' },
-        { type:'text', text: dateStr, x: 80, y: Math.round(canvas.height*0.45)+260, size:18, font:'Inter', weight:400, color:'#6b7280' }
-      ]
-    }
-  ];
+  const dateLabel = data.date ? new Date(data.date).toLocaleString() : '';
+  // Template 1: Wedding elegant
+  const t1 = {
+    id:'wedding',
+    title:'Wedding — Elegant',
+    elements:[
+      { type:'rect', x:0, y:0, width: canvas.width/DPR, height: canvas.height/DPR, color:'#fff7f0' },
+      { type:'text', text: name, x:80, y:160, size:72, font:'Playfair Display', weight:700, color:'#111827' },
+      { type:'text', text: desc, x:80, y:240, size:22, font:'Inter', weight:400, color:'#6b7280' },
+      { type:'text', text: dateLabel + (data.type ? ' • ' + data.type : ''), x:80, y:320, size:18, font:'Inter', color:'#6b7280' }
+    ]
+  };
+  // Template 2: Concert bold
+  const t2 = {
+    id:'concert',
+    title:'Concert — Bold',
+    elements:[
+      { type:'rect', x:0, y:0, width: Math.round((canvas.width/DPR)*0.44), height: canvas.height/DPR, color:'#0f172a' },
+      { type:'text', text: name, x:60, y:160, size:64, font:'Playfair Display', weight:800, color:'#ffffff' },
+      { type:'text', text: desc, x:60, y:240, size:20, font:'Inter', weight:400, color:'#ffffff' },
+      { type:'text', text: dateLabel, x: Math.round((canvas.width/DPR)*0.5), y:320, size:22, font:'Inter', color:'#111' }
+    ]
+  };
+  // Template 3: Sale/Promo
+  const t3 = {
+    id:'sale',
+    title:'Sale — Promotional',
+    elements:[
+      { type:'rect', x:0, y:0, width: canvas.width/DPR, height: canvas.height/DPR, color:'#ffffff' },
+      { type:'text', text: name, x:60, y:160, size:72, font:'Inter', weight:800, color:'#ef4444' },
+      { type:'text', text: desc, x:60, y:240, size:22, font:'Inter', weight:400, color:'#374151' },
+      { type:'text', text: dateLabel, x:60, y:320, size:18, font:'Inter', color:'#6b7280' }
+    ]
+  };
+  return [t1,t2,t3];
 }
 
-/* ---------- Apply template to canvas ---------- */
-function applyTemplate(template){
-  elements = [];
-  for(const e of template.elements || []){
-    if(e.type === 'text'){
-      elements.push({
-        id: uid(), type:'text', text: e.text || '',
-        x: e.x || 60, y: e.y || 100,
-        width: e.width || 600, height: e.height || 80,
-        size: e.size || 48, font: e.font || 'Inter', weight: e.weight || 700,
-        color: e.color || '#111827', opacity: e.opacity ?? 1, align: e.align || 'left'
-      });
-    } else if(e.type === 'rect'){
-      elements.push({
-        id: uid(), type:'rect', x:e.x||0,y:e.y||0,width:e.width||canvas.width,height:e.height||canvas.height,color:e.color||'#fff',opacity:e.opacity ?? 1
-      });
-    } else if(e.type === 'image'){
-      // if template provides src, fetch it; else leave placeholder blank
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => { render(); };
-      img.src = e.src || '';
-      elements.push({ id: uid(), type: 'image', img: img, x: e.x || 0, y: e.y || 0, width: e.width || 600, height: e.height || 400, opacity: e.opacity ?? 1 });
-    }
-  }
-  updateElementsList(); render();
-}
+/* initial local templates visible */
+showTemplateCards(dummyAIGenerate({ name: $('eventName').value, date: $('eventDate').value, type: $('eventType').value, desc: $('eventDesc').value }));
 
-/* ---------- Initial setup ---------- */
-(function init(){
-  // Set initial size to Instagram tall
-  setCanvasSize(1080,1350);
+/* update elements list on load */
+updateElementsList();
 
-  // click on template placeholder: show local templates by default initially
-  renderTemplates(localTemplateGenerator({
-    name: el('eventName').value,
-    date: el('eventDate').value,
-    type: el('eventType').value,
-    desc: el('eventDesc').value
-  }));
-})();
+/* periodic render to ensure handles sync */
+setInterval(()=>{ render(); updateHandles(); }, 150);
 
-/* ---------- Interaction: click on canvas selects element ---------- */
-canvas.addEventListener('click', (ev) => {
-  const p = canvasPointerToCanvasCoords(ev.clientX, ev.clientY);
-  const hit = getElementAt(p.x,p.y);
-  if(hit){
-    selectElementById(hit.id);
-  } else {
-    selectedId = null; updateElementsList(); updateHandles();
-  }
-});
-
-/* ---------- Helpers used in multiple places ---------- */
-function canvasPointerToCanvasCoords(clientX, clientY){
-  const rect = canvas.getBoundingClientRect();
-  const rx = canvas.width / rect.width;
-  const ry = canvas.height / rect.height;
-  return { x: (clientX - rect.left) * rx, y: (clientY - rect.top) * ry };
-}
-
-/* ---------- Keyboard shortcuts (Delete) ---------- */
+/* keyboard delete support */
 window.addEventListener('keydown', (e) => {
-  if(e.key === 'Delete' && selectedId){
-    elements = elements.filter(x => x.id !== selectedId);
-    selectedId = null; updateElementsList(); render();
-  }
+  if(e.key === 'Delete' && selectedId){ elements = elements.filter(x=>x.id!==selectedId); selectedId=null; updateElementsList(); render(); }
 });
 
-/* ---------- Periodic render safety ---------- */
-setInterval(() => { render(); }, 200);
+/* click canvas to select */
+canvas.addEventListener('click', (ev)=> {
+  const p = clientToCanvas(ev.clientX, ev.clientY);
+  const hit = getElementAt(p.x, p.y);
+  if(hit){ selectedId = hit.id; updateElementsList(); render(); } else { selectedId=null; updateElementsList(); render(); }
+});
 
-/* ---------- Notes for Server-side AI integration ----------
-  - You can implement /api/generate-templates on your server (Node, Apps Script, Firebase function).
-  - It should accept POST JSON: { name, date, type, desc }
-  - Return array of templates with 'title' and 'elements' arrays matching the 'applyTemplate' format above.
-  - This client will fallback to local templates if the fetch call fails.
-*/
+/* helper to convert client->canvas CSS coords */
+function clientToCanvas(cx, cy){
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
+  return { x: (cx - rect.left) * (canvas.width / rect.width) / DPR, y: (cy - rect.top) * (canvas.height / rect.height) / DPR };
+}
 
-/* ---------- End of script ---------- */
+/* small utility to avoid errors when resizing before any images are loaded */
+window.addEventListener('resize', ()=> { updateHandles(); });
+
 </script>
 </body>
-  </html>
+</html>
