@@ -3,12 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QuickPoster — Canva Style Editor</title>
+<title>QuickPoster — Multi-Page Editor</title>
 
-<!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
 
-<!-- html2canvas & jsPDF -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
@@ -26,13 +24,13 @@ h1{text-align:center;color:#fff;background:linear-gradient(90deg,#6dd5fa,#8e54e9
 .panel{background:var(--card-bg);padding:15px;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,0.1);}
 .left input, .left select, .left textarea{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:1px solid #e6e6e6;font-size:15px;box-sizing:border-box;}
 textarea{resize:vertical;min-height:80px;}
-.templates-grid{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px;}
-.tp{width:100px;border-radius:10px;padding:6px;background:#fafafa;border:2px solid transparent;cursor:pointer;text-align:center;}
-.tp img{width:100%;height:70px;object-fit:cover;border-radius:6px;}
-.tp.active{border-color:var(--accent);box-shadow:0 6px 18px rgba(63,55,201,0.12);}
+.templates-grid, .border-grid{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px;}
+.tp, .bd{width:80px;border-radius:10px;padding:6px;background:#fafafa;border:2px solid transparent;cursor:pointer;text-align:center;}
+.tp img, .bd img{width:100%;height:70px;object-fit:cover;border-radius:6px;}
+.tp.active, .bd.active{border-color:var(--accent);box-shadow:0 6px 18px rgba(63,55,201,0.12);}
 .right{display:flex;flex-direction:column;align-items:center;}
 .preview-wrap{background:var(--paper-white);padding:15px;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,0.08);position:relative;width:100%;max-width:520px;}
-.poster{width:100%;min-height:400px;padding:15px;border-radius:8px;overflow:hidden;box-sizing:border-box;background:#fff;}
+.poster{width:100%;min-height:400px;padding:15px;border-radius:8px;overflow:hidden;box-sizing:border-box;background:#fff;position:relative;}
 .poster .title{font-size:28px;font-weight:800;text-align:center;margin:8px 0;}
 .poster .sub{font-size:14px;text-align:center;margin:2px 0;color:var(--muted);}
 .poster .bio{font-size:15px;margin-top:12px;line-height:1.4;text-align:center;white-space:pre-line;}
@@ -44,11 +42,15 @@ textarea{resize:vertical;min-height:80px;}
 @media(max-width:980px){.wrap{grid-template-columns:1fr;}}
 button{padding:6px 10px;border:none;border-radius:6px;background:var(--accent);color:#fff;cursor:pointer;}
 button.ghost{background:#fff;color:var(--accent);border:1px solid var(--accent);}
+.border-style{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;border:6px solid transparent;border-radius:10px;}
+.bd1{border-color:#3f37c9;} 
+.bd2{border-color:#ff5a5f;}
+.bd3{border-color:#3cba54;}
 </style>
 </head>
 <body>
 
-<h1>QuickPoster — Canva Style Editor</h1>
+<h1>QuickPoster — Multi-Page Editor</h1>
 <div class="wrap">
 
 <!-- LEFT: type, template, fields -->
@@ -64,6 +66,15 @@ button.ghost{background:#fff;color:var(--accent);border:1px solid var(--accent);
   <div id="templateArea">
     <label>Choose Template</label>
     <div class="templates-grid" id="templateGrid"></div>
+  </div>
+
+  <div id="borderArea">
+    <label>Choose Border</label>
+    <div class="border-grid" id="borderGrid">
+      <div class="bd bd1" data-border="bd1">Classic</div>
+      <div class="bd bd2" data-border="bd2">Elegant</div>
+      <div class="bd bd3" data-border="bd3">Modern</div>
+    </div>
   </div>
 
   <div id="extraFields"></div>
@@ -83,6 +94,7 @@ button.ghost{background:#fff;color:var(--accent);border:1px solid var(--accent);
     </div>
 
     <div id="previewPoster" class="poster t-classic" data-page="0">
+      <div class="border-style" id="borderDiv"></div>
       <div class="title" id="pvTitle">[Title]</div>
       <div class="sub" id="pvDates">Date(s)</div>
       <div class="bio" id="pvDetails">Details / message</div>
@@ -101,7 +113,6 @@ button.ghost{background:#fff;color:var(--accent);border:1px solid var(--accent);
 </div>
 
 <script>
-// --------------- Template Definitions ----------------
 const TEMPLATES = {
   obituary:[
     {name:"Classic",img:"https://images.unsplash.com/photo-1503264116251-35a269479413?q=80&w=600"},
@@ -123,13 +134,16 @@ const TEMPLATES = {
 
 const posterType = document.getElementById('posterType');
 const templateGrid = document.getElementById('templateGrid');
+const borderGrid = document.getElementById('borderGrid');
 const extraFields = document.getElementById('extraFields');
 const pvTitle = document.getElementById('pvTitle');
 const pvDates = document.getElementById('pvDates');
 const pvDetails = document.getElementById('pvDetails');
 const previewPoster = document.getElementById('previewPoster');
+const borderDiv = document.getElementById('borderDiv');
 
 let selectedTemplate = '';
+let selectedBorder = 'bd1';
 let titleSize=28;
 
 // ---------------- Render Templates -----------------
@@ -152,6 +166,17 @@ function renderTemplates(){
   templateGrid.querySelector('.tp').classList.add('active');
   selectedTemplate=TEMPLATES[type][0].name;
 }
+
+// ---------------- Render Borders -----------------
+borderGrid.querySelectorAll('.bd').forEach(b=>{
+  b.addEventListener('click',()=>{
+    borderGrid.querySelectorAll('.bd').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    selectedBorder=b.dataset.border;
+    borderDiv.className='border-style '+selectedBorder;
+  });
+});
+borderDiv.className='border-style '+selectedBorder;
 
 // ---------------- Extra Fields -------------------
 function renderExtra(){
@@ -219,7 +244,7 @@ function refreshPreview(){
   previewPoster.style.fontSize=titleSize+'px';
 }
 
-// ---------------- Font Size Controls ----------------
+// ---------------- Font Controls ----------------
 document.getElementById('btnFontSmall').addEventListener('click',()=>{titleSize=Math.max(14,titleSize-2); refreshPreview();});
 document.getElementById('btnFontBig').addEventListener('click',()=>{titleSize=Math.min(60,titleSize+2); refreshPreview();});
 
@@ -229,14 +254,13 @@ posterType.addEventListener('change',()=>{
   renderExtra();
   refreshPreview();
 });
-
-// ---------------- Extra Field Listeners ----------------
 extraFields.addEventListener('input',refreshPreview);
 
 // ---------------- Initial Render ----------------
 renderTemplates();
 renderExtra();
 refreshPreview();
+
 </script>
 </body>
 </html>
