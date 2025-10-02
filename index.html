@@ -1,422 +1,254 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>QuickPoster — Wedding & Posters Creator</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Poster Generator</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
 
-<!-- html2canvas & jsPDF -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- Styles -->
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(to bottom right, #89CFF0, #9370DB);
+      color: #333;
+    }
+    h1, h2, h3 { font-family: 'Playfair Display', serif; }
 
-<style>
-:root{
-  --bg1:#e6f4ff; --bg2:#cdb3ff;
-  --accent:#d84f6b; /* nice wedding pink */
-  --muted:#6b6b6b;
-  --paper:#fffdf8;
-}
-*{box-sizing:border-box}
-body{margin:0;font-family:'Poppins',sans-serif;background:linear-gradient(135deg,var(--bg1),var(--bg2));color:#111}
-.header{padding:18px;text-align:center;color:#fff;background:linear-gradient(90deg,#6dd5fa,#8e54e9);font-weight:800;border-bottom-left-radius:8px;border-bottom-right-radius:8px}
-.container{max-width:1200px;margin:18px auto;display:grid;grid-template-columns:360px 1fr;gap:18px;padding:10px}
-.panel{background:var(--paper);border-radius:12px;padding:14px;box-shadow:0 8px 30px rgba(12,18,30,0.08)}
-.left .label{display:block;margin-top:10px;color:var(--muted);font-weight:600}
-.left input,.left textarea,.left select{width:100%;padding:10px;margin-top:8px;border-radius:8px;border:1px solid #e8e8e8;font-size:14px}
-textarea{min-height:84px;resize:vertical}
-.templates{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-.template{width:100px;border-radius:8px;padding:6px;background:#fff;border:2px solid transparent;cursor:pointer;text-align:center}
-.template img{width:100%;height:64px;object-fit:cover;border-radius:6px}
-.template.active{border-color:var(--accent);box-shadow:0 8px 20px rgba(216,79,107,0.12);transform:translateY(-4px)}
-.btn{display:inline-block;padding:9px 12px;border-radius:8px;background:var(--accent);color:#fff;border:none;cursor:pointer;font-weight:700}
-.btn.ghost{background:transparent;color:var(--accent);border:2px solid var(--accent)}
-.controls{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
-.preview-area{display:flex;flex-direction:column;align-items:center;gap:12px;padding:10px}
-.preview-canvas{width:760px;max-width:95%;display:flex;flex-direction:column;gap:14px;align-items:center}
-.page{width:595px; /* A4-ish width in px for screen preview */ min-height:842px;background:var(--paper);border-radius:8px;padding:36px;box-shadow:0 10px 30px rgba(0,0,0,0.08);position:relative;overflow:hidden}
-.page.small{width:420px}
-.page .title{font-family:'Playfair Display',serif;font-size:34px;text-align:center;margin:8px 0;color:var(--accent)}
-.page .subtitle{font-size:14px;text-align:center;color:var(--muted);margin-bottom:8px}
-.page .body{font-size:15px;line-height:1.6;color:#222;white-space:pre-line;text-align:center;padding:6px 40px}
-.floral-tr{position:absolute;top:-6px;right:-6px;width:180px;opacity:0.95;pointer-events:none}
-.floral-bl{position:absolute;left:-6px;bottom:-6px;width:180px;opacity:0.95;pointer-events:none}
+    .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    .header { text-align: center; margin-bottom: 20px; color: white; text-shadow: 1px 1px 4px rgba(0,0,0,0.3); }
 
-/* template specific styles */
-.template-wedding .title{color:#d84f6b}
-.template-wedding .page{background:linear-gradient(180deg,#fffefc,#fff8f6)}
-.template-obit .page{background:#fff;border:12px solid #111;border-radius:6px;color:#111}
-.template-obit .title{font-size:30px;font-family:'Playfair Display',serif;color:#111}
-.template-event .page{background:linear-gradient(180deg,#fff,#f7fcff)}
-.template-menu .page{background:#fffef9}
+    .flex { display: flex; gap: 20px; flex-wrap: wrap; }
+    .panel, .preview-panel { background: white; border-radius: 12px; padding: 15px; flex: 1; min-width: 300px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
 
-/* border variations */
-.border-1 .page{border:8px solid rgba(216,79,107,0.12)}
-.border-2 .page{box-shadow:0 0 0 8px rgba(0,0,0,0.02) inset}
-.border-3 .page{border:10px double rgba(100,100,100,0.06)}
+    /* Template gallery */
+    .template-gallery { display: flex; gap: 10px; overflow-x: auto; margin-bottom: 10px; }
+    .template-thumb { width: 100px; height: 140px; border-radius: 8px; cursor: pointer; border: 2px solid transparent; object-fit: cover; }
+    .template-thumb.selected { border-color: #9370DB; }
 
-/* thumbnails of pages */
-.thumb-row{display:flex;gap:8px;justify-content:center}
-.thumb{width:72px;height:100px;border-radius:6px;border:2px solid transparent;overflow:hidden;cursor:pointer}
-.thumb.active{border-color:var(--accent)}
+    label { display: block; margin-top: 10px; font-weight: bold; }
+    input[type="text"], input[type="color"], select { width: 100%; padding: 8px; margin-top: 5px; border-radius: 6px; border: 1px solid #ccc; }
+    input[type="file"] { margin-top: 5px; }
+    button { background: linear-gradient(to right, #89CFF0, #9370DB); border: none; padding: 10px 15px; margin-top: 15px; color: white; font-weight: bold; border-radius: 8px; cursor: pointer; }
+    button:hover { opacity: 0.9; }
 
-/* footer */
-.hint{font-size:13px;color:var(--muted);margin-top:8px}
-@media (max-width:980px){.container{grid-template-columns:1fr;}.preview-canvas{width:100%}.page{width:86vw;padding:22px}}
-</style>
+    .poster-canvas { width: 100%; height: 500px; border-radius: 12px; display: flex; justify-content: center; align-items: center; position: relative; background-size: cover; background-position: center; border: 2px dashed #ccc; overflow: hidden; }
+    .poster-text { position: absolute; text-align: center; width: 90%; color: #fff; text-shadow: 2px 2px 5px rgba(0,0,0,0.5); cursor: move; }
+
+    @media(max-width: 768px){ .flex { flex-direction: column; } .poster-canvas { height: 400px; } }
+  </style>
 </head>
 <body>
-
-<div class="header">
-  QuickPoster — Wedding Programs & Posters (Canva style)
-</div>
-
-<div class="container">
-  <!-- LEFT: controls -->
-  <div class="panel left">
-    <label class="label">Poster Type</label>
-    <select id="typeSelect">
-      <option value="wedding">Wedding Program</option>
-      <option value="obituary">Obituary / Funeral</option>
-      <option value="event">Event / Gathering</option>
-      <option value="menu">Restaurant Menu</option>
-    </select>
-
-    <label class="label">Pick a Template</label>
-    <div id="templates" class="templates"></div>
-
-    <label class="label">Border Style</label>
-    <div style="display:flex;gap:8px;margin-top:6px">
-      <button class="btn ghost" data-border="border-0">None</button>
-      <button class="btn ghost" data-border="border-1">Pink</button>
-      <button class="btn ghost" data-border="border-2">Inset</button>
-      <button class="btn ghost" data-border="border-3">Double</button>
+  <div class="container">
+    <div class="header">
+      <h1>Event Poster Generator</h1>
+      <p>Create stunning posters for weddings, funerals, birthdays, or restaurant menus!</p>
     </div>
 
-    <div id="fieldsArea"></div>
+    <div class="flex">
+      <!-- Customization Panel -->
+      <div class="panel">
+        <h2>Customize Poster</h2>
 
-    <div class="controls">
-      <button id="btnLive" class="btn">Update Preview</button>
-      <button id="btnReset" class="btn ghost">Reset</button>
-    </div>
+        <label>Event Type:</label>
+        <select id="eventType">
+          <option value="Wedding">Wedding</option>
+          <option value="Birthday">Birthday</option>
+          <option value="Funeral">Funeral</option>
+          <option value="Family Event">Family Event</option>
+          <option value="Restaurant Menu">Restaurant Menu</option>
+          <option value="Other">Other</option>
+        </select>
 
-    <p class="hint">Tip: wedding templates use floral corners and centered text (like your reference). Obituaries will use sober black/white templates. Menus are clean and list-focused.</p>
-  </div>
+        <label>Event Name / Title:</label>
+        <input type="text" id="eventTitle" placeholder="Enter Event Name">
 
-  <!-- RIGHT: preview & download -->
-  <div class="panel preview-area">
-    <div style="display:flex;gap:8px;align-items:center;width:100%;justify-content:flex-end">
-      <div style="display:flex;gap:6px">
-        <button id="btnZoomOut" class="btn ghost">A-</button>
-        <button id="btnZoomIn" class="btn ghost">A+</button>
+        <label>Date & Time:</label>
+        <input type="text" id="eventDate" placeholder="Enter Date & Time">
+
+        <label>Location / Venue:</label>
+        <input type="text" id="eventLocation" placeholder="Enter Location">
+
+        <label>Description / Notes:</label>
+        <input type="text" id="eventDesc" placeholder="Enter Notes">
+
+        <label>Headline Color:</label>
+        <input type="color" id="headlineColor" value="#ffffff">
+
+        <label>Background Color / Gradient:</label>
+        <input type="color" id="bgColor" value="#9370DB">
+
+        <label>Font:</label>
+        <select id="fontSelect">
+          <option value="'Montserrat', sans-serif">Montserrat</option>
+          <option value="'Playfair Display', serif">Playfair Display</option>
+        </select>
+
+        <label>Upload Image / Logo:</label>
+        <input type="file" id="uploadImage" accept="image/*">
+
+        <label>QR Code Link:</label>
+        <input type="text" id="qrLink" placeholder="RSVP / Tickets URL">
+
+        <button id="exportBtn">Download Poster PNG</button>
+      </div>
+
+      <!-- Poster Preview Panel -->
+      <div class="preview-panel">
+        <h2>Poster Preview</h2>
+
+        <div class="template-gallery" id="templateGallery"></div>
+
+        <div class="poster-canvas" id="posterCanvas">
+          <div class="poster-text" id="posterTitle" style="top:50px; font-size:32px;">Event Title</div>
+          <div class="poster-text" id="posterDate" style="top:100px; font-size:18px;">Date & Time</div>
+          <div class="poster-text" id="posterLocation" style="top:140px; font-size:18px;">Location</div>
+          <div class="poster-text" id="posterDesc" style="top:180px; font-size:16px;">Notes / Description</div>
+        </div>
       </div>
     </div>
-
-    <div class="preview-canvas" id="previewCanvas"></div>
-
-    <div class="thumb-row" id="thumbRow"></div>
-
-    <div style="display:flex;gap:8px;justify-content:center;margin-top:8px">
-      <button id="downloadPNG" class="btn">Download PNG</button>
-      <button id="downloadPDF" class="btn">Download PDF</button>
-      <button id="copyLink" class="btn ghost">Copy Share Link</button>
-    </div>
   </div>
-</div>
 
-<script>
-/* ----------------- Templates data ----------------- */
-/* Each template has: id, label, pages count, cssClass */
-const TEMPLATES = {
-  wedding: [
-    {id:'w-floral', label:'Floral Pink', pages:2, css:'template-wedding'},
-    {id:'w-modern', label:'Modern Clean', pages:2, css:'template-wedding'},
-    {id:'w-minimal', label:'Minimal', pages:1, css:'template-wedding'}
-  ],
-  obituary: [
-    {id:'o-classic', label:'Classic Black', pages:2, css:'template-obit'},
-    {id:'o-elegant', label:'Elegant', pages:1, css:'template-obit'}
-  ],
-  event: [
-    {id:'e-color', label:'Colorful', pages:1, css:'template-event'},
-    {id:'e-simple', label:'Simple', pages:1, css:'template-event'}
-  ],
-  menu: [
-    {id:'m-modern', label:'Menu Modern', pages:1, css:'template-menu'},
-    {id:'m-classic', label:'Menu Classic', pages:1, css:'template-menu'}
-  ]
-};
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+  <script>
+    const posterCanvas = document.getElementById('posterCanvas');
+    const posterTitle = document.getElementById('posterTitle');
+    const posterDateElem = document.getElementById('posterDate');
+    const posterLocationElem = document.getElementById('posterLocation');
+    const posterDescElem = document.getElementById('posterDesc');
 
-/* ----------------- State ----------------- */
-let state = {
-  type: 'wedding',
-  templateId: 'w-floral',
-  border: 'border-1',
-  pages: [],   // array of page content objects
-  zoom: 1
-};
+    const eventTitle = document.getElementById('eventTitle');
+    const eventDate = document.getElementById('eventDate');
+    const eventLocation = document.getElementById('eventLocation');
+    const eventDesc = document.getElementById('eventDesc');
+    const headlineColor = document.getElementById('headlineColor');
+    const bgColor = document.getElementById('bgColor');
+    const fontSelect = document.getElementById('fontSelect');
+    const uploadImage = document.getElementById('uploadImage');
+    const qrLink = document.getElementById('qrLink');
+    const exportBtn = document.getElementById('exportBtn');
+    const templateGallery = document.getElementById('templateGallery');
+    const eventType = document.getElementById('eventType');
 
-/* ---------- DOM refs ---------- */
-const typeSelect = document.getElementById('typeSelect');
-const templatesEl = document.getElementById('templates');
-const fieldsArea = document.getElementById('fieldsArea');
-const previewCanvas = document.getElementById('previewCanvas');
-const thumbRow = document.getElementById('thumbRow');
-const btnLive = document.getElementById('btnLive');
-const btnReset = document.getElementById('btnReset');
-const downloadPNG = document.getElementById('downloadPNG');
-const downloadPDF = document.getElementById('downloadPDF');
-const copyLink = document.getElementById('copyLink');
+    // Templates (AI-style suggestions)
+    const templates = {
+      "Wedding":[ "#FFDDEE", "#FFB6C1", "#FFC0CB" ],
+      "Birthday":[ "#FFF68F", "#FFD700", "#FFA500" ],
+      "Funeral":[ "#333333", "#555555", "#777777" ],
+      "Family Event":[ "#ADD8E6", "#87CEFA", "#00BFFF" ],
+      "Restaurant Menu":[ "#FFF5E1", "#FFE4B5", "#FFDAB9" ],
+      "Other":[ "#C0C0C0", "#A9A9A9", "#808080" ]
+    };
 
-/* ---------- Helpers ---------- */
-function makeDefaultPages(type, templateId){
-  const template = TEMPLATES[type].find(t=>t.id===templateId);
-  const pages = [];
-  for(let i=0;i<template.pages;i++){
-    if(type==='wedding'){
-      pages.push({
-        title: 'Wedding Program',
-        subtitle: (i===0? 'Ceremony' : 'Reception'),
-        body: (i===0? 'Welcome\nPresentation\nPrayer\nFirst Reading\nExchange of Vows\nGiving and Receiving of Rings\nLighting of the Unity Candle\nWedding Prayer\nThe Pronouncement\nRecessional\nWedding March' : 'Cocktails, Dinner, Dancing, and a Night Full of Fun!')
+    function loadTemplates(type){
+      templateGallery.innerHTML = "";
+      templates[type].forEach((color,i)=>{
+        const thumb = document.createElement('div');
+        thumb.classList.add('template-thumb');
+        thumb.style.background = color;
+        thumb.dataset.color = color;
+        thumb.addEventListener('click', ()=> {
+          posterCanvas.style.background = color;
+          templateGallery.querySelectorAll('.template-thumb').forEach(t=>t.classList.remove('selected'));
+          thumb.classList.add('selected');
+        });
+        if(i===0) thumb.classList.add('selected');
+        templateGallery.appendChild(thumb);
+        posterCanvas.style.background = templates[type][0];
       });
-    } else if(type==='obituary'){
-      pages.push({
-        title: (i===0? 'In Loving Memory of Name' : 'Order of Service'),
-        subtitle: '',
-        body: (i===0? 'John Doe\n01 Jan 1950 — 01 Jan 2025\nSurvived by: Wife, 3 children\n\nShort tribute goes here.' : 'Service at: Community Hall\nTime: 10:00 AM\nProgram:\n- Opening Hymn\n- Readings\n- Eulogy')
-      });
-    } else if(type==='event'){
-      pages.push({title:'Event Name', subtitle:'Date & Time', body:'Host: ...\nVenue: ...\nDetails...'});
-    } else if(type==='menu'){
-      pages.push({title:'Restaurant Name', subtitle:'Menu', body:'Dish 1 — R45\nDish 2 — R55\nDish 3 — R35'});
-    }
-  }
-  return pages;
-}
-
-/* ---------- render template choices ---------- */
-function renderTemplateChoices(){
-  templatesEl.innerHTML='';
-  const list = TEMPLATES[state.type];
-  list.forEach(t=>{
-    const d = document.createElement('div');
-    d.className='template' + (t.id===state.templateId ? ' active':'');
-    d.dataset.tid = t.id;
-    // make tiny visual sample: use css class to hint design
-    d.innerHTML = `<div style="height:60px;border-radius:6px;overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center;border-bottom:1px solid #eee">
-      <strong style="font-size:11px;color:${state.type==='obituary'?'#111':'#d84f6b'}">${t.label}</strong>
-    </div><div style="font-size:12px;margin-top:6px">${t.pages} page${t.pages>1?'s':''}</div>`;
-    d.addEventListener('click', ()=>{
-      state.templateId = t.id;
-      // reset default pages based on chosen template
-      state.pages = makeDefaultPages(state.type, state.templateId);
-      renderTemplateChoices();
-      renderFields();
-      renderPreview();
-    });
-    templatesEl.appendChild(d);
-  });
-}
-
-/* ---------- render editable fields for each page ---------- */
-function renderFields(){
-  fieldsArea.innerHTML = '';
-  // build inputs for each page
-  state.pages.forEach((p, idx)=>{
-    const wrap = document.createElement('div');
-    wrap.style.borderTop='1px dashed #eee';
-    wrap.style.paddingTop='8px';
-    wrap.innerHTML = `<label class="label" style="margin-top:8px">Page ${idx+1} - Title</label>
-      <input data-page="${idx}" data-field="title" value="${escapeHtml(p.title || '')}">
-      <label class="label">Subtitle</label>
-      <input data-page="${idx}" data-field="subtitle" value="${escapeHtml(p.subtitle || '')}">
-      <label class="label">Body / Lines</label>
-      <textarea data-page="${idx}" data-field="body">${escapeHtml(p.body || '')}</textarea>`;
-    fieldsArea.appendChild(wrap);
-  });
-
-  // add input listeners
-  fieldsArea.querySelectorAll('input,textarea').forEach(el=>{
-    el.addEventListener('input', (e)=>{
-      const pg = Number(el.dataset.page);
-      const field = el.dataset.field;
-      state.pages[pg][field] = el.value;
-      renderPreview();
-    });
-  });
-}
-
-/* ---------- preview rendering ---------- */
-function renderPreview(){
-  previewCanvas.className = state.border;
-  previewCanvas.innerHTML = '';
-
-  // create page elements
-  state.pages.forEach((p, idx)=>{
-    const pageWrap = document.createElement('div');
-    pageWrap.className = 'page ' + TEMPLATES[state.type].find(t=>t.id===state.templateId).css;
-    pageWrap.dataset.page = idx;
-    pageWrap.style.transform = `scale(${state.zoom})`;
-    pageWrap.innerHTML = '';
-
-    // floral decoration for wedding floral template
-    if(state.templateId === 'w-floral'){
-      const imgTR = document.createElement('img'); imgTR.className='floral-tr'; imgTR.src = 'https://i.imgur.com/6VwP5bH.png'; // floral top-right (transparent)
-      const imgBL = document.createElement('img'); imgBL.className='floral-bl'; imgBL.src = 'https://i.imgur.com/7qGk6yR.png'; // floral bottom-left
-      pageWrap.appendChild(imgTR); pageWrap.appendChild(imgBL);
     }
 
-    // content
-    const titleEl = document.createElement('div'); titleEl.className='title'; titleEl.textContent = p.title || '';
-    const subEl = document.createElement('div'); subEl.className='subtitle'; subEl.textContent = p.subtitle || '';
-    const bodyEl = document.createElement('div'); bodyEl.className='body'; bodyEl.textContent = p.body || '';
+    loadTemplates(eventType.value);
 
-    pageWrap.appendChild(titleEl);
-    pageWrap.appendChild(subEl);
-    pageWrap.appendChild(bodyEl);
+    eventType.addEventListener('change', ()=> loadTemplates(eventType.value));
 
-    previewCanvas.appendChild(pageWrap);
-  });
-
-  // thumbs
-  thumbRow.innerHTML = '';
-  state.pages.forEach((p, idx)=>{
-    const t = document.createElement('div');
-    t.className = 'thumb' + (idx===0 ? ' active':'');
-    t.title = 'Page ' + (idx+1);
-    // small snapshot imitation
-    t.innerHTML = `<div style="font-size:11px;font-weight:700;padding:6px;text-align:center">${p.title}</div>`;
-    t.addEventListener('click', ()=>{
-      // scroll to page
-      const pageEl = previewCanvas.querySelector(`.page[data-page="${idx}"]`);
-      pageEl.scrollIntoView({behavior:'smooth',block:'center'});
-      thumbRow.querySelectorAll('.thumb').forEach(x=>x.classList.remove('active'));
-      t.classList.add('active');
+    // Update poster text live
+    [eventTitle, eventDate, eventLocation, eventDesc].forEach(input=>{
+      input.addEventListener('input', ()=>{
+        posterTitle.textContent = eventTitle.value || "Event Title";
+        posterDateElem.textContent = eventDate.value || "Date & Time";
+        posterLocationElem.textContent = eventLocation.value || "Location";
+        posterDescElem.textContent = eventDesc.value || "Notes / Description";
+      });
     });
-    thumbRow.appendChild(t);
-  });
-}
 
-/* ---------- utilities ---------- */
-function escapeHtml(s){ return (s||'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
+    // Color & font updates
+    headlineColor.addEventListener('input', ()=>{
+      [posterTitle,posterDateElem,posterLocationElem,posterDescElem].forEach(el=>el.style.color = headlineColor.value);
+    });
+    bgColor.addEventListener('input', ()=> posterCanvas.style.background = bgColor.value);
+    fontSelect.addEventListener('change', ()=>{
+      [posterTitle,posterDateElem,posterLocationElem,posterDescElem].forEach(el=>el.style.fontFamily = fontSelect.value);
+    });
 
-/* ---------- downloads ---------- */
-async function downloadPagesAsPNG(){
-  const pages = Array.from(previewCanvas.querySelectorAll('.page'));
-  for(let i=0;i<pages.length;i++){
-    const canvas = await html2canvas(pages[i], {scale:2, backgroundColor:null});
-    const data = canvas.toDataURL('image/png');
-    const a = document.createElement('a');
-    a.href = data; a.download = `${state.type}_${i+1}.png`;
-    document.body.appendChild(a); a.click(); a.remove();
-  }
-}
-
-async function downloadAsPDF(){
-  const pages = Array.from(previewCanvas.querySelectorAll('.page'));
-  const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF('portrait','pt','a4'); // points
-  const margin = 20;
-  for(let i=0;i<pages.length;i++){
-    const canvas = await html2canvas(pages[i], {scale:2, backgroundColor:'#ffffff'});
-    const imgData = canvas.toDataURL('image/png');
-    const imgProps = pdf.getImageProperties(imgData);
-    const pdfWidth = pdf.internal.pageSize.getWidth() - margin*2;
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-    pdf.addImage(imgData,'PNG',margin,margin,pdfWidth,pdfHeight);
-    if(i < pages.length-1) pdf.addPage();
-  }
-  pdf.save(`${state.type}_poster.pdf`);
-}
-
-/* ---------- share link ---------- */
-function copyShareLink(){
-  const obj = {
-    type: state.type,
-    templateId: state.templateId,
-    border: state.border,
-    pages: state.pages
-  };
-  const base = location.origin + location.pathname;
-  const qs = encodeURIComponent(JSON.stringify(obj));
-  const link = base + '?design=' + qs;
-  navigator.clipboard.writeText(link).then(()=> alert('Share link copied'));
-}
-
-/* ---------- load from link ---------- */
-function loadFromURL(){
-  const qs = new URLSearchParams(location.search);
-  if(qs.has('design')){
-    try{
-      const obj = JSON.parse(decodeURIComponent(qs.get('design')));
-      if(obj.type && TEMPLATES[obj.type]){
-        state.type = obj.type;
-        state.templateId = obj.templateId || TEMPLATES[state.type][0].id;
-        state.border = obj.border || state.border;
-        state.pages = obj.pages || makeDefaultPages(state.type, state.templateId);
-        // apply border
-        document.querySelectorAll('[data-border]').forEach(b=> b.classList.remove('active'));
-        // update UI after small delay
-        setTimeout(()=> {
-          renderTemplateChoices();
-          renderFields();
-          renderPreview();
-          // mark border active
-          document.querySelectorAll('[data-border]').forEach(btn=>{
-            if(btn.dataset.border === state.border) btn.classList.add('active');
-          });
-          document.body.classList.add(state.border);
-        }, 120);
+    // Upload image/logo
+    uploadImage.addEventListener('change', e=>{
+      const file = e.target.files[0];
+      if(file){
+        const reader = new FileReader();
+        reader.onload = ()=> posterCanvas.style.backgroundImage = `url(${reader.result})`;
+        reader.readAsDataURL(file);
       }
-    }catch(e){ console.warn('could not parse design'); }
-  }
-}
+    });
 
-/* ---------- UI wiring ---------- */
-typeSelect.addEventListener('change', ()=>{
-  state.type = typeSelect.value;
-  // pick first template for that type
-  state.templateId = TEMPLATES[state.type][0].id;
-  state.pages = makeDefaultPages(state.type, state.templateId);
-  renderTemplateChoices();
-  renderFields();
-  renderPreview();
-});
+    // QR code
+    qrLink.addEventListener('input', ()=>{
+      let existingQr = posterCanvas.querySelector('.qr-code');
+      if(existingQr) existingQr.remove();
+      if(qrLink.value){
+        const qr = document.createElement('canvas');
+        qr.classList.add('qr-code');
+        qr.style.position = 'absolute';
+        qr.style.bottom = '10px';
+        qr.style.right = '10px';
+        posterCanvas.appendChild(qr);
+        new QRious({element: qr, value: qrLink.value, size:80});
+      }
+    });
 
-document.querySelectorAll('[data-border]').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    document.querySelectorAll('[data-border]').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    state.border = btn.dataset.border;
-    previewCanvas.className = state.border;
-  });
-});
+    // Export poster
+    exportBtn.addEventListener('click', ()=>{
+      html2canvas(posterCanvas).then(canvas=>{
+        const link = document.createElement('a');
+        link.download = `${eventTitle.value || "poster"}.png`;
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    });
 
-btnLive.addEventListener('click', ()=> renderPreview());
-btnReset.addEventListener('click', ()=>{
-  state = {type:'wedding', templateId:'w-floral', border:'border-1', pages: makeDefaultPages('wedding','w-floral'), zoom:1};
-  typeSelect.value = state.type;
-  renderTemplateChoices(); renderFields(); renderPreview();
-});
+    // Drag & move text
+    document.querySelectorAll('.poster-text').forEach(el=>{
+      el.onmousedown = function(e){
+        let shiftX = e.clientX - el.getBoundingClientRect().left;
+        let shiftY = e.clientY - el.getBoundingClientRect().top;
 
-downloadPNG.addEventListener('click', ()=> downloadPagesAsPNG());
-downloadPDF.addEventListener('click', ()=> downloadAsPDF());
-copyLink.addEventListener('click', ()=> copyShareLink());
+        function moveAt(pageX, pageY){
+          let rect = posterCanvas.getBoundingClientRect();
+          let newLeft = pageX - shiftX - rect.left;
+          let newTop = pageY - shiftY - rect.top;
+          newLeft = Math.max(0, Math.min(rect.width - el.offsetWidth, newLeft));
+          newTop = Math.max(0, Math.min(rect.height - el.offsetHeight, newTop));
+          el.style.left = newLeft + 'px';
+          el.style.top = newTop + 'px';
+        }
 
-document.getElementById('btnZoomIn').addEventListener('click', ()=>{
-  state.zoom = Math.min(1.2, (state.zoom || 1) + 0.08); renderPreview();
-});
-document.getElementById('btnZoomOut').addEventListener('click', ()=>{
-  state.zoom = Math.max(0.7, (state.zoom || 1) - 0.08); renderPreview();
-});
+        function onMouseMove(e){ moveAt(e.pageX, e.pageY); }
 
-/* ---------- startup ---------- */
-state.pages = makeDefaultPages(state.type, state.templateId);
-renderTemplateChoices();
-renderFields();
-renderPreview();
-loadFromURL();
-</script>
+        document.addEventListener('mousemove', onMouseMove);
+
+        el.onmouseup = function(){
+          document.removeEventListener('mousemove', onMouseMove);
+          el.onmouseup = null;
+        };
+      };
+      el.ondragstart = ()=> false;
+    });
+
+  </script>
 </body>
-  </html>
+</html>
