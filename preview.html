@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Poster Preview – QuickPoster</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #6dd5fa, #8e54e9);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .poster {
+      background: rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 30px;
+      width: 90%;
+      max-width: 500px;
+      text-align: center;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+    }
+
+    .poster h2 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    .poster p {
+      font-size: 1rem;
+      margin: 6px 0;
+    }
+
+    .btn {
+      background: white;
+      color: #6a11cb;
+      padding: 14px 20px;
+      border-radius: 10px;
+      font-weight: 600;
+      margin-top: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+      border: none;
+    }
+
+    .btn:hover {
+      background: #6a11cb;
+      color: white;
+      transform: translateY(-3px);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="poster" id="posterPreview">
+    <h2 id="previewTitle">[Title Here]</h2>
+    <p id="previewEvent">Event: --</p>
+    <p id="previewDate">Date: --</p>
+    <p id="previewDetails">Details will appear here...</p>
+    <p id="previewLanguage">Language: --</p>
+    <p id="previewTemplate">Template: --</p>
+  </div>
+
+  <button class="btn" onclick="downloadPoster()">⬇ Download Poster</button>
+
+  <script>
+    // Grab data from URL (sent from create.html)
+    const params = new URLSearchParams(window.location.search);
+
+    document.getElementById("previewTitle").textContent = params.get("title") || "[Title]";
+    document.getElementById("previewEvent").textContent = "Event: " + (params.get("event") || "--");
+    document.getElementById("previewDate").textContent = "Date: " + (params.get("date") || "--");
+    document.getElementById("previewDetails").textContent = params.get("details") || "No details provided.";
+    document.getElementById("previewLanguage").textContent = "Language: " + (params.get("language") || "--");
+    document.getElementById("previewTemplate").textContent = "Template: " + (params.get("template") || "--");
+
+    // Download (screenshot method)
+    function downloadPoster() {
+      alert("📥 Download feature coming next: we’ll make the poster save as an image or PDF.");
+    }
+  </script>
+
+</body>
+</html>
