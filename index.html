@@ -1,135 +1,747 @@
 <!doctype html>
-
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Event Poster Generator — Full v4</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Event Poster Generator — vNext (drag & resize + AI templates)</title>
+
+<!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+
 <style>
-:root{--bg:linear-gradient(135deg,#cfe9ff,#e8d6ff);--card:#fff;--accent:#6366f1;--radius:14px;font-family:Inter,system-ui,Arial}
-*{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:var(--bg);font-family:var(--font-family);color:#0f172a}
-.app{max-width:1280px;margin:18px auto;padding:14px;display:grid;grid-template-columns:320px 1fr 320px;gap:14px}
-.panel{background:var(--card);border-radius:var(--radius);padding:12px;box-shadow:0 10px 30px rgba(12,15,30,.06)}
-h1{margin:6px 0 12px;font-size:18px}
-label{font-size:13px;color:#374151}
-input[type=text],input[type=file],select,textarea{width:100%;padding:8px;border-radius:8px;border:1px solid #e6e9ef;margin-top:6px}
-textarea{min-height:72px}
-.btn{display:inline-block;padding:10px 14px;border-radius:10px;background:linear-gradient(90deg,#6366f1,#8b5cf6);color:white;border:none;cursor:pointer}
-.muted{background:transparent;border:1px solid #edf2f7;padding:8px;border-radius:8px}
-.templates{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-.tpl{width:100%;height:80px;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid rgba(0,0,0,.06)}
-.canvas-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;position:relative}
-#posterCanvas{background:#fff;border-radius:12px;box-shadow:0 14px 40px rgba(12,15,30,0.12);touch-action:none}
-.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-.small{font-size:13px;color:#6b7280}
-.elements-list{display:flex;flex-direction:column;gap:8px;margin-top:8px}
-.element-row{display:flex;align-items:center;gap:8px;padding:8px;border-radius:8px;border:1px solid #f1f5f9}
-.row-actions{margin-left:auto;display:flex;gap:6px}
-.crop-popup{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:9999}
-.crop-content{background:#fff;padding:12px;border-radius:12px;display:flex;flex-direction:column;align-items:center}
-#cropCanvas{border:1px solid #ccc}
-.handle{width:10px;height:10px;background:#6366f1;position:absolute;cursor:se-resize;border-radius:2px;z-index:10}
-@media(max-width:1100px){.app{grid-template-columns:1fr;}}
+  :root{
+    --bg: linear-gradient(135deg,#cfe9ff,#e8d6ff);
+    --card:#fff; --accent:#6366f1; --radius:12px;
+    font-family: Inter, system-ui, Arial;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;background:var(--bg);color:#0f172a;font-family:Inter,system-ui,Arial}
+  .app{max-width:1200px;margin:18px auto;padding:14px;display:grid;grid-template-columns:320px 1fr 320px;gap:14px}
+  .panel{background:var(--card);border-radius:var(--radius);padding:12px;box-shadow:0 8px 30px rgba(12,15,30,.06)}
+  h1{margin:6px 0 12px;font-size:18px}
+  label{font-size:13px;color:#374151}
+  input,select,textarea,button{font-family:inherit}
+  input[type=text],input[type=file],select,textarea{width:100%;padding:8px;border-radius:8px;border:1px solid #e6e9ef;margin-top:6px}
+  textarea{min-height:72px}
+  .btn{display:inline-block;padding:10px 14px;border-radius:10px;background:linear-gradient(90deg,#6366f1,#8b5cf6);color:white;border:none;cursor:pointer}
+  .muted{background:transparent;border:1px solid #edf2f7;padding:8px;border-radius:8px;cursor:pointer}
+  .templates{display:flex;flex-direction:column;gap:8px;margin-top:10px;max-height:420px;overflow:auto}
+  .tpl-card{display:flex;gap:8px;align-items:center;padding:10px;border-radius:10px;border:1px solid #eef2ff;cursor:pointer}
+  .tpl-thumb{width:90px;height:120px;border-radius:6px;overflow:hidden;background:#fff;border:1px solid #eee;display:flex;align-items:center;justify-content:center;font-size:12px;color:#666}
+  .canvas-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;position:relative}
+  canvas{background:#fff;border-radius:10px;box-shadow:0 12px 36px rgba(12,15,30,.12);touch-action:none}
+  .controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;align-items:center}
+  .small{font-size:13px;color:#6b7280}
+  .elements-list{display:flex;flex-direction:column;gap:8px;margin-top:8px;max-height:520px;overflow:auto}
+  .element-row{display:flex;align-items:center;gap:8px;padding:8px;border-radius:8px;border:1px solid #f1f5f9}
+  .crop-popup{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:9999}
+  .crop-content{background:#fff;padding:12px;border-radius:12px;display:flex;flex-direction:column;align-items:center}
+  #cropCanvas{border:1px solid #ccc}
+  .handle{width:12px;height:12px;background:#fff;border:2px solid var(--accent);position:absolute;border-radius:3px;box-shadow:0 2px 6px rgba(0,0,0,.12);display:none;touch-action:none}
+  @media(max-width:1100px){.app{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<div class="app">
-<aside class="panel">
-<h1>Create Poster</h1>
-<div class="small">Fill details → pick template → customize → export.</div>
-<label>Event Name</label>
-<input id="eventName" type="text" placeholder="Community Jazz Night">
-<label>Date & Time</label>
-<input id="eventDate" type="datetime-local">
-<label>Location</label>
-<input id="eventLocation" type="text" placeholder="Town Hall">
-<label>Event Type</label>
-<select id="eventType"><option>Concert</option><option>Wedding</option><option>Birthday</option><option>Sale</option><option>Workshop</option><option>Other</option></select>
-<label>Description</label>
-<textarea id="eventDesc">An evening of live jazz and local food stalls.</textarea>
-<label>Upload Images</label>
-<input id="imageUpload" type="file" accept="image/*" multiple>
-<label>QR Code Link</label>
-<input id="qrLink" type="text" placeholder="https://...">
-<div style="display:flex;gap:8px;margin-top:12px">
-<button id="genTemplates" class="btn">Suggest Templates</button>
-<button id="addTextBtn" class="muted">+ Add Text</button>
-</div>
-<div class="templates" id="templates"></div>
-</aside>
-<main class="panel">
-<h1>Preview & Editor</h1>
-<div class="canvas-wrap">
-<canvas id="posterCanvas" width="1080" height="1350"></canvas>
-</div>
-<div class="controls">
-<select id="sizeSelect"><option value="1080x1350">Instagram</option><option value="1200x1800">Poster</option><option value="2480x3508">A4 Print</option></select>
-<button id="exportPNG" class="btn">Download PNG</button>
-<button id="exportPDF" class="btn">Download PDF</button>
-</div>
-</main>
-<aside class="panel">
-<h1>Elements</h1>
-<div class="elements-list" id="elementsList"></div>
-</aside>
-<div class="crop-popup" id="cropPopup">
-<div class="crop-content">
-<canvas id="cropCanvas" width="400" height="400"></canvas>
-<div style="margin-top:8px">
-<button id="applyCrop" class="btn">Apply Crop</button>
-<button id="cancelCrop" class="muted">Cancel</button>
-</div>
-</div>
-</div>
+  <div class="app">
+
+    <!-- LEFT: Inputs & AI Template -->
+    <aside class="panel">
+      <h1>Create Poster</h1>
+      <div class="small">Fill details → Suggest templates → pick one → customize → export</div>
+
+      <label>Event Name</label>
+      <input id="eventName" type="text" placeholder="Community Jazz Night" value="Community Jazz Night">
+
+      <label>Date & Time</label>
+      <input id="eventDate" type="datetime-local">
+
+      <label>Location</label>
+      <input id="eventLocation" type="text" placeholder="Town Hall, Johannesburg">
+
+      <label>Event Type</label>
+      <select id="eventType">
+        <option>Concert</option><option>Wedding</option><option>Birthday</option><option>Sale</option><option>Workshop</option><option>Other</option>
+      </select>
+
+      <label>Short Description</label>
+      <textarea id="eventDesc">An evening of live jazz and local food stalls.</textarea>
+
+      <label>Upload Images</label>
+      <input id="imageUpload" type="file" accept="image/*" multiple>
+
+      <label>QR Code Link (optional)</label>
+      <input id="qrLink" type="text" placeholder="https://...">
+
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button id="suggestTemplates" class="btn">Suggest Templates (AI)</button>
+        <button id="localTemplates" class="muted">Local Templates</button>
+      </div>
+
+      <div class="templates" id="templates"></div>
+    </aside>
+
+    <!-- CENTER: Canvas + controls -->
+    <main class="panel">
+      <h1>Poster Editor</h1>
+      <div class="canvas-wrap">
+        <div id="handles-container" style="position:absolute;pointer-events:none;top:0;left:0;width:100%;height:100%"></div>
+        <canvas id="posterCanvas" width="1080" height="1350"></canvas>
+      </div>
+
+      <div class="controls">
+        <label class="small">Size</label>
+        <select id="sizeSelect">
+          <option value="1080x1350">Instagram Post (1080×1350)</option>
+          <option value="1080x1080">Instagram Square (1080×1080)</option>
+          <option value="1080x1920">Story (1080×1920)</option>
+          <option value="2480x3508">A4 Print (2480×3508)</option>
+        </select>
+
+        <button id="exportPng" class="btn">Download PNG</button>
+        <button id="exportPdf" class="btn">Download PDF</button>
+        <button id="addText" class="muted">+ Text</button>
+        <button id="addQr" class="muted">+ QR from Link</button>
+        <button id="clearAll" class="muted">Clear</button>
+        <div class="small" style="margin-left:auto">Hold <strong>Shift</strong> while resizing to keep aspect ratio</div>
+      </div>
+    </main>
+
+    <!-- RIGHT: Elements list and quick edit -->
+    <aside class="panel">
+      <h1>Elements</h1>
+      <div class="small">Select elements on the canvas to move, resize, edit or delete.</div>
+      <div style="height:12px"></div>
+
+      <div id="elementsList" class="elements-list"></div>
+      <div style="height:12px"></div>
+      <div style="display:flex;gap:8px">
+        <button id="bringFront" class="muted">Bring Front</button>
+        <button id="sendBack" class="muted">Send Back</button>
+        <button id="deleteEl" class="muted">Delete</button>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Crop popup -->
+  <div class="crop-popup" id="cropPopup">
+    <div class="crop-content">
+      <canvas id="cropCanvas" width="600" height="400"></canvas>
+      <div style="margin-top:8px;display:flex;gap:8px">
+        <button id="cropApply" class="btn">Apply Crop</button>
+        <button id="cropCancel" class="muted">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <script>
-// Canvas & Elements
-const canvas=document.getElementById('posterCanvas');
-const ctx=canvas.getContext('2d');
-let elements=[];let selectedElement=null;
-function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);elements.forEach(el=>{
-if(el.type==='text'){ctx.font=`${el.size}px ${el.font}`;ctx.fillStyle=el.color;ctx.fillText(el.text,el.x,el.y);}
-if(el.type==='image'){ctx.drawImage(el.img,el.x,el.y,el.width,el.height);}
-if(el.type==='qr'){ctx.drawImage(el.img,el.x,el.y,el.width,el.height);}});}
-canvas.addEventListener('mousedown',e=>{
-const rect=canvas.getBoundingClientRect();
-const mx=e.clientX-rect.left,my=e.clientY-rect.top;
-selectedElement=elements.find(el=>mx>=el.x&&mx<=el.x+el.width&&my>=el.y&&my<=el.y+el.height);
+/*
+  Event Poster Generator — vNext
+  - Drag & Move elements
+  - Corner resize handles (Shift to maintain aspect ratio)
+  - Image upload with cropping popup
+  - AI template generation (POST /api/generate-templates) + local fallback
+  - QR via external API
+  - PNG & PDF export
+*/
+
+/* ---------- Utilities ---------- */
+const uid = () => Math.random().toString(36).slice(2,9);
+const el = id => document.getElementById(id);
+
+function setCanvasSize(w,h){
+  const canvas = el('posterCanvas');
+  // support high-DPI
+  const ratio = window.devicePixelRatio || 1;
+  canvas.style.width = w + 'px';
+  canvas.style.height = h + 'px';
+  canvas.width = Math.round(w * ratio);
+  canvas.height = Math.round(h * ratio);
+  ctx.setTransform(ratio, 0, 0, ratio, 0, 0); // scale drawing to CSS pixels
+  render();
+}
+
+/* ---------- State ---------- */
+const canvas = el('posterCanvas');
+const ctx = canvas.getContext('2d');
+let elements = []; // ordered stack; each element { id, type, x,y,width,height, ... }
+let selectedId = null;
+let mode = null; // 'drag'|'resize'|null
+let dragOffset = {x:0,y:0};
+let activeHandle = null;
+let keepAspect = false;
+
+/* ---------- Handles (DOM) ---------- */
+const handlesContainer = el('handles-container');
+const handles = {
+  tl: createHandle(), tr: createHandle(), bl: createHandle(), br: createHandle()
+};
+Object.values(handles).forEach(h => handlesContainer.appendChild(h));
+
+function createHandle(){
+  const d = document.createElement('div');
+  d.className = 'handle';
+  d.style.display = 'none';
+  return d;
+}
+
+/* ---------- Drawing ---------- */
+function render(){
+  // clear
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  // draw background
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  // draw elements in order
+  for(const elmt of elements){
+    if(elmt.type === 'rect'){
+      ctx.fillStyle = elmt.color || '#000';
+      ctx.globalAlpha = elmt.opacity ?? 1;
+      ctx.fillRect(elmt.x, elmt.y, elmt.width, elmt.height);
+      ctx.globalAlpha = 1;
+    }
+    if(elmt.type === 'image' || elmt.type === 'qr'){
+      if(elmt.img && elmt.img.complete){
+        ctx.globalAlpha = elmt.opacity ?? 1;
+        ctx.drawImage(elmt.img, elmt.x, elmt.y, elmt.width, elmt.height);
+        ctx.globalAlpha = 1;
+      }
+    }
+    if(elmt.type === 'text'){
+      ctx.globalAlpha = elmt.opacity ?? 1;
+      ctx.fillStyle = elmt.color || '#111';
+      ctx.font = `${elmt.weight || 700} ${elmt.size || 48}px ${elmt.font || 'Inter'}`;
+      ctx.textAlign = elmt.align || 'left';
+      const lines = (elmt.text || '').split('\\n');
+      let y = elmt.y;
+      for(const line of lines){
+        ctx.fillText(line, elmt.x, y);
+        y += (elmt.size || 48) * 1.15;
+      }
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  // draw selection box / handles
+  updateHandles();
+}
+
+/* ---------- Hit testing & selection ---------- */
+function getElementAt(x,y){
+  for(let i = elements.length - 1; i >= 0; i--){
+    const elmt = elements[i];
+    if(x >= elmt.x && x <= elmt.x + elmt.width && y >= elmt.y && y <= elmt.y + elmt.height){
+      return elmt;
+    }
+  }
+  return null;
+}
+
+function selectElementById(id){
+  selectedId = id;
+  updateElementsList();
+  updateHandles();
+}
+
+/* ---------- Handles placement ---------- */
+function updateHandles(){
+  // hide all first
+  Object.values(handles).forEach(h => h.style.display = 'none');
+  if(!selectedId){ return; }
+  const elmt = elements.find(e => e.id === selectedId);
+  if(!elmt) return;
+
+  // show handles at corners (in CSS pixels)
+  const rect = canvas.getBoundingClientRect();
+  // compute scale between canvas coordinate and CSS pixels (canvas.width is scaled with DPR)
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
+  // convert element coordinates (canvas units) to CSS pixels
+  const left = elmt.x / scaleX + rect.left;
+  const top = elmt.y / scaleY + rect.top;
+  const right = (elmt.x + elmt.width) / scaleX + rect.left;
+  const bottom = (elmt.y + elmt.height) / scaleY + rect.top;
+
+  // position DOM handles
+  positionHandle(handles.tl, left - 6, top - 6);
+  positionHandle(handles.tr, right - 6, top - 6);
+  positionHandle(handles.bl, left - 6, bottom - 6);
+  positionHandle(handles.br, right - 6, bottom - 6);
+
+  Object.values(handles).forEach(h => h.style.display = 'block');
+}
+
+function positionHandle(dom, px, py){
+  dom.style.left = px + 'px';
+  dom.style.top = py + 'px';
+  dom.style.position = 'absolute';
+  dom.style.pointerEvents = 'auto';
+}
+
+/* ---------- Pointer events for canvas (move + resize) ---------- */
+let pointerDown = false;
+
+function canvasPointerToCanvasCoords(clientX, clientY){
+  const rect = canvas.getBoundingClientRect();
+  const ratioX = canvas.width / rect.width;
+  const ratioY = canvas.height / rect.height;
+  return {
+    x: (clientX - rect.left) * ratioX,
+    y: (clientY - rect.top) * ratioY
+  };
+}
+
+// canvas drag
+canvas.addEventListener('mousedown', (ev) => {
+  ev.preventDefault();
+  pointerDown = true;
+  keepAspect = ev.shiftKey;
+  const p = canvasPointerToCanvasCoords(ev.clientX, ev.clientY);
+  const hit = getElementAt(p.x, p.y);
+  if(hit){
+    selectElementById(hit.id);
+    mode = 'drag';
+    dragOffset.x = p.x - hit.x;
+    dragOffset.y = p.y - hit.y;
+  } else {
+    selectedId = null;
+    updateElementsList();
+    updateHandles();
+  }
 });
-canvas.addEventListener('mousemove',e=>{if(selectedElement&&e.buttons){
-const rect=canvas.getBoundingClientRect();
-selectedElement.x=e.clientX-rect.left-selectedElement.width/2;
-selectedElement.y=e.clientY-rect.top-selectedElement.height/2;
-draw();}});
-canvas.addEventListener('mouseup',e=>{selectedElement=null;});
-// Add Text
-document.getElementById('addTextBtn').addEventListener('click',()=>{
-const text=prompt('Enter text','New Text');
-if(text){elements.push({type:'text',text,x:50,y:50,size:36,font:'Playfair Display',color:'#000',width:ctx.measureText(text).width,height:36});draw();}});
-// Image Upload & Crop
-let cropImg=null;const cropCanvas=document.getElementById('cropCanvas');const cropCtx=cropCanvas.getContext('2d');
-const cropPopup=document.getElementById('cropPopup');
-document.getElementById('imageUpload').addEventListener('change',e=>{const files=[...e.target.files];
-files.forEach(file=>{const reader=new FileReader();reader.onload=function(ev){
-cropImg=new Image();cropImg.onload=function(){cropCtx.clearRect(0,0,cropCanvas.width,cropCanvas.height);cropCtx.drawImage(cropImg,0,0,cropCanvas.width,cropCanvas.height);cropPopup.style.display='flex';};cropImg.src=ev.target.result;};reader.readAsDataURL(file);});});
-document.getElementById('applyCrop').addEventListener('click',()=>{
-const imgEl=new Image();imgEl.src=cropCanvas.toDataURL();imgEl.onload=function(){
-elements.push({type:'image',img:imgEl,x:50,y:50,width:300,height:200});draw();cropPopup.style.display='none';};});
-document.getElementById('cancelCrop').addEventListener('click',()=>{cropPopup.style.display='none';});
-// QR Code
-document.getElementById('qrLink').addEventListener('change',()=>{
-const val=document.getElementById('qrLink').value;if(val){
-const qr=new Image();qr.src='https://api.qrserver.com/v1/create-qr-code/?size=150x150&data='+encodeURIComponent(val);
-qr.onload=function(){elements.push({type:'qr',img:qr,x:50,y:50,width:150,height:150});draw();}}});
-// Export PNG
-document.getElementById('exportPNG').addEventListener('click',()=>{
-const link=document.createElement('a');link.download='poster.png';link.href=canvas.toDataURL();link.click();});
-// Export PDF (using jsPDF CDN)
-function downloadPDF(){
-const { jsPDF } = window.jspdf;const pdf=new jsPDF('p','pt',[canvas.width,canvas.height]);pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, canvas.width, canvas.height);pdf.save('poster.pdf');}
-document.getElementById('exportPDF').addEventListener('click',downloadPDF);
+
+window.addEventListener('mousemove', (ev) => {
+  if(!pointerDown) return;
+  const p = canvasPointerToCanvasCoords(ev.clientX, ev.clientY);
+  if(mode === 'drag' && selectedId){
+    const elmt = elements.find(e => e.id === selectedId);
+    if(!elmt) return;
+    elmt.x = p.x - dragOffset.x;
+    elmt.y = p.y - dragOffset.y;
+    render();
+  } else if(mode === 'resize' && selectedId && activeHandle){
+    const elmt = elements.find(e => e.id === selectedId);
+    if(!elmt) return;
+    // compute new width/height based on handle
+    const start = { x: elmt.x, y: elmt.y, w: elmt.width, h: elmt.height };
+    const ratioLock = keepAspect || ev.shiftKey;
+    if(activeHandle === 'br'){
+      let newW = p.x - start.x;
+      let newH = p.y - start.y;
+      if(ratioLock){
+        const aspect = start.w / start.h || 1;
+        if(newW / newH > aspect) newH = newW / aspect; else newW = newH * aspect;
+      }
+      elmt.width = Math.max(10, newW);
+      elmt.height = Math.max(10, newH);
+    } else if(activeHandle === 'tl'){
+      let newX = p.x;
+      let newY = p.y;
+      let newW = start.x + start.w - newX;
+      let newH = start.y + start.h - newY;
+      if(ratioLock){
+        const aspect = start.w / start.h || 1;
+        if(newW / newH > aspect) newH = newW / aspect; else newW = newH * aspect;
+      }
+      elmt.x = start.x + start.w - newW;
+      elmt.y = start.y + start.h - newH;
+      elmt.width = Math.max(10,newW);
+      elmt.height = Math.max(10,newH);
+    } else if(activeHandle === 'tr'){
+      let newY = p.y;
+      let newW = p.x - start.x;
+      let newH = start.y + start.h - newY;
+      if(ratioLock){
+        const aspect = start.w / start.h || 1;
+        newH = newW / aspect;
+      }
+      elmt.y = start.y + start.h - newH;
+      elmt.width = Math.max(10,newW);
+      elmt.height = Math.max(10,newH);
+    } else if(activeHandle === 'bl'){
+      let newX = p.x;
+      let newW = start.x + start.w - newX;
+      let newH = p.y - start.y;
+      if(ratioLock){
+        const aspect = start.w / start.h || 1;
+        newW = newH * aspect;
+        elmt.x = start.x + start.w - newW;
+      } else {
+        elmt.x = start.x + start.w - newW;
+      }
+      elmt.width = Math.max(10,newW);
+      elmt.height = Math.max(10,newH);
+    }
+    render();
+  }
+});
+
+window.addEventListener('mouseup', (ev) => {
+  pointerDown = false;
+  mode = null;
+  activeHandle = null;
+});
+
+/* ---------- Handle pointer events ---------- */
+Object.entries(handles).forEach(([name, dom]) => {
+  dom.addEventListener('mousedown', (ev) => {
+    ev.stopPropagation(); ev.preventDefault();
+    activeHandle = name;
+    mode = 'resize';
+    pointerDown = true;
+    keepAspect = ev.shiftKey;
+  });
+});
+
+/* ---------- UI: Size selector ---------- */
+el('sizeSelect').addEventListener('change', () => {
+  const [w,h] = el('sizeSelect').value.split('x').map(Number);
+  setCanvasSize(w,h);
+});
+
+/* ---------- Elements list UI ---------- */
+function updateElementsList(){
+  const list = el('elementsList');
+  list.innerHTML = '';
+  elements.forEach(it => {
+    const row = document.createElement('div'); row.className = 'element-row';
+    const label = document.createElement('div'); label.textContent = `${it.type} ${it.type==='text' ? '• '+(it.text||'') : ''}`;
+    row.appendChild(label);
+    const actions = document.createElement('div'); actions.style.marginLeft = 'auto';
+    const selectBtn = document.createElement('button'); selectBtn.className='muted'; selectBtn.textContent='Select';
+    selectBtn.onclick = () => { selectElementById(it.id); render(); };
+    actions.appendChild(selectBtn);
+    row.appendChild(actions);
+    list.appendChild(row);
+    // highlight
+    if(it.id === selectedId) row.style.background = '#f8fafc';
+  });
+}
+
+/* ---------- Add text element ---------- */
+el('addText').addEventListener('click', () => {
+  const txt = prompt('Enter text','New Event');
+  if(!txt) return;
+  const newEl = {
+    id: uid(), type: 'text', text: txt,
+    x: 80, y: 140, width: 600, height: 60,
+    size: 56, font: 'Playfair Display', weight: 700, color: '#111827', opacity: 1, align: 'left'
+  };
+  elements.push(newEl);
+  selectElementById(newEl.id);
+  updateElementsList();
+  render();
+});
+
+/* ---------- Image upload with cropping ---------- */
+const cropPopup = el('cropPopup');
+const cropCanvas = el('cropCanvas');
+const cropCtx = cropCanvas.getContext('2d');
+let cropSourceImg = null;
+let lastCropDataUrl = null;
+
+el('imageUpload').addEventListener('change', (ev) => {
+  const files = Array.from(ev.target.files || []);
+  if(files.length === 0) return;
+  // show first file at a time for cropping; allow multiple by re-trigger
+  const file = files[0];
+  const reader = new FileReader();
+  reader.onload = e => {
+    cropSourceImg = new Image();
+    cropSourceImg.onload = () => {
+      // draw fit into cropCanvas
+      const cw = cropCanvas.width, ch = cropCanvas.height;
+      cropCtx.clearRect(0,0,cw,ch);
+      // fit image preserving aspect
+      const arSrc = cropSourceImg.width / cropSourceImg.height;
+      const arDst = cw/ch;
+      let dw = cw, dh = ch, dx=0, dy=0;
+      if(arSrc > arDst) {
+        // source wider -> fit height
+        dh = ch; dw = ch * arSrc; dx = (cw - dw)/2;
+      } else {
+        dw = cw; dh = cw / arSrc; dy = (ch - dh)/2;
+      }
+      cropCtx.drawImage(cropSourceImg, dx, dy, dw, dh);
+      cropPopup.style.display = 'flex';
+    };
+    cropSourceImg.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+});
+
+el('cropCancel').addEventListener('click', () => { cropPopup.style.display = 'none'; });
+
+el('cropApply').addEventListener('click', () => {
+  const dataUrl = cropCanvas.toDataURL('image/png');
+  const img = new Image();
+  img.onload = () => {
+    const newEl = {
+      id: uid(), type: 'image', img: img,
+      x: 80, y: 260, width: Math.min(900, img.width), height: Math.min(600, img.height),
+      opacity: 1
+    };
+    elements.push(newEl);
+    selectElementById(newEl.id);
+    updateElementsList();
+    render();
+    cropPopup.style.display = 'none';
+  };
+  img.src = dataUrl;
+});
+
+/* ---------- Simple crop drag (move within cropCanvas) ---------- */
+(function setupCropInteraction(){
+  let dragging = false, dx=0, dy=0;
+  cropCanvas.addEventListener('mousedown', (ev) => {
+    dragging = true;
+    dx = ev.offsetX; dy = ev.offsetY;
+  });
+  window.addEventListener('mousemove', (ev) => {
+    if(!dragging || !cropSourceImg) return;
+    // allow panning by redrawing the image offset slightly based on mouse movement
+    // For simplicity, we won't implement full crop selection UI — this is a simple pan/fit preview.
+  });
+  window.addEventListener('mouseup', () => { dragging = false; });
+})();
+
+/* ---------- QR code add ---------- */
+el('addQr').addEventListener('click', () => {
+  const link = el('qrLink').value.trim();
+  if(!link){ alert('Enter a QR link first'); return; }
+  const qrImg = new Image();
+  // using a free QR API; you may replace with local generator
+  qrImg.crossOrigin = 'anonymous';
+  qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(link);
+  qrImg.onload = () => {
+    const newEl = { id: uid(), type: 'qr', img: qrImg, x: 80, y: 320, width: 240, height: 240, opacity: 1 };
+    elements.push(newEl);
+    selectElementById(newEl.id);
+    updateElementsList();
+    render();
+  };
+});
+
+/* ---------- Export PNG & PDF ---------- */
+el('exportPng').addEventListener('click', () => {
+  // Use current canvas bitmap (canvas is already high-res)
+  const cssW = canvas.style.width.replace('px','') || canvas.width;
+  const dataUrl = canvas.toDataURL('image/png');
+  const a = document.createElement('a'); a.href = dataUrl; a.download = 'poster.png'; a.click();
+});
+
+el('exportPdf').addEventListener('click', () => {
+  const { jsPDF } = window.jspdf;
+  // Convert canvas to image and add to PDF sized to canvas px
+  const imgData = canvas.toDataURL('image/png');
+  const pdf = new jsPDF({
+    orientation: canvas.width > canvas.height ? 'landscape' : 'portrait',
+    unit: 'pt',
+    format: [canvas.width, canvas.height]
+  });
+  pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+  pdf.save('poster.pdf');
+});
+
+/* ---------- Clear, Bring Front/Back, Delete ---------- */
+el('clearAll').addEventListener('click', () => {
+  if(confirm('Clear all elements?')) { elements = []; selectedId = null; updateElementsList(); render(); }
+});
+el('bringFront').addEventListener('click', () => {
+  if(!selectedId) return;
+  const idx = elements.findIndex(e => e.id === selectedId);
+  if(idx >= 0){ const [e] = elements.splice(idx,1); elements.push(e); render(); updateElementsList(); }
+});
+el('sendBack').addEventListener('click', () => {
+  if(!selectedId) return;
+  const idx = elements.findIndex(e => e.id === selectedId);
+  if(idx >= 0){ const [e] = elements.splice(idx,1); elements.unshift(e); render(); updateElementsList(); }
+});
+el('deleteEl').addEventListener('click', () => {
+  if(!selectedId) return;
+  elements = elements.filter(e => e.id !== selectedId);
+  selectedId = null;
+  updateElementsList(); render();
+});
+
+/* ---------- Template generation (AI + fallback) ---------- */
+el('suggestTemplates').addEventListener('click', async () => {
+  const payload = {
+    name: el('eventName').value,
+    date: el('eventDate').value,
+    type: el('eventType').value,
+    desc: el('eventDesc').value
+  };
+
+  // Try server AI endpoint first (replace with your endpoint)
+  try {
+    const resp = await fetch('/api/generate-templates', {
+      method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload)
+    });
+    if(resp.ok){
+      const json = await resp.json();
+      renderTemplates(json);
+      return;
+    }
+    // else fallback
+    console.warn('AI endpoint returned non-OK, using fallback');
+  } catch (err) {
+    console.warn('AI endpoint error, using local fallback', err);
+  }
+
+  // Fallback local templates
+  const fallback = localTemplateGenerator(payload);
+  renderTemplates(fallback);
+});
+
+el('localTemplates').addEventListener('click', () => {
+  const data = {
+    name: el('eventName').value,
+    date: el('eventDate').value,
+    type: el('eventType').value,
+    desc: el('eventDesc').value
+  };
+  renderTemplates(localTemplateGenerator(data));
+});
+
+function renderTemplates(list){
+  const container = el('templates'); container.innerHTML = '';
+  for(const t of list){
+    const card = document.createElement('div'); card.className='tpl-card';
+    const thumb = document.createElement('div'); thumb.className='tpl-thumb';
+    thumb.textContent = 'Preview';
+    const meta = document.createElement('div'); meta.style.flex='1';
+    const title = document.createElement('div'); title.textContent = t.title || 'Template';
+    const applyBtn = document.createElement('button'); applyBtn.className='muted'; applyBtn.textContent='Apply';
+    applyBtn.onclick = () => { applyTemplate(t); };
+    meta.appendChild(title); meta.appendChild(applyBtn);
+    card.appendChild(thumb); card.appendChild(meta);
+    container.appendChild(card);
+  }
+}
+
+/* Local template generator — simple layouts */
+function localTemplateGenerator(data){
+  const name = data.name || 'Event';
+  const desc = data.desc || '';
+  const dateStr = data.date ? new Date(data.date).toLocaleString() : '';
+  return [
+    {
+      id: 'local-1',
+      title: 'Minimal Center',
+      elements: [
+        { type: 'rect', color:'#ffffff', x:0, y:0, width: canvas.width, height: canvas.height },
+        { type: 'text', text: name, x: canvas.width/2 - 360, y: 220, size: 72, font:'Inter', weight:800, color:'#111827', align:'left' },
+        { type: 'text', text: desc, x: canvas.width/2 - 360, y: 320, size: 28, font:'Inter', weight:400, color:'#374151', align:'left' },
+        { type: 'text', text: dateStr + (data.type ? ' • ' + data.type : ''), x: canvas.width/2 - 360, y: 380, size: 20, font:'Inter', weight:400, color:'#6b7280', align:'left' }
+      ]
+    },
+    {
+      id: 'local-2',
+      title: 'Bold Side',
+      elements: [
+        { type:'rect', color: '#0f172a', x:0, y:0, width: Math.round(canvas.width*0.44), height: canvas.height },
+        { type:'text', text: name, x: 60, y: 160, size:64, font:'Playfair Display', weight:700, color:'#fff' },
+        { type:'text', text: desc, x: 60, y: 240, size:20, font:'Inter', weight:400, color:'#fff' },
+        { type:'text', text: dateStr, x: Math.round(canvas.width*0.5), y: 320, size:22, font:'Inter', weight:600, color:'#111' }
+      ]
+    },
+    {
+      id: 'local-3',
+      title: 'Photo top',
+      elements:[
+        { type:'image', src: '', x:0, y:0, width: canvas.width, height: Math.round(canvas.height*0.45) },
+        { type:'text', text: name, x: 80, y: Math.round(canvas.height*0.45)+120, size:64, font:'Playfair Display', weight:700, color:'#111' },
+        { type:'text', text: desc, x: 80, y: Math.round(canvas.height*0.45)+200, size:20, font:'Inter', weight:400, color:'#374151' },
+        { type:'text', text: dateStr, x: 80, y: Math.round(canvas.height*0.45)+260, size:18, font:'Inter', weight:400, color:'#6b7280' }
+      ]
+    }
+  ];
+}
+
+/* ---------- Apply template to canvas ---------- */
+function applyTemplate(template){
+  elements = [];
+  for(const e of template.elements || []){
+    if(e.type === 'text'){
+      elements.push({
+        id: uid(), type:'text', text: e.text || '',
+        x: e.x || 60, y: e.y || 100,
+        width: e.width || 600, height: e.height || 80,
+        size: e.size || 48, font: e.font || 'Inter', weight: e.weight || 700,
+        color: e.color || '#111827', opacity: e.opacity ?? 1, align: e.align || 'left'
+      });
+    } else if(e.type === 'rect'){
+      elements.push({
+        id: uid(), type:'rect', x:e.x||0,y:e.y||0,width:e.width||canvas.width,height:e.height||canvas.height,color:e.color||'#fff',opacity:e.opacity ?? 1
+      });
+    } else if(e.type === 'image'){
+      // if template provides src, fetch it; else leave placeholder blank
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => { render(); };
+      img.src = e.src || '';
+      elements.push({ id: uid(), type: 'image', img: img, x: e.x || 0, y: e.y || 0, width: e.width || 600, height: e.height || 400, opacity: e.opacity ?? 1 });
+    }
+  }
+  updateElementsList(); render();
+}
+
+/* ---------- Initial setup ---------- */
+(function init(){
+  // Set initial size to Instagram tall
+  setCanvasSize(1080,1350);
+
+  // click on template placeholder: show local templates by default initially
+  renderTemplates(localTemplateGenerator({
+    name: el('eventName').value,
+    date: el('eventDate').value,
+    type: el('eventType').value,
+    desc: el('eventDesc').value
+  }));
+})();
+
+/* ---------- Interaction: click on canvas selects element ---------- */
+canvas.addEventListener('click', (ev) => {
+  const p = canvasPointerToCanvasCoords(ev.clientX, ev.clientY);
+  const hit = getElementAt(p.x,p.y);
+  if(hit){
+    selectElementById(hit.id);
+  } else {
+    selectedId = null; updateElementsList(); updateHandles();
+  }
+});
+
+/* ---------- Helpers used in multiple places ---------- */
+function canvasPointerToCanvasCoords(clientX, clientY){
+  const rect = canvas.getBoundingClientRect();
+  const rx = canvas.width / rect.width;
+  const ry = canvas.height / rect.height;
+  return { x: (clientX - rect.left) * rx, y: (clientY - rect.top) * ry };
+}
+
+/* ---------- Keyboard shortcuts (Delete) ---------- */
+window.addEventListener('keydown', (e) => {
+  if(e.key === 'Delete' && selectedId){
+    elements = elements.filter(x => x.id !== selectedId);
+    selectedId = null; updateElementsList(); render();
+  }
+});
+
+/* ---------- Periodic render safety ---------- */
+setInterval(() => { render(); }, 200);
+
+/* ---------- Notes for Server-side AI integration ----------
+  - You can implement /api/generate-templates on your server (Node, Apps Script, Firebase function).
+  - It should accept POST JSON: { name, date, type, desc }
+  - Return array of templates with 'title' and 'elements' arrays matching the 'applyTemplate' format above.
+  - This client will fallback to local templates if the fetch call fails.
+*/
+
+/* ---------- End of script ---------- */
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </body>
-</html>
+  </html>
