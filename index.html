@@ -1,254 +1,140 @@
-<!DOCTYPE html>
+<!doctype html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Event Poster Generator</title>
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
-
-  <!-- Styles -->
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Montserrat', sans-serif;
-      background: linear-gradient(to bottom right, #89CFF0, #9370DB);
-      color: #333;
-    }
-    h1, h2, h3 { font-family: 'Playfair Display', serif; }
-
-    .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-    .header { text-align: center; margin-bottom: 20px; color: white; text-shadow: 1px 1px 4px rgba(0,0,0,0.3); }
-
-    .flex { display: flex; gap: 20px; flex-wrap: wrap; }
-    .panel, .preview-panel { background: white; border-radius: 12px; padding: 15px; flex: 1; min-width: 300px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-
-    /* Template gallery */
-    .template-gallery { display: flex; gap: 10px; overflow-x: auto; margin-bottom: 10px; }
-    .template-thumb { width: 100px; height: 140px; border-radius: 8px; cursor: pointer; border: 2px solid transparent; object-fit: cover; }
-    .template-thumb.selected { border-color: #9370DB; }
-
-    label { display: block; margin-top: 10px; font-weight: bold; }
-    input[type="text"], input[type="color"], select { width: 100%; padding: 8px; margin-top: 5px; border-radius: 6px; border: 1px solid #ccc; }
-    input[type="file"] { margin-top: 5px; }
-    button { background: linear-gradient(to right, #89CFF0, #9370DB); border: none; padding: 10px 15px; margin-top: 15px; color: white; font-weight: bold; border-radius: 8px; cursor: pointer; }
-    button:hover { opacity: 0.9; }
-
-    .poster-canvas { width: 100%; height: 500px; border-radius: 12px; display: flex; justify-content: center; align-items: center; position: relative; background-size: cover; background-position: center; border: 2px dashed #ccc; overflow: hidden; }
-    .poster-text { position: absolute; text-align: center; width: 90%; color: #fff; text-shadow: 2px 2px 5px rgba(0,0,0,0.5); cursor: move; }
-
-    @media(max-width: 768px){ .flex { flex-direction: column; } .poster-canvas { height: 400px; } }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Event Poster Generator</title>
+<style>
+:root {
+  --bg1: linear-gradient(135deg,#cfe9ff,#e8d6ff);
+  --card-bg:#fff;
+  --accent:#6366f1;
+  --radius:12px;
+  --font-base: Arial, sans-serif;
+}
+body{margin:0;font-family:var(--font-base);background:var(--bg1);}
+.container{max-width:1200px;margin:auto;padding:20px;display:flex;flex-wrap:wrap;gap:20px;}
+.panel{background:var(--card-bg);border-radius:var(--radius);padding:16px;flex:1;min-width:300px;box-shadow:0 4px 12px rgba(0,0,0,0.1);}
+h2{margin-top:0;}
+label{display:block;margin-top:10px;font-weight:bold;}
+input,select,textarea{width:100%;padding:8px;margin-top:4px;border-radius:6px;border:1px solid #ccc;}
+button{margin-top:12px;padding:10px 16px;border:none;border-radius:8px;background:linear-gradient(90deg,#6366f1,#8b5cf6);color:#fff;cursor:pointer;}
+#templateList{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;}
+.template-card{width:150px;height:220px;background:#f3f3f3;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;text-align:center;padding:8px;}
+canvas{border-radius:12px;margin-top:10px;width:100%;max-width:400px;height:auto;box-shadow:0 4px 12px rgba(0,0,0,0.2);}
+.color-inputs{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;}
+.color-inputs label{margin-top:0;font-weight:normal;}
+.color-inputs input{width:100px;}
+.font-select{margin-top:12px;}
+@media(max-width:900px){.container{flex-direction:column;}}
+</style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <h1>Event Poster Generator</h1>
-      <p>Create stunning posters for weddings, funerals, birthdays, or restaurant menus!</p>
+<div class="container">
+  <!-- Left Panel: Event Input -->
+  <div class="panel">
+    <h2>Event Details</h2>
+    <label>Event Name</label>
+    <input id="eventName" type="text" placeholder="Jazz Night">
+    <label>Date & Time</label>
+    <input id="eventDate" type="datetime-local">
+    <label>Location</label>
+    <input id="eventLocation" type="text" placeholder="Town Hall, City">
+    <label>Event Type</label>
+    <select id="eventType">
+      <option>Concert</option>
+      <option>Wedding</option>
+      <option>Birthday</option>
+      <option>Sale</option>
+      <option>Workshop</option>
+    </select>
+    <label>Description</label>
+    <textarea id="eventDesc" placeholder="Short description"></textarea>
+    <label>Upload Image</label>
+    <input id="imageUpload" type="file" accept="image/*">
+    <label>QR Code Link</label>
+    <input id="qrLink" type="text" placeholder="Optional link">
+    <button id="generateBtn">Generate Templates</button>
+    <div id="templateList"></div>
+  </div>  <!-- Middle Panel: Poster Preview and Editor -->  <div class="panel">
+    <h2>Poster Preview</h2>
+    <canvas id="posterCanvas" width="600" height="900"></canvas>
+    <div class="color-inputs">
+      <div><label>Background</label><input type="color" id="bgColor" value="#ffffff"></div>
+      <div><label>Accent</label><input type="color" id="accentColor" value="#6366f1"></div>
     </div>
-
-    <div class="flex">
-      <!-- Customization Panel -->
-      <div class="panel">
-        <h2>Customize Poster</h2>
-
-        <label>Event Type:</label>
-        <select id="eventType">
-          <option value="Wedding">Wedding</option>
-          <option value="Birthday">Birthday</option>
-          <option value="Funeral">Funeral</option>
-          <option value="Family Event">Family Event</option>
-          <option value="Restaurant Menu">Restaurant Menu</option>
-          <option value="Other">Other</option>
-        </select>
-
-        <label>Event Name / Title:</label>
-        <input type="text" id="eventTitle" placeholder="Enter Event Name">
-
-        <label>Date & Time:</label>
-        <input type="text" id="eventDate" placeholder="Enter Date & Time">
-
-        <label>Location / Venue:</label>
-        <input type="text" id="eventLocation" placeholder="Enter Location">
-
-        <label>Description / Notes:</label>
-        <input type="text" id="eventDesc" placeholder="Enter Notes">
-
-        <label>Headline Color:</label>
-        <input type="color" id="headlineColor" value="#ffffff">
-
-        <label>Background Color / Gradient:</label>
-        <input type="color" id="bgColor" value="#9370DB">
-
-        <label>Font:</label>
-        <select id="fontSelect">
-          <option value="'Montserrat', sans-serif">Montserrat</option>
-          <option value="'Playfair Display', serif">Playfair Display</option>
-        </select>
-
-        <label>Upload Image / Logo:</label>
-        <input type="file" id="uploadImage" accept="image/*">
-
-        <label>QR Code Link:</label>
-        <input type="text" id="qrLink" placeholder="RSVP / Tickets URL">
-
-        <button id="exportBtn">Download Poster PNG</button>
-      </div>
-
-      <!-- Poster Preview Panel -->
-      <div class="preview-panel">
-        <h2>Poster Preview</h2>
-
-        <div class="template-gallery" id="templateGallery"></div>
-
-        <div class="poster-canvas" id="posterCanvas">
-          <div class="poster-text" id="posterTitle" style="top:50px; font-size:32px;">Event Title</div>
-          <div class="poster-text" id="posterDate" style="top:100px; font-size:18px;">Date & Time</div>
-          <div class="poster-text" id="posterLocation" style="top:140px; font-size:18px;">Location</div>
-          <div class="poster-text" id="posterDesc" style="top:180px; font-size:16px;">Notes / Description</div>
-        </div>
-      </div>
+    <div class="font-select">
+      <label>Font</label>
+      <select id="fontSelect">
+        <option value="Arial, sans-serif">Sans-serif</option>
+        <option value="serif">Serif</option>
+        <option value="'Brush Script MT',cursive">Handwritten</option>
+      </select>
     </div>
+    <button id="downloadBtn">Download PNG</button>
   </div>
+</div><script>
+const canvas=document.getElementById('posterCanvas');
+const ctx=canvas.getContext('2d');
+let uploadedImage=null;
+let selectedTemplate=null;
 
-  <!-- Scripts -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
-  <script>
-    const posterCanvas = document.getElementById('posterCanvas');
-    const posterTitle = document.getElementById('posterTitle');
-    const posterDateElem = document.getElementById('posterDate');
-    const posterLocationElem = document.getElementById('posterLocation');
-    const posterDescElem = document.getElementById('posterDesc');
+document.getElementById('imageUpload').addEventListener('change', e=>{
+  const file=e.target.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{uploadedImage=new Image();uploadedImage.src=ev.target.result;uploadedImage.onload=()=>{if(selectedTemplate)drawPoster(selectedTemplate);};};
+  reader.readAsDataURL(file);
+});
 
-    const eventTitle = document.getElementById('eventTitle');
-    const eventDate = document.getElementById('eventDate');
-    const eventLocation = document.getElementById('eventLocation');
-    const eventDesc = document.getElementById('eventDesc');
-    const headlineColor = document.getElementById('headlineColor');
-    const bgColor = document.getElementById('bgColor');
-    const fontSelect = document.getElementById('fontSelect');
-    const uploadImage = document.getElementById('uploadImage');
-    const qrLink = document.getElementById('qrLink');
-    const exportBtn = document.getElementById('exportBtn');
-    const templateGallery = document.getElementById('templateGallery');
-    const eventType = document.getElementById('eventType');
+document.getElementById('generateBtn').addEventListener('click',()=>{
+  const data={
+    name: document.getElementById('eventName').value||'Event',
+    date: document.getElementById('eventDate').value,
+    location: document.getElementById('eventLocation').value,
+    type: document.getElementById('eventType').value,
+    desc: document.getElementById('eventDesc').value,
+    qr: document.getElementById('qrLink').value
+  };
+  const templates=[
+    {style:'Minimal',accent:'#6366f1',bg:'#ffffff',font:'Arial, sans-serif',data},
+    {style:'Bold',accent:'#f97316',bg:'#0f172a',font:'serif',data},
+    {style:'Elegant',accent:'#0ea5a4',bg:'#fff7ed',font:"'Brush Script MT',cursive",data}
+  ];
+  const list=document.getElementById('templateList');
+  list.innerHTML='';
+  templates.forEach((t,i)=>{
+    const div=document.createElement('div');
+    div.className='template-card';
+    div.innerText=t.style;
+    div.onclick=()=>{selectedTemplate=t;document.getElementById('bgColor').value=t.bg;document.getElementById('accentColor').value=t.accent;document.getElementById('fontSelect').value=t.font;drawPoster(t);};
+    list.appendChild(div);
+  });
+});
 
-    // Templates (AI-style suggestions)
-    const templates = {
-      "Wedding":[ "#FFDDEE", "#FFB6C1", "#FFC0CB" ],
-      "Birthday":[ "#FFF68F", "#FFD700", "#FFA500" ],
-      "Funeral":[ "#333333", "#555555", "#777777" ],
-      "Family Event":[ "#ADD8E6", "#87CEFA", "#00BFFF" ],
-      "Restaurant Menu":[ "#FFF5E1", "#FFE4B5", "#FFDAB9" ],
-      "Other":[ "#C0C0C0", "#A9A9A9", "#808080" ]
-    };
+function drawPoster(template){
+  const data=template.data;
+  const bg=document.getElementById('bgColor').value||template.bg;
+  const accent=document.getElementById('accentColor').value||template.accent;
+  const font=document.getElementById('fontSelect').value||template.font;
 
-    function loadTemplates(type){
-      templateGallery.innerHTML = "";
-      templates[type].forEach((color,i)=>{
-        const thumb = document.createElement('div');
-        thumb.classList.add('template-thumb');
-        thumb.style.background = color;
-        thumb.dataset.color = color;
-        thumb.addEventListener('click', ()=> {
-          posterCanvas.style.background = color;
-          templateGallery.querySelectorAll('.template-thumb').forEach(t=>t.classList.remove('selected'));
-          thumb.classList.add('selected');
-        });
-        if(i===0) thumb.classList.add('selected');
-        templateGallery.appendChild(thumb);
-        posterCanvas.style.background = templates[type][0];
-      });
-    }
+  ctx.fillStyle=bg;ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle=accent;ctx.font=`bold 48px ${font}`;ctx.textAlign='center';
+  ctx.fillText(data.name,canvas.width/2,100);
+  ctx.fillStyle='#000';ctx.font=`24px ${font}`;
+  ctx.fillText(data.desc,canvas.width/2,160);
+  ctx.fillText(data.type+' - '+data.date,canvas.width/2,200);
+  ctx.fillText(data.location,canvas.width/2,240);
 
-    loadTemplates(eventType.value);
+  if(uploadedImage){ctx.drawImage(uploadedImage,50,280,canvas.width-100,300);}
+}
 
-    eventType.addEventListener('change', ()=> loadTemplates(eventType.value));
-
-    // Update poster text live
-    [eventTitle, eventDate, eventLocation, eventDesc].forEach(input=>{
-      input.addEventListener('input', ()=>{
-        posterTitle.textContent = eventTitle.value || "Event Title";
-        posterDateElem.textContent = eventDate.value || "Date & Time";
-        posterLocationElem.textContent = eventLocation.value || "Location";
-        posterDescElem.textContent = eventDesc.value || "Notes / Description";
-      });
-    });
-
-    // Color & font updates
-    headlineColor.addEventListener('input', ()=>{
-      [posterTitle,posterDateElem,posterLocationElem,posterDescElem].forEach(el=>el.style.color = headlineColor.value);
-    });
-    bgColor.addEventListener('input', ()=> posterCanvas.style.background = bgColor.value);
-    fontSelect.addEventListener('change', ()=>{
-      [posterTitle,posterDateElem,posterLocationElem,posterDescElem].forEach(el=>el.style.fontFamily = fontSelect.value);
-    });
-
-    // Upload image/logo
-    uploadImage.addEventListener('change', e=>{
-      const file = e.target.files[0];
-      if(file){
-        const reader = new FileReader();
-        reader.onload = ()=> posterCanvas.style.backgroundImage = `url(${reader.result})`;
-        reader.readAsDataURL(file);
-      }
-    });
-
-    // QR code
-    qrLink.addEventListener('input', ()=>{
-      let existingQr = posterCanvas.querySelector('.qr-code');
-      if(existingQr) existingQr.remove();
-      if(qrLink.value){
-        const qr = document.createElement('canvas');
-        qr.classList.add('qr-code');
-        qr.style.position = 'absolute';
-        qr.style.bottom = '10px';
-        qr.style.right = '10px';
-        posterCanvas.appendChild(qr);
-        new QRious({element: qr, value: qrLink.value, size:80});
-      }
-    });
-
-    // Export poster
-    exportBtn.addEventListener('click', ()=>{
-      html2canvas(posterCanvas).then(canvas=>{
-        const link = document.createElement('a');
-        link.download = `${eventTitle.value || "poster"}.png`;
-        link.href = canvas.toDataURL();
-        link.click();
-      });
-    });
-
-    // Drag & move text
-    document.querySelectorAll('.poster-text').forEach(el=>{
-      el.onmousedown = function(e){
-        let shiftX = e.clientX - el.getBoundingClientRect().left;
-        let shiftY = e.clientY - el.getBoundingClientRect().top;
-
-        function moveAt(pageX, pageY){
-          let rect = posterCanvas.getBoundingClientRect();
-          let newLeft = pageX - shiftX - rect.left;
-          let newTop = pageY - shiftY - rect.top;
-          newLeft = Math.max(0, Math.min(rect.width - el.offsetWidth, newLeft));
-          newTop = Math.max(0, Math.min(rect.height - el.offsetHeight, newTop));
-          el.style.left = newLeft + 'px';
-          el.style.top = newTop + 'px';
-        }
-
-        function onMouseMove(e){ moveAt(e.pageX, e.pageY); }
-
-        document.addEventListener('mousemove', onMouseMove);
-
-        el.onmouseup = function(){
-          document.removeEventListener('mousemove', onMouseMove);
-          el.onmouseup = null;
-        };
-      };
-      el.ondragstart = ()=> false;
-    });
-
-  </script>
-</body>
-</html>
+document.getElementById('downloadBtn').addEventListener('click',()=>{
+  const link=document.createElement('a');
+  link.download='poster.png';
+  link.href=canvas.toDataURL();
+  link.click();
+});
+</script></body>
+                          </html>
