@@ -1,652 +1,107 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Event Poster Generator — vAI-Dummy</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:linear-gradient(135deg,#cfe9ff,#e8d6ff);
-  --card:#fff; --accent:#6366f1; --radius:12px;
-  font-family:Inter,system-ui,Arial;
-}
-*{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:var(--bg);color:#0f172a;font-family:Inter,system-ui,Arial}
-.app{max-width:1200px;margin:18px auto;padding:14px;display:grid;grid-template-columns:320px 1fr 320px;gap:14px}
-.panel{background:var(--card);border-radius:var(--radius);padding:12px;box-shadow:0 8px 30px rgba(12,15,30,.06)}
-h1{margin:6px 0 12px;font-size:18px}
-label{font-size:13px;color:#374151}
-input,select,textarea,button{font-family:inherit}
-input[type=text],input[type=file],select,textarea{width:100%;padding:8px;border-radius:8px;border:1px solid #e6e9ef;margin-top:6px}
-textarea{min-height:72px}
-.btn{display:inline-block;padding:10px 14px;border-radius:10px;background:linear-gradient(90deg,#6366f1,#8b5cf6);color:white;border:none;cursor:pointer}
-.muted{background:transparent;border:1px solid #edf2f7;padding:8px;border-radius:8px;cursor:pointer}
-.templates{display:flex;flex-direction:column;gap:8px;margin-top:10px;max-height:420px;overflow:auto}
-.tpl-card{display:flex;gap:8px;align-items:center;padding:10px;border-radius:10px;border:1px solid #eef2ff;cursor:pointer}
-.tpl-thumb{width:90px;height:120px;border-radius:6px;overflow:hidden;background:#fff;border:1px solid #eee;display:flex;align-items:center;justify-content:center;font-size:12px;color:#666}
-.canvas-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;position:relative}
-canvas{background:#fff;border-radius:10px;box-shadow:0 12px 36px rgba(12,15,30,.12);touch-action:none;max-width:100%}
-.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;align-items:center}
-.small{font-size:13px;color:#6b7280}
-.elements-list{display:flex;flex-direction:column;gap:8px;margin-top:8px;max-height:520px;overflow:auto}
-.element-row{display:flex;align-items:center;gap:8px;padding:8px;border-radius:8px;border:1px solid #f1f5f9}
-.crop-popup{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:9999}
-.crop-content{background:#fff;padding:12px;border-radius:12px;display:flex;flex-direction:column;align-items:center}
-#cropCanvas{border:1px solid #ccc;max-width:95vw;height:auto}
-.handle{width:12px;height:12px;background:#fff;border:2px solid var(--accent);position:absolute;border-radius:3px;box-shadow:0 2px 6px rgba(0,0,0,.12);display:none;pointer-events:auto;z-index:50}
-@media(max-width:1100px){.app{grid-template-columns:1fr}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Excess Stock Marketplace</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #89CFF0, #9370DB);
+      color: #fff;
+      text-align: center;
+    }
+    header {
+      padding: 30px 20px;
+    }
+    header h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+    header p {
+      font-size: 1.2em;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .buttons {
+      margin: 30px 0;
+    }
+    .buttons a {
+      display: inline-block;
+      margin: 10px;
+      padding: 15px 30px;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #fff;
+      background: #28a745;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    .buttons a:hover {
+      background: #218838;
+    }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 40px 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0px 4px 12px rgba(0,0,0,0.2);
+      text-align: left;
+    }
+    .card h3 {
+      margin-top: 0;
+      font-size: 1.4em;
+      color: #fff;
+    }
+    footer {
+      background: rgba(0,0,0,0.3);
+      padding: 20px;
+      margin-top: 40px;
+      font-size: 0.9em;
+    }
+  </style>
 </head>
 <body>
-
-<div class="app">
-
-  <!-- LEFT: Inputs & Dummy AI Template -->
-  <aside class="panel">
-    <h1>Create Poster</h1>
-    <div class="small">Fill details → Suggest templates → pick one → customize → export</div>
-
-    <label>Event Name</label>
-    <input id="eventName" type="text" placeholder="Community Jazz Night" value="Community Jazz Night">
-
-    <label>Date & Time</label>
-    <input id="eventDate" type="datetime-local">
-
-    <label>Location</label>
-    <input id="eventLocation" type="text" placeholder="Town Hall, Johannesburg">
-
-    <label>Event Type</label>
-    <select id="eventType"><option>Concert</option><option>Wedding</option><option>Birthday</option><option>Sale</option><option>Workshop</option><option>Other</option></select>
-
-    <label>Short Description</label>
-    <textarea id="eventDesc">An evening of live jazz and local food stalls.</textarea>
-
-    <label>Upload Images</label>
-    <input id="imageUpload" type="file" accept="image/*" multiple>
-
-    <label>QR Code Link</label>
-    <input id="qrLink" type="text" placeholder="https://...">
-
-    <div style="display:flex;gap:8px;margin-top:10px">
-      <button id="suggestTemplates" class="btn">Suggest Templates</button>
-      <button id="localTemplates" class="muted">Local Templates</button>
+  <header>
+    <h1>Welcome to Excess Stock Marketplace</h1>
+    <p>The smart platform where businesses sell extra stock and buyers get the best deals. 
+       Save money, reduce waste, and make profits!</p>
+    <div class="buttons">
+      <a href="upload.html">📤 Upload Stock</a>
+      <a href="browse.html">🔍 Browse Stock</a>
     </div>
+  </header>
 
-    <div class="templates" id="templates"></div>
-  </aside>
-
-  <!-- CENTER: Canvas + controls -->
-  <main class="panel">
-    <h1>Poster Editor</h1>
-    <div class="canvas-wrap" id="canvasWrap" style="width:100%;display:flex;flex-direction:column;align-items:center;">
-      <!-- handles will be absolute-positioned in body -->
-      <canvas id="posterCanvas" width="1080" height="1350"></canvas>
+  <section class="steps">
+    <div class="card">
+      <h3>Step 1: Upload Stock</h3>
+      <p>Businesses with extra items (clothes, electronics, furniture, etc.) upload their stock with photos and prices.</p>
     </div>
-
-    <div class="controls">
-      <label class="small">Size</label>
-      <select id="sizeSelect">
-        <option value="1080x1350">Instagram (1080×1350)</option>
-        <option value="1080x1080">Square (1080×1080)</option>
-        <option value="1080x1920">Story (1080×1920)</option>
-        <option value="2480x3508">A4 Print (2480×3508)</option>
-      </select>
-
-      <button id="exportPng" class="btn">Download PNG</button>
-      <button id="exportPdf" class="btn">Download PDF</button>
-
-      <button id="addText" class="muted">+ Text</button>
-      <button id="addQr" class="muted">+ QR</button>
-      <button id="clearAll" class="muted">Clear</button>
-
-      <div class="small" style="margin-left:auto">Hold <strong>Shift</strong> while resizing to keep aspect</div>
+    <div class="card">
+      <h3>Step 2: Find Buyers</h3>
+      <p>Other businesses or resellers browse and discover discounted stock they need for their shops or customers.</p>
     </div>
-  </main>
-
-  <!-- RIGHT: Elements list -->
-  <aside class="panel">
-    <h1>Elements</h1>
-    <div class="small">Select elements on the canvas to move, resize, or edit.</div>
-    <div style="height:12px"></div>
-
-    <div id="elementsList" class="elements-list"></div>
-
-    <div style="height:12px"></div>
-    <div style="display:flex;gap:8px">
-      <button id="bringFront" class="muted">Bring Front</button>
-      <button id="sendBack" class="muted">Send Back</button>
-      <button id="deleteEl" class="muted">Delete</button>
+    <div class="card">
+      <h3>Step 3: Make Deals</h3>
+      <p>Buyers connect directly with sellers, finalize deals, and arrange delivery or pickup.</p>
     </div>
-  </aside>
-</div>
-
-<!-- Crop popup -->
-<div class="crop-popup" id="cropPopup">
-  <div class="crop-content" role="dialog" aria-modal="true">
-    <div style="display:flex;gap:8px;align-items:center">
-      <div class="small">Zoom</div>
-      <input id="cropZoom" type="range" min="1" max="3" step="0.01" value="1" style="width:180px">
+    <div class="card">
+      <h3>Step 4: Everyone Wins</h3>
+      <p>Sellers recover money from unsold stock, buyers get cheaper deals, and you earn a commission.</p>
     </div>
-    <canvas id="cropCanvas" width="800" height="500"></canvas>
-    <div style="margin-top:8px;display:flex;gap:8px">
-      <button id="cropApply" class="btn">Apply Crop</button>
-      <button id="cropCancel" class="muted">Cancel</button>
-    </div>
-    <div class="small" style="margin-top:8px">Drag the crop rectangle to reposition; zoom adjusts scale.</div>
-  </div>
-</div>
+  </section>
 
-<!-- handles DOM nodes (4 corners) -->
-<div id="handle_tl" class="handle"></div>
-<div id="handle_tr" class="handle"></div>
-<div id="handle_bl" class="handle"></div>
-<div id="handle_br" class="handle"></div>
-
-<!-- JS libs: jsPDF for PDF export -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-<script>
-/* Event Poster Generator vAI-Dummy
-   Features implemented in this file:
-   - canvas rendering with elements []
-   - drag to move
-   - 4-corner resize handles with shift to keep aspect
-   - image upload + cropping with selection rectangle & zoom
-   - dummy AI templates (3 templates) and local fallback
-   - QR insertion via public API
-   - PNG & PDF export
-   - elements list UI, bring front, send back, delete
-*/
-
-/* --------- helpers --------- */
-const $ = id => document.getElementById(id);
-const uid = () => Math.random().toString(36).slice(2,9);
-
-/* --------- state --------- */
-const canvas = $('posterCanvas');
-const ctx = canvas.getContext('2d');
-let DPR = window.devicePixelRatio || 1;
-let elements = []; // z-order bottom->top
-let selectedId = null;
-let mode = null; // 'drag'|'resize'|null
-let dragOffset = {x:0,y:0};
-let activeHandle = null;
-let keepAspect = false;
-
-/* --------- handle elements --------- */
-const handle_tl = $('handle_tl'), handle_tr = $('handle_tr'), handle_bl = $('handle_bl'), handle_br = $('handle_br');
-const handles = {tl: handle_tl, tr: handle_tr, bl: handle_bl, br: handle_br};
-Object.values(handles).forEach(h => { h.style.display = 'none'; h.style.position='absolute'; h.style.zIndex=9999; });
-
-/* position handles based on selected element in CSS pixels */
-function updateHandles(){
-  const rect = canvas.getBoundingClientRect();
-  if(!selectedElement()) { Object.values(handles).forEach(h=>h.style.display='none'); return; }
-  const el = selectedElement();
-  // convert canvas coords -> CSS pixels
-  const cssScaleX = rect.width / canvas.width;
-  const cssScaleY = rect.height / canvas.height;
-  const left = rect.left + el.x * cssScaleX;
-  const top  = rect.top  + el.y * cssScaleY;
-  const right = rect.left + (el.x + el.width) * cssScaleX;
-  const bottom = rect.top + (el.y + el.height) * cssScaleY;
-  // position
-  place(handles.tl, left-8, top-8); place(handles.tr, right-8, top-8);
-  place(handles.bl, left-8, bottom-8); place(handles.br, right-8, bottom-8);
-  Object.values(handles).forEach(h => h.style.display='block');
-}
-
-function place(dom, px, py){
-  dom.style.left = px + 'px'; dom.style.top = py + 'px';
-}
-
-function selectedElement(){ return elements.find(e => e.id === selectedId) || null; }
-
-/* --------- canvas sizing (support DPR) --------- */
-function setCanvasSize(w,h){
-  // store width/height in CSS pixels
-  canvas.style.width = w + 'px';
-  canvas.style.height = h + 'px';
-  DPR = window.devicePixelRatio || 1;
-  canvas.width = Math.round(w * DPR);
-  canvas.height = Math.round(h * DPR);
-  ctx.setTransform(DPR,0,0,DPR,0,0); // make drawing use CSS pixel coords
-  render();
-}
-setCanvasSize(1080,1350);
-
-/* --------- render loop --------- */
-function render(){
-  // clear background
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle = '#fff';
-  ctx.fillRect(0,0,canvas.width/DPR,canvas.height/DPR);
-
-  // draw each element in order
-  for(const el of elements){
-    if(el.type === 'rect'){
-      ctx.globalAlpha = el.opacity ?? 1;
-      ctx.fillStyle = el.color || '#000';
-      ctx.fillRect(el.x, el.y, el.width, el.height);
-      ctx.globalAlpha = 1;
-    }
-    if(el.type === 'image' || el.type === 'qr'){
-      if(el.img && el.img.complete){
-        ctx.globalAlpha = el.opacity ?? 1;
-        ctx.drawImage(el.img, el.x, el.y, el.width, el.height);
-        ctx.globalAlpha = 1;
-      }
-    }
-    if(el.type === 'text'){
-      ctx.globalAlpha = el.opacity ?? 1;
-      ctx.fillStyle = el.color || '#111';
-      ctx.font = `${el.weight||700} ${el.size||48}px ${el.font||'Inter'}`;
-      ctx.textAlign = el.align || 'left';
-      const lines = (el.text||'').split('\\n');
-      let y = el.y;
-      for(const line of lines){
-        ctx.fillText(line, el.x, y);
-        y += (el.size || 48) * 1.15;
-      }
-      ctx.globalAlpha = 1;
-    }
-  }
-
-  // draw selection box
-  const sel = selectedElement();
-  if(sel){
-    ctx.save();
-    ctx.strokeStyle = 'rgba(0,0,0,0.6)';
-    ctx.lineWidth = 2;
-    ctx.strokeRect(sel.x - 4, sel.y - 4, sel.width + 8, sel.height + 8);
-    ctx.restore();
-  }
-  updateHandles();
-}
-
-/* --------- hit testing --------- */
-function getElementAt(x,y){
-  for(let i = elements.length - 1; i >= 0; i--){
-    const el = elements[i];
-    if(x >= el.x && x <= el.x + el.width && y >= el.y && y <= el.y + el.height) return el;
-  }
-  return null;
-}
-
-/* --------- pointer events: drag + resize ---------- */
-let pointerDown = false;
-canvas.addEventListener('pointerdown', (ev) => {
-  ev.preventDefault();
-  const p = clientToCanvas(ev.clientX, ev.clientY);
-  pointerDown = true;
-  keepAspect = ev.shiftKey;
-  // check if pressing a handle
-  const handleName = whichHandleHit(ev.clientX, ev.clientY);
-  if(handleName && selectedElement()){ activeHandle = handleName; mode = 'resize'; return; }
-  const hit = getElementAt(p.x, p.y);
-  if(hit){
-    selectedId = hit.id;
-    dragOffset.x = p.x - hit.x;
-    dragOffset.y = p.y - hit.y;
-    mode = 'drag';
-    updateElementsList();
-    render();
-  } else {
-    selectedId = null;
-    updateElementsList();
-    render();
-  }
-});
-window.addEventListener('pointermove', (ev) => {
-  if(!pointerDown) return;
-  const p = clientToCanvas(ev.clientX, ev.clientY);
-  if(mode === 'drag' && selectedElement()){
-    const el = selectedElement();
-    el.x = p.x - dragOffset.x;
-    el.y = p.y - dragOffset.y;
-    render();
-  } else if(mode === 'resize' && selectedElement()){
-    const el = selectedElement();
-    const start = {x:el.x, y:el.y, w:el.width, h:el.height};
-    const ratio = start.w / (start.h || 1);
-    if(activeHandle === 'br'){
-      let nw = p.x - start.x; let nh = p.y - start.y;
-      if(keepAspect || ev.shiftKey){ if(nw / nh > ratio) nh = nw / ratio; else nw = nh * ratio; }
-      el.width = Math.max(10, nw); el.height = Math.max(10, nh);
-    } else if(activeHandle === 'tl'){
-      let nx = p.x, ny = p.y;
-      let nw = start.x + start.w - nx, nh = start.y + start.h - ny;
-      if(keepAspect || ev.shiftKey){ if(nw / nh > ratio) nh = nw / ratio; else nw = nh * ratio; }
-      el.x = start.x + start.w - nw; el.y = start.y + start.h - nh; el.width = Math.max(10, nw); el.height = Math.max(10, nh);
-    } else if(activeHandle === 'tr'){
-      let nw = p.x - start.x; let nh = start.y + start.h - p.y;
-      if(keepAspect || ev.shiftKey){ nh = nw / ratio; }
-      el.y = start.y + start.h - nh; el.width = Math.max(10,nw); el.height = Math.max(10,nh);
-    } else if(activeHandle === 'bl'){
-      let nw = start.x + start.w - p.x; let nh = p.y - start.y;
-      if(keepAspect || ev.shiftKey){ nw = nh * ratio; el.x = start.x + start.w - nw; } else { el.x = start.x + start.w - nw; }
-      el.width = Math.max(10,nw); el.height = Math.max(10,nh);
-    }
-    render();
-  }
-});
-window.addEventListener('pointerup', (ev) => {
-  pointerDown = false; mode = null; activeHandle = null; updateHandles();
-});
-
-/* detect if pointer is over a handle (return name or null) */
-function whichHandleHit(clientX, clientY){
-  for(const [name, dom] of Object.entries(handles)){
-    const r = dom.getBoundingClientRect();
-    if(clientX >= r.left && clientX <= r.right && clientY >= r.top && clientY <= r.bottom) return name;
-  }
-  return null;
-}
-
-/* convert client coords to canvas coords (CSS->canvas units) */
-function clientToCanvas(cx, cy){
-  const rect = canvas.getBoundingClientRect();
-  const rx = canvas.width / rect.width;
-  const ry = canvas.height / rect.height;
-  return { x: (cx - rect.left) * rx / DPR, y: (cy - rect.top) * ry / DPR }; // dividing DPR since ctx uses CSS pixels
-}
-
-/* --------- handle DOM clicks for handles (also support touch) ---------- */
-for(const [name, dom] of Object.entries(handles)){
-  dom.addEventListener('pointerdown', (ev) => {
-    ev.preventDefault(); ev.stopPropagation();
-    activeHandle = name; mode = 'resize'; pointerDown = true; keepAspect = ev.shiftKey;
-  });
-}
-
-/* --------- elements list UI ---------- */
-function updateElementsList(){
-  const list = $('elementsList'); list.innerHTML = '';
-  elements.forEach(el => {
-    const row = document.createElement('div'); row.className='element-row';
-    row.textContent = el.type + (el.type==='text' ? ' • ' + (el.text||'') : '');
-    const selectBtn = document.createElement('button'); selectBtn.className='muted'; selectBtn.textContent='Select';
-    selectBtn.onclick = () => { selectedId = el.id; render(); updateElementsList(); };
-    row.appendChild(selectBtn);
-    list.appendChild(row);
-    if(el.id === selectedId) row.style.background='#f8fafc';
-  });
-}
-
-/* bring/sendt/delete */
-$('bringFront').addEventListener('click', () => {
-  if(!selectedId) return;
-  const i = elements.findIndex(e=>e.id===selectedId); if(i>=0){ const [it]=elements.splice(i,1); elements.push(it); render(); updateElementsList(); }
-});
-$('sendBack').addEventListener('click', () => {
-  if(!selectedId) return;
-  const i = elements.findIndex(e=>e.id===selectedId); if(i>=0){ const [it]=elements.splice(i,1); elements.unshift(it); render(); updateElementsList(); }
-});
-$('deleteEl').addEventListener('click', () => {
-  if(!selectedId) return; elements = elements.filter(e=>e.id!==selectedId); selectedId=null; render(); updateElementsList();
-});
-
-/* --------- add text button ---------- */
-$('addText').addEventListener('click', () => {
-  const txt = prompt('Enter text','New Event');
-  if(!txt) return;
-  const newEl = { id: uid(), type: 'text', text: txt, x: 60, y: 140, width: 600, height: 80, size: 56, font:'Playfair Display', weight:700, color:'#111827', opacity:1, align:'left' };
-  elements.push(newEl); selectedId = newEl.id; render(); updateElementsList();
-});
-
-/* --------- image upload + crop UI --------- */
-const cropPopup = $('cropPopup'), cropCanvas = $('cropCanvas'), cropCtx = cropCanvas.getContext('2d');
-let cropSource = null; let cropZoom = 1; let cropRect = null; let cropDrag = false; let cropOffset = {x:0,y:0};
-
-$('imageUpload').addEventListener('change', (ev) => {
-  const files = Array.from(ev.target.files || []);
-  if(files.length === 0) return;
-  const file = files[0];
-  const reader = new FileReader();
-  reader.onload = () => {
-    cropSource = new Image(); cropSource.onload = () => {
-      // initialize crop state
-      cropZoom = 1; $('cropZoom').value = 1;
-      cropRect = { x: 50, y: 50, w: cropCanvas.width - 100, h: cropCanvas.height - 100 };
-      drawCropCanvas();
-      cropPopup.style.display = 'flex';
-    };
-    cropSource.src = reader.result;
-  };
-  reader.readAsDataURL(file);
-});
-
-// cropping interactions: drag cropRect
-cropCanvas.addEventListener('pointerdown', (ev) => {
-  const rect = cropCanvas.getBoundingClientRect();
-  const x = ev.clientX - rect.left, y = ev.clientY - rect.top;
-  if(cropRect && x >= cropRect.x && x <= cropRect.x+cropRect.w && y >= cropRect.y && y <= cropRect.y+cropRect.h){
-    cropDrag = true; cropOffset.x = x - cropRect.x; cropOffset.y = y - cropRect.y;
-  }
-});
-window.addEventListener('pointermove', (ev) => {
-  if(!cropDrag) return;
-  const rect = cropCanvas.getBoundingClientRect();
-  const x = ev.clientX - rect.left, y = ev.clientY - rect.top;
-  cropRect.x = Math.max(0, Math.min(cropCanvas.width - cropRect.w, x - cropOffset.x));
-  cropRect.y = Math.max(0, Math.min(cropCanvas.height - cropRect.h, y - cropOffset.y));
-  drawCropCanvas();
-});
-window.addEventListener('pointerup', () => { cropDrag = false; });
-
-$('cropZoom').addEventListener('input', (ev) => {
-  const val = parseFloat(ev.target.value);
-  cropZoom = val; drawCropCanvas();
-});
-
-$('cropCancel').addEventListener('click', () => { cropPopup.style.display = 'none'; });
-$('cropApply').addEventListener('click', () => {
-  // extract crop area as image data
-  if(!cropSource || !cropRect) { cropPopup.style.display = 'none'; return; }
-  // draw source scaled and translated to temporary canvas to get selected area
-  const tmp = document.createElement('canvas'); tmp.width = cropRect.w; tmp.height = cropRect.h;
-  const tctx = tmp.getContext('2d');
-  // compute draw params: fit cropSource to cropCanvas with current zoom
-  const arSrc = cropSource.width / cropSource.height;
-  const arDst = cropCanvas.width / cropCanvas.height;
-  // find draw width/height used on cropCanvas (same logic as drawCropCanvas)
-  let drawW = cropCanvas.width * cropZoom, drawH = drawW / arSrc;
-  if(drawH < cropCanvas.height * cropZoom){ drawH = cropCanvas.height * cropZoom; drawW = drawH * arSrc; }
-  // center
-  const dx = (cropCanvas.width - drawW) / 2, dy = (cropCanvas.height - drawH) / 2;
-  // source region corresponding to cropRect:
-  // map cropRect area back to source image coords
-  const sx = (cropRect.x - dx) * (cropSource.width / drawW);
-  const sy = (cropRect.y - dy) * (cropSource.height / drawH);
-  const sw = cropRect.w * (cropSource.width / drawW);
-  const sh = cropRect.h * (cropSource.height / drawH);
-  tctx.drawImage(cropSource, sx, sy, sw, sh, 0, 0, tmp.width, tmp.height);
-  const img = new Image(); img.onload = () => {
-    const newEl = { id: uid(), type: 'image', img: img, x: 80, y: 300, width: Math.min(900, tmp.width), height: Math.min(700, tmp.height), opacity:1 };
-    elements.push(newEl); selectedId = newEl.id; updateElementsList(); render();
-  };
-  img.src = tmp.toDataURL('image/png');
-  cropPopup.style.display = 'none';
-});
-
-/* draw cropCanvas preview */
-function drawCropCanvas(){
-  if(!cropSource) return;
-  const cw = cropCanvas.width, ch = cropCanvas.height;
-  cropCtx.clearRect(0,0,cw,ch);
-  // compute draw size to fit and zoom
-  const ar = cropSource.width / cropSource.height;
-  let dw = cw * cropZoom, dh = dw / ar;
-  if(dh < ch * cropZoom){ dh = ch * cropZoom; dw = dh * ar; }
-  const dx = (cw - dw)/2, dy = (ch - dh)/2;
-  cropCtx.drawImage(cropSource, dx, dy, dw, dh);
-  // draw translucent overlay except cropRect
-  if(!cropRect) cropRect = {x:50,y:50,w:cw-100,h:ch-100};
-  cropCtx.fillStyle = 'rgba(0,0,0,0.4)';
-  cropCtx.fillRect(0,0,cw,ch);
-  // clear crop rect
-  cropCtx.clearRect(cropRect.x, cropRect.y, cropRect.w, cropRect.h);
-  // draw border
-  cropCtx.strokeStyle = '#fff'; cropCtx.lineWidth = 2; cropCtx.strokeRect(cropRect.x, cropRect.y, cropRect.w, cropRect.h);
-}
-
-/* --------- QR insertion (via free API) ---------- */
-$('addQr').addEventListener('click', () => {
-  const link = $('qrLink').value.trim(); if(!link){ alert('Enter QR link first'); return; }
-  const img = new Image(); img.crossOrigin='anonymous';
-  img.onload = () => {
-    elements.push({ id: uid(), type: 'qr', img: img, x: 80, y: 320, width: 240, height:240, opacity:1 });
-    selectedId = elements[elements.length-1].id; updateElementsList(); render();
-  };
-  img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(link);
-});
-
-/* --------- exports --------- */
-$('exportPng').addEventListener('click', () => {
-  const dataUrl = canvas.toDataURL('image/png');
-  const a = document.createElement('a'); a.href = dataUrl; a.download = 'poster.png'; a.click();
-});
-$('exportPdf').addEventListener('click', () => {
-  const { jsPDF } = window.jspdf;
-  // Ensure canvas drawn at final size
-  const img = canvas.toDataURL('image/png');
-  // create PDF sized to canvas px
-  const pdf = new jsPDF({unit:'pt',format:[canvas.width/DPR, canvas.height/DPR]});
-  pdf.addImage(img, 'PNG', 0, 0, canvas.width/DPR, canvas.height/DPR);
-  pdf.save('poster.pdf');
-});
-
-/* --------- clear --------- */
-$('clearAll').addEventListener('click', () => {
-  if(confirm('Clear all elements?')){ elements = []; selectedId = null; updateElementsList(); render(); }
-});
-
-/* --------- size selector ---------- */
-$('sizeSelect').addEventListener('change', () => {
-  const [w,h] = $('sizeSelect').value.split('x').map(Number);
-  setCanvasSize(w,h);
-  render();
-});
-
-/* --------- templates (dummy AI) ---------- */
-$('suggestTemplates').addEventListener('click', () => {
-  // this dummy generator simulates what AI would return
-  const data = { name: $('eventName').value, date: $('eventDate').value, type: $('eventType').value, desc: $('eventDesc').value };
-  const templates = dummyAIGenerate(data);
-  showTemplateCards(templates);
-});
-$('localTemplates').addEventListener('click', () => {
-  const data = { name: $('eventName').value, date: $('eventDate').value, type: $('eventType').value, desc: $('eventDesc').value };
-  showTemplateCards(dummyAIGenerate(data));
-});
-
-function showTemplateCards(list){
-  const c = $('templates'); c.innerHTML = '';
-  list.forEach(t => {
-    const card = document.createElement('div'); card.className='tpl-card';
-    const thumb = document.createElement('div'); thumb.className='tpl-thumb'; thumb.textContent='Preview';
-    const meta = document.createElement('div'); meta.style.flex='1';
-    const title = document.createElement('div'); title.textContent = t.title;
-    const btn = document.createElement('button'); btn.className='muted'; btn.textContent='Apply';
-    btn.onclick = () => applyTemplate(t);
-    meta.appendChild(title); meta.appendChild(btn);
-    card.appendChild(thumb); card.appendChild(meta);
-    c.appendChild(card);
-  });
-}
-
-function applyTemplate(t){
-  elements = []; selectedId = null;
-  for(const el of t.elements){
-    if(el.type === 'text'){
-      elements.push({
-        id: uid(), type: 'text', text: el.text, x: el.x, y: el.y, width: el.width||400, height: el.height||60,
-        size: el.size||48, font: el.font||'Inter', weight: el.weight||700, color: el.color||'#111', opacity: el.opacity||1, align: el.align||'left'
-      });
-    } else if(el.type === 'rect'){
-      elements.push({ id: uid(), type:'rect', x:el.x,y:el.y,width:el.width,height:el.height,color:el.color||'#fff',opacity:el.opacity||1 });
-    } else if(el.type === 'image'){
-      const img = new Image(); img.crossOrigin='anonymous'; img.onload = () => render();
-      img.src = el.src || ''; elements.push({ id: uid(), type:'image', img: img, x:el.x,y:el.y,width:el.width,height:el.height,opacity:el.opacity||1 });
-    }
-  }
-  updateElementsList(); render();
-}
-
-/* Dummy AI template generator — returns simple JSON templates */
-function dummyAIGenerate(data){
-  const name = data.name || 'Event';
-  const desc = data.desc || '';
-  const dateLabel = data.date ? new Date(data.date).toLocaleString() : '';
-  // Template 1: Wedding elegant
-  const t1 = {
-    id:'wedding',
-    title:'Wedding — Elegant',
-    elements:[
-      { type:'rect', x:0, y:0, width: canvas.width/DPR, height: canvas.height/DPR, color:'#fff7f0' },
-      { type:'text', text: name, x:80, y:160, size:72, font:'Playfair Display', weight:700, color:'#111827' },
-      { type:'text', text: desc, x:80, y:240, size:22, font:'Inter', weight:400, color:'#6b7280' },
-      { type:'text', text: dateLabel + (data.type ? ' • ' + data.type : ''), x:80, y:320, size:18, font:'Inter', color:'#6b7280' }
-    ]
-  };
-  // Template 2: Concert bold
-  const t2 = {
-    id:'concert',
-    title:'Concert — Bold',
-    elements:[
-      { type:'rect', x:0, y:0, width: Math.round((canvas.width/DPR)*0.44), height: canvas.height/DPR, color:'#0f172a' },
-      { type:'text', text: name, x:60, y:160, size:64, font:'Playfair Display', weight:800, color:'#ffffff' },
-      { type:'text', text: desc, x:60, y:240, size:20, font:'Inter', weight:400, color:'#ffffff' },
-      { type:'text', text: dateLabel, x: Math.round((canvas.width/DPR)*0.5), y:320, size:22, font:'Inter', color:'#111' }
-    ]
-  };
-  // Template 3: Sale/Promo
-  const t3 = {
-    id:'sale',
-    title:'Sale — Promotional',
-    elements:[
-      { type:'rect', x:0, y:0, width: canvas.width/DPR, height: canvas.height/DPR, color:'#ffffff' },
-      { type:'text', text: name, x:60, y:160, size:72, font:'Inter', weight:800, color:'#ef4444' },
-      { type:'text', text: desc, x:60, y:240, size:22, font:'Inter', weight:400, color:'#374151' },
-      { type:'text', text: dateLabel, x:60, y:320, size:18, font:'Inter', color:'#6b7280' }
-    ]
-  };
-  return [t1,t2,t3];
-}
-
-/* initial local templates visible */
-showTemplateCards(dummyAIGenerate({ name: $('eventName').value, date: $('eventDate').value, type: $('eventType').value, desc: $('eventDesc').value }));
-
-/* update elements list on load */
-updateElementsList();
-
-/* periodic render to ensure handles sync */
-setInterval(()=>{ render(); updateHandles(); }, 150);
-
-/* keyboard delete support */
-window.addEventListener('keydown', (e) => {
-  if(e.key === 'Delete' && selectedId){ elements = elements.filter(x=>x.id!==selectedId); selectedId=null; updateElementsList(); render(); }
-});
-
-/* click canvas to select */
-canvas.addEventListener('click', (ev)=> {
-  const p = clientToCanvas(ev.clientX, ev.clientY);
-  const hit = getElementAt(p.x, p.y);
-  if(hit){ selectedId = hit.id; updateElementsList(); render(); } else { selectedId=null; updateElementsList(); render(); }
-});
-
-/* helper to convert client->canvas CSS coords */
-function clientToCanvas(cx, cy){
-  const rect = canvas.getBoundingClientRect();
-  const scaleX = canvas.width / rect.width;
-  const scaleY = canvas.height / rect.height;
-  return { x: (cx - rect.left) * (canvas.width / rect.width) / DPR, y: (cy - rect.top) * (canvas.height / rect.height) / DPR };
-}
-
-/* small utility to avoid errors when resizing before any images are loaded */
-window.addEventListener('resize', ()=> { updateHandles(); });
-
-</script>
+  <footer>
+    <p>© 2025 Excess Stock Marketplace. All rights reserved.</p>
+  </footer>
 </body>
 </html>
