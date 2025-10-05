@@ -3,147 +3,120 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QuickPoster - FindMyHustle</title>
+<title>VarsityHub - All-in-One Student Platform</title>
 <style>
-  /* General reset and font */
-  * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-  body { background: #f4f7fa; color: #333; line-height: 1.6; }
-  h1, h2 { color: #1a73e8; }
-  a { text-decoration: none; color: inherit; }
-  
-  header {
-    background: #fff;
-    padding: 20px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    text-align: center;
-  }
-
-  .container { padding: 20px; max-width: 1200px; margin: auto; }
-
-  .category {
-    margin-bottom: 40px;
-  }
-
-  .category h2 { margin-bottom: 15px; }
-
-  .template-grid {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-  }
-
-  .template {
-    width: 200px;
-    cursor: pointer;
-    transition: transform 0.2s;
-  }
-
-  .template img {
-    width: 100%;
-    height: 280px;
-    object-fit: cover;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  }
-
-  .template:hover { transform: scale(1.05); }
-
-  /* Floating Mama Suzan Help Button */
-  #mamaSuzanBtn {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: #1a73e8;
-    color: #fff;
-    border: none;
-    border-radius: 50px;
-    padding: 12px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    z-index: 1000;
-  }
-
-  #mamaSuzanBox {
-    display: none;
-    position: fixed;
-    bottom: 70px;
-    right: 20px;
-    width: 300px;
-    max-width: 90%;
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    padding: 15px;
-    z-index: 1000;
-  }
-
-  #mamaSuzanBox h3 { margin-bottom: 10px; }
-  #mamaSuzanBox p { font-size: 14px; }
+  body { margin:0; font-family: Arial, sans-serif; background:#f4f7fa; color:#333; }
+  header { background:#1a73e8; color:#fff; text-align:center; padding:20px; }
+  header h1 { margin-bottom:5px; }
+  .container { max-width:1200px; margin:auto; padding:20px; }
+  .section { margin-bottom:40px; }
+  .section h2 { color:#1a73e8; margin-bottom:15px; }
+  .card-grid { display:flex; flex-wrap:wrap; gap:15px; }
+  .card { background:#fff; flex:1 1 200px; min-width:200px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.2); padding:15px; cursor:pointer; transition: transform 0.2s; }
+  .card:hover { transform:scale(1.05); }
+  .card img { width:100%; border-radius:8px; margin-bottom:10px; }
+  input, textarea, select { width:100%; padding:10px; margin:10px 0; border-radius:5px; border:1px solid #ccc; }
+  button { background:#1a73e8; color:#fff; border:none; padding:10px 15px; border-radius:5px; cursor:pointer; }
+  button:hover { background:#155ab6; }
+  .error { color:red; font-size:14px; }
+  /* Mama Suzan floating help */
+  #mamaSuzanBtn { position:fixed; bottom:20px; right:20px; background:#1a73e8; color:#fff; border:none; border-radius:50px; padding:12px 20px; font-size:16px; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,0.2); z-index:1000; }
+  #mamaSuzanBox { display:none; position:fixed; bottom:70px; right:20px; width:300px; max-width:90%; background:#fff; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.2); padding:15px; z-index:1000; }
+  #mamaSuzanBox h3 { margin-bottom:10px; } 
+  #mamaSuzanBox p { font-size:14px; }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>QuickPoster - Create Beautiful Posters</h1>
-  <p>Select a category to start your design</p>
+  <h1>VarsityHub</h1>
+  <p>Rate Professors, AI Study Tools, Event Posters, and University Dashboards</p>
 </header>
 
 <div class="container">
 
-  <!-- Wedding Posters -->
-  <div class="category">
-    <h2>Wedding Posters</h2>
-    <div class="template-grid">
-      <div class="template" onclick="loadTemplate('wedding1')">
-        <img src="templates/wedding1-thumb.jpg" alt="Wedding Template 1">
+  <!-- LOGIN / REGISTRATION -->
+  <div class="section" id="loginSection">
+    <h2>Student Login / Registration</h2>
+    <input type="email" id="email" placeholder="University Email">
+    <input type="password" id="password" placeholder="Password">
+    <div class="error" id="errorMsg"></div>
+    <button onclick="login()">Login / Register</button>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="section" id="dashboardSection" style="display:none;">
+    <h2>Welcome, <span id="uniName"></span> Students</h2>
+    <div class="card-grid">
+
+      <!-- Rate My Professor -->
+      <div class="card" onclick="showSection('rateProfessorSection')">
+        <img src="https://via.placeholder.com/300x180.png?text=Rate+Professor" alt="Rate Professor">
+        <h3>Rate Your Lecturer</h3>
+        <p>Submit ratings and feedback for your courses anonymously.</p>
       </div>
-      <div class="template" onclick="loadTemplate('wedding2')">
-        <img src="templates/wedding2-thumb.jpg" alt="Wedding Template 2">
+
+      <!-- AI Study Tools -->
+      <div class="card" onclick="showSection('aiStudySection')">
+        <img src="https://via.placeholder.com/300x180.png?text=AI+Notes" alt="AI Study">
+        <h3>AI Study Tools</h3>
+        <p>Upload lecture notes and get AI summaries, flashcards, and quizzes.</p>
       </div>
-      <div class="template" onclick="loadTemplate('wedding3')">
-        <img src="templates/wedding3-thumb.jpg" alt="Wedding Template 3">
+
+      <!-- Event Poster Generator -->
+      <div class="card" onclick="showSection('posterSection')">
+        <img src="https://via.placeholder.com/300x180.png?text=Poster+Generator" alt="Event Poster">
+        <h3>Create Event Posters</h3>
+        <p>Generate professional posters for student clubs and events.</p>
       </div>
+
+      <!-- University Dashboard Preview -->
+      <div class="card" onclick="showSection('universityDashboardSection')">
+        <img src="https://via.placeholder.com/300x180.png?text=Dashboard" alt="University Dashboard">
+        <h3>University Dashboard</h3>
+        <p>View aggregated ratings, engagement, and AI tool usage (admin preview).</p>
+      </div>
+
     </div>
   </div>
 
-  <!-- Funeral / Obituary Posters -->
-  <div class="category">
-    <h2>Funeral / Obituary Posters</h2>
-    <div class="template-grid">
-      <div class="template" onclick="loadTemplate('funeral1')">
-        <img src="templates/funeral1-thumb.jpg" alt="Funeral Template 1">
-      </div>
-      <div class="template" onclick="loadTemplate('funeral2')">
-        <img src="templates/funeral2-thumb.jpg" alt="Funeral Template 2">
-      </div>
-    </div>
+  <!-- Rate My Professor Form -->
+  <div class="section" id="rateProfessorSection" style="display:none;">
+    <h2>Rate Your Lecturer - <span id="uniRP"></span></h2>
+    <form id="rateForm">
+      <input type="text" id="course" placeholder="Course Name" required>
+      <input type="text" id="lecturer" placeholder="Lecturer Name" required>
+      <input type="number" id="rating" placeholder="Rating (1-5)" min="1" max="5" required>
+      <textarea id="comment" placeholder="Optional Comment"></textarea>
+      <button type="submit">Submit Rating</button>
+      <button type="button" onclick="backToDashboard()">Back</button>
+    </form>
   </div>
 
-  <!-- Family Event Posters -->
-  <div class="category">
-    <h2>Family Event Posters</h2>
-    <div class="template-grid">
-      <div class="template" onclick="loadTemplate('family1')">
-        <img src="templates/family1-thumb.jpg" alt="Family Template 1">
-      </div>
-      <div class="template" onclick="loadTemplate('family2')">
-        <img src="templates/family2-thumb.jpg" alt="Family Template 2">
-      </div>
-    </div>
+  <!-- AI Study Tools Section -->
+  <div class="section" id="aiStudySection" style="display:none;">
+    <h2>AI Study Tools - <span id="uniAI"></span></h2>
+    <p>Upload notes or slides and generate summaries, flashcards, and quizzes.</p>
+    <input type="file" id="uploadNotes">
+    <button onclick="generateAIStudy()">Generate Study Material</button>
+    <button type="button" onclick="backToDashboard()">Back</button>
   </div>
 
-  <!-- Restaurant Menu Posters -->
-  <div class="category">
-    <h2>Restaurant Menu Posters</h2>
-    <div class="template-grid">
-      <div class="template" onclick="loadTemplate('menu1')">
-        <img src="templates/menu1-thumb.jpg" alt="Menu Template 1">
-      </div>
-      <div class="template" onclick="loadTemplate('menu2')">
-        <img src="templates/menu2-thumb.jpg" alt="Menu Template 2">
-      </div>
-    </div>
+  <!-- Event Poster Generator -->
+  <div class="section" id="posterSection" style="display:none;">
+    <h2>Event Poster Generator - <span id="uniPoster"></span></h2>
+    <input type="text" id="eventName" placeholder="Event Name">
+    <input type="text" id="eventDate" placeholder="Event Date">
+    <input type="text" id="eventLocation" placeholder="Location">
+    <button onclick="createPoster()">Generate Poster</button>
+    <button type="button" onclick="backToDashboard()">Back</button>
+  </div>
+
+  <!-- University Dashboard Section -->
+  <div class="section" id="universityDashboardSection" style="display:none;">
+    <h2>University Dashboard - <span id="uniDash"></span></h2>
+    <p>Aggregated ratings, AI tool usage, and event posters will appear here.</p>
+    <button type="button" onclick="backToDashboard()">Back</button>
   </div>
 
 </div>
@@ -152,22 +125,47 @@
 <button id="mamaSuzanBtn" onclick="toggleMamaSuzan()">🧓 Need Help? Ask Mama Suzan</button>
 <div id="mamaSuzanBox">
   <h3>Mama Suzan Tips</h3>
-  <p>Click on a category to see poster templates. Select one to edit text, add logos, and download your professional poster instantly!</p>
-  <p>Hover over template thumbnails for a preview effect.</p>
+  <p>Students can rate professors, generate AI study notes, and create event posters. Universities get dashboards with insights and analytics.</p>
 </div>
 
 <script>
-  function toggleMamaSuzan() {
-    const box = document.getElementById('mamaSuzanBox');
-    box.style.display = box.style.display === 'block' ? 'none' : 'block';
-  }
+const allowedUniversities = {
+  "wits.ac.za": "Wits University",
+  "uct.ac.za": "University of Cape Town",
+  "uj.ac.za": "University of Johannesburg",
+  "up.ac.za": "University of Pretoria"
+};
 
-  function loadTemplate(templateName) {
-    // Here you can add your editor loading logic
-    alert('Loading template: ' + templateName + ' (Editor coming soon!)');
-    // Example: window.location.href = `editor.html?template=${templateName}`;
-  }
-</script>
+// Mama Suzan toggle
+function toggleMamaSuzan() {
+  const box = document.getElementById('mamaSuzanBox');
+  box.style.display = box.style.display === 'block' ? 'none' : 'block';
+}
 
-</body>
-</html>
+// LOGIN
+function login() {
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value.trim();
+  const errorMsg = document.getElementById('errorMsg');
+  
+  if(!email || !password) { errorMsg.innerText = "Please fill all fields"; return; }
+
+  const domain = email.split("@")[1];
+  if(allowedUniversities[domain]) {
+    const university = allowedUniversities[domain];
+    localStorage.setItem('university', university);
+    document.getElementById('uniName').innerText = university;
+    document.getElementById('loginSection').style.display = 'none';
+    document.getElementById('dashboardSection').style.display = 'block';
+  } else {
+    errorMsg.innerText = "University email not recognized.";
+  }
+}
+
+// SHOW SPECIFIC SECTION
+function showSection(sectionId) {
+  hideAllSections();
+  document.getElementById(sectionId).style.display = 'block';
+  const uni = localStorage.getItem('university');
+  if(sectionId==='rateProfessorSection') document.getElementById('uniRP').innerText = uni;
+  if(sectionId==='aiStudySection') document.getElement
