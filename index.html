@@ -3,24 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PosterGenie AI</title>
+  <title>PosterGenie AI – Pro Posters</title>
   <style>
-    /* Gradient Background & Basic Styling */
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
       background: linear-gradient(135deg, #6a11cb, #2575fc);
       color: #fff;
-      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      text-align: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 20px;
     }
 
     h1 {
-      font-size: 2.8rem;
+      font-size: 3rem;
       margin-bottom: 10px;
     }
 
@@ -41,10 +40,11 @@
       background: rgba(255,255,255,0.1);
       border-radius: 15px;
       padding: 25px 30px;
-      min-width: 150px;
+      min-width: 160px;
       cursor: pointer;
       transition: all 0.3s ease;
       box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      font-weight: bold;
     }
 
     .category-card:hover {
@@ -61,6 +61,7 @@
       background: linear-gradient(135deg, #2575fc, #6a11cb);
       color: #fff;
       transition: all 0.3s ease;
+      margin-top: 10px;
     }
 
     button:hover {
@@ -72,20 +73,24 @@
       flex-direction: column;
       align-items: center;
       margin-top: 30px;
+      width: 100%;
+      max-width: 500px;
     }
 
     input, textarea {
-      padding: 10px;
+      padding: 12px;
       margin: 10px 0;
       border-radius: 8px;
       border: none;
-      width: 250px;
+      width: 100%;
+      font-size: 1rem;
     }
 
     #posterCanvas {
       margin-top: 20px;
       border-radius: 15px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+      background: #fff; /* will be overwritten by gradient */
     }
 
   </style>
@@ -93,7 +98,7 @@
 <body>
 
   <h1>PosterGenie AI</h1>
-  <p>Create Stunning Posters Instantly for Restaurants, Shops, Events & More</p>
+  <p>Create professional posters instantly for Shops, Restaurants, Events & More</p>
 
   <div class="category-container">
     <div class="category-card" onclick="selectCategory('Shop')">Shop Promotion</div>
@@ -114,7 +119,7 @@
 
   <div id="posterPreview">
     <h2>Poster Preview</h2>
-    <canvas id="posterCanvas" width="500" height="700"></canvas>
+    <canvas id="posterCanvas" width="1080" height="1350"></canvas>
     <button onclick="editPoster()">Edit Poster</button>
     <button onclick="downloadPoster()">Download Poster</button>
   </div>
@@ -139,26 +144,32 @@
     const canvas = document.getElementById('posterCanvas');
     const ctx = canvas.getContext('2d');
 
-    // Background Gradient
-    const gradient = ctx.createLinearGradient(0,0,0,700);
+    // Professional Gradient Background
+    const gradient = ctx.createLinearGradient(0,0,0,canvas.height);
     gradient.addColorStop(0,'#6a11cb');
     gradient.addColorStop(1,'#2575fc');
     ctx.fillStyle = gradient;
-    ctx.fillRect(0,0,500,700);
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    // Shadow settings for professional text
+    ctx.shadowColor = "rgba(0,0,0,0.5)";
+    ctx.shadowOffsetX = 2;
+    ctx.shadowOffsetY = 2;
+    ctx.shadowBlur = 6;
 
     // Poster Title
     ctx.fillStyle = '#fff';
-    ctx.font = 'bold 36px Poppins';
+    ctx.font = 'bold 80px Poppins';
     ctx.textAlign = 'center';
-    ctx.fillText(title, 250, 100);
+    ctx.fillText(title, canvas.width/2, 200);
 
     // Subtitle
-    ctx.font = '24px Poppins';
-    ctx.fillText(sub, 250, 150);
+    ctx.font = 'bold 45px Poppins';
+    ctx.fillText(sub, canvas.width/2, 300);
 
     // Extra Info
-    ctx.font = '20px Poppins';
-    ctx.fillText(extra, 250, 200);
+    ctx.font = 'bold 35px Poppins';
+    ctx.fillText(extra, canvas.width/2, 400);
 
     // Optional image
     if(imageFile){
@@ -166,7 +177,10 @@
       reader.onload = function(event){
         const img = new Image();
         img.onload = function(){
-          ctx.drawImage(img, 100, 250, 300, 300);
+          // Image centered horizontally, professional size
+          const imgWidth = 800;
+          const imgHeight = 600;
+          ctx.drawImage(img, (canvas.width-imgWidth)/2, 500, imgWidth, imgHeight);
         }
         img.src = event.target.result;
       }
