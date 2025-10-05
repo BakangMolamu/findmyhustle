@@ -3,169 +3,108 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VarsityHub - All-in-One Student Platform</title>
+<title>Rate My Professor - Simple Version</title>
 <style>
-  body { margin:0; font-family: Arial, sans-serif; background:#f4f7fa; color:#333; }
-  header { background:#1a73e8; color:#fff; text-align:center; padding:20px; }
-  header h1 { margin-bottom:5px; }
-  .container { max-width:1200px; margin:auto; padding:20px; }
-  .section { margin-bottom:40px; }
-  .section h2 { color:#1a73e8; margin-bottom:15px; }
-  .card-grid { display:flex; flex-wrap:wrap; gap:15px; }
-  .card { background:#fff; flex:1 1 200px; min-width:200px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.2); padding:15px; cursor:pointer; transition: transform 0.2s; }
-  .card:hover { transform:scale(1.05); }
-  .card img { width:100%; border-radius:8px; margin-bottom:10px; }
-  input, textarea, select { width:100%; padding:10px; margin:10px 0; border-radius:5px; border:1px solid #ccc; }
+  body { font-family: Arial; margin:0; background:#f4f7fa; }
+  header { background:#1a73e8; color:#fff; padding:20px; text-align:center; }
+  .container { max-width:800px; margin:auto; padding:20px; }
+  h2 { color:#1a73e8; }
+  input, textarea { width:100%; padding:10px; margin:10px 0; border-radius:5px; border:1px solid #ccc; }
   button { background:#1a73e8; color:#fff; border:none; padding:10px 15px; border-radius:5px; cursor:pointer; }
   button:hover { background:#155ab6; }
+  .comment { background:#fff; padding:10px; border-radius:8px; margin-bottom:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
+  .comment-email { font-size:12px; color:#666; }
   .error { color:red; font-size:14px; }
-  /* Mama Suzan floating help */
-  #mamaSuzanBtn { position:fixed; bottom:20px; right:20px; background:#1a73e8; color:#fff; border:none; border-radius:50px; padding:12px 20px; font-size:16px; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,0.2); z-index:1000; }
-  #mamaSuzanBox { display:none; position:fixed; bottom:70px; right:20px; width:300px; max-width:90%; background:#fff; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.2); padding:15px; z-index:1000; }
-  #mamaSuzanBox h3 { margin-bottom:10px; } 
-  #mamaSuzanBox p { font-size:14px; }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>VarsityHub</h1>
-  <p>Rate Professors, AI Study Tools, Event Posters, and University Dashboards</p>
+  <h1>Rate My Professor</h1>
+  <p>Simple and easy commenting system for all students</p>
 </header>
 
 <div class="container">
 
-  <!-- LOGIN / REGISTRATION -->
-  <div class="section" id="loginSection">
-    <h2>Student Login / Registration</h2>
-    <input type="email" id="email" placeholder="University Email">
-    <input type="password" id="password" placeholder="Password">
-    <div class="error" id="errorMsg"></div>
-    <button onclick="login()">Login / Register</button>
-  </div>
+  <h2>Submit Your Rating</h2>
+  <div class="error" id="errorMsg"></div>
+  <input type="text" id="course" placeholder="Course Name">
+  <input type="text" id="lecturer" placeholder="Lecturer Name">
+  <input type="number" id="rating" placeholder="Rating (1-5)" min="1" max="5">
+  <textarea id="comment" placeholder="Your comment"></textarea>
+  <input type="email" id="email" placeholder="Your email">
+  <label><input type="checkbox" id="anonymous"> Post anonymously</label>
+  <button onclick="submitComment()">Submit Comment</button>
 
-  <!-- DASHBOARD -->
-  <div class="section" id="dashboardSection" style="display:none;">
-    <h2>Welcome, <span id="uniName"></span> Students</h2>
-    <div class="card-grid">
+  <h2>Comments</h2>
+  <div id="commentsSection"></div>
 
-      <!-- Rate My Professor -->
-      <div class="card" onclick="showSection('rateProfessorSection')">
-        <img src="https://via.placeholder.com/300x180.png?text=Rate+Professor" alt="Rate Professor">
-        <h3>Rate Your Lecturer</h3>
-        <p>Submit ratings and feedback for your courses anonymously.</p>
-      </div>
-
-      <!-- AI Study Tools -->
-      <div class="card" onclick="showSection('aiStudySection')">
-        <img src="https://via.placeholder.com/300x180.png?text=AI+Notes" alt="AI Study">
-        <h3>AI Study Tools</h3>
-        <p>Upload lecture notes and get AI summaries, flashcards, and quizzes.</p>
-      </div>
-
-      <!-- Event Poster Generator -->
-      <div class="card" onclick="showSection('posterSection')">
-        <img src="https://via.placeholder.com/300x180.png?text=Poster+Generator" alt="Event Poster">
-        <h3>Create Event Posters</h3>
-        <p>Generate professional posters for student clubs and events.</p>
-      </div>
-
-      <!-- University Dashboard Preview -->
-      <div class="card" onclick="showSection('universityDashboardSection')">
-        <img src="https://via.placeholder.com/300x180.png?text=Dashboard" alt="University Dashboard">
-        <h3>University Dashboard</h3>
-        <p>View aggregated ratings, engagement, and AI tool usage (admin preview).</p>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- Rate My Professor Form -->
-  <div class="section" id="rateProfessorSection" style="display:none;">
-    <h2>Rate Your Lecturer - <span id="uniRP"></span></h2>
-    <form id="rateForm">
-      <input type="text" id="course" placeholder="Course Name" required>
-      <input type="text" id="lecturer" placeholder="Lecturer Name" required>
-      <input type="number" id="rating" placeholder="Rating (1-5)" min="1" max="5" required>
-      <textarea id="comment" placeholder="Optional Comment"></textarea>
-      <button type="submit">Submit Rating</button>
-      <button type="button" onclick="backToDashboard()">Back</button>
-    </form>
-  </div>
-
-  <!-- AI Study Tools Section -->
-  <div class="section" id="aiStudySection" style="display:none;">
-    <h2>AI Study Tools - <span id="uniAI"></span></h2>
-    <p>Upload notes or slides and generate summaries, flashcards, and quizzes.</p>
-    <input type="file" id="uploadNotes">
-    <button onclick="generateAIStudy()">Generate Study Material</button>
-    <button type="button" onclick="backToDashboard()">Back</button>
-  </div>
-
-  <!-- Event Poster Generator -->
-  <div class="section" id="posterSection" style="display:none;">
-    <h2>Event Poster Generator - <span id="uniPoster"></span></h2>
-    <input type="text" id="eventName" placeholder="Event Name">
-    <input type="text" id="eventDate" placeholder="Event Date">
-    <input type="text" id="eventLocation" placeholder="Location">
-    <button onclick="createPoster()">Generate Poster</button>
-    <button type="button" onclick="backToDashboard()">Back</button>
-  </div>
-
-  <!-- University Dashboard Section -->
-  <div class="section" id="universityDashboardSection" style="display:none;">
-    <h2>University Dashboard - <span id="uniDash"></span></h2>
-    <p>Aggregated ratings, AI tool usage, and event posters will appear here.</p>
-    <button type="button" onclick="backToDashboard()">Back</button>
-  </div>
-
-</div>
-
-<!-- Mama Suzan Help -->
-<button id="mamaSuzanBtn" onclick="toggleMamaSuzan()">🧓 Need Help? Ask Mama Suzan</button>
-<div id="mamaSuzanBox">
-  <h3>Mama Suzan Tips</h3>
-  <p>Students can rate professors, generate AI study notes, and create event posters. Universities get dashboards with insights and analytics.</p>
 </div>
 
 <script>
-const allowedUniversities = {
-  "wits.ac.za": "Wits University",
-  "uct.ac.za": "University of Cape Town",
-  "uj.ac.za": "University of Johannesburg",
-  "up.ac.za": "University of Pretoria"
-};
+let bannedEmails = []; // List of banned emails
+let comments = []; // List of submitted comments
 
-// Mama Suzan toggle
-function toggleMamaSuzan() {
-  const box = document.getElementById('mamaSuzanBox');
-  box.style.display = box.style.display === 'block' ? 'none' : 'block';
+function submitComment() {
+  const course = document.getElementById('course').value.trim();
+  const lecturer = document.getElementById('lecturer').value.trim();
+  const rating = document.getElementById('rating').value.trim();
+  const comment = document.getElementById('comment').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const anonymous = document.getElementById('anonymous').checked;
+  const errorMsg = document.getElementById('errorMsg');
+
+  // Validation
+  if(!course || !lecturer || !rating || !email) {
+    errorMsg.innerText = "Please fill all required fields";
+    return;
+  }
+  if(bannedEmails.includes(email.toLowerCase())) {
+    errorMsg.innerText = "This email is banned from commenting.";
+    return;
+  }
+
+  // Save comment
+  const newComment = {
+    course, lecturer, rating, comment,
+    email: anonymous ? "Anonymous" : email
+  };
+  comments.push(newComment);
+  displayComments();
+
+  // Clear inputs
+  document.getElementById('course').value = '';
+  document.getElementById('lecturer').value = '';
+  document.getElementById('rating').value = '';
+  document.getElementById('comment').value = '';
+  document.getElementById('email').value = '';
+  document.getElementById('anonymous').checked = false;
+  errorMsg.innerText = '';
 }
 
-// LOGIN
-function login() {
-  const email = document.getElementById('email').value.trim();
-  const password = document.getElementById('password').value.trim();
-  const errorMsg = document.getElementById('errorMsg');
-  
-  if(!email || !password) { errorMsg.innerText = "Please fill all fields"; return; }
+// Display comments
+function displayComments() {
+  const section = document.getElementById('commentsSection');
+  section.innerHTML = '';
+  comments.forEach(c => {
+    const div = document.createElement('div');
+    div.className = 'comment';
+    div.innerHTML = `<strong>${c.lecturer} (${c.course})</strong><br>
+                     Rating: ${c.rating}/5<br>
+                     ${c.comment}<br>
+                     <span class="comment-email">${c.email}</span>`;
+    section.appendChild(div);
+  });
+}
 
-  const domain = email.split("@")[1];
-  if(allowedUniversities[domain]) {
-    const university = allowedUniversities[domain];
-    localStorage.setItem('university', university);
-    document.getElementById('uniName').innerText = university;
-    document.getElementById('loginSection').style.display = 'none';
-    document.getElementById('dashboardSection').style.display = 'block';
-  } else {
-    errorMsg.innerText = "University email not recognized.";
+// Function to ban email (admin feature)
+function banEmail(email) {
+  if(!bannedEmails.includes(email.toLowerCase())) {
+    bannedEmails.push(email.toLowerCase());
+    alert(email + " has been banned from commenting.");
   }
 }
+</script>
 
-// SHOW SPECIFIC SECTION
-function showSection(sectionId) {
-  hideAllSections();
-  document.getElementById(sectionId).style.display = 'block';
-  const uni = localStorage.getItem('university');
-  if(sectionId==='rateProfessorSection') document.getElementById('uniRP').innerText = uni;
-  if(sectionId==='aiStudySection') document.getElement
+</body>
+</html>
