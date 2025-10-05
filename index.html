@@ -1,169 +1,189 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Student Feedback Platform</title>
-<style>
-  body {
-    margin:0;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Feedback Platform</title>
+    <style>
+        /* Add/* General Styles */
+body {
+    margin: 0;
     font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #8e2de2, #4a00e0, #6dd5fa);
-    color:#333;
-  }
-  header {
-    text-align:center;
-    padding:25px 10px;
-    color:#fff;
-  }
-  header h1 { margin:0; font-size:28px; }
-  header p { margin:5px 0 0; font-size:16px; }
-  .container { max-width:800px; margin:auto; padding:20px; background:rgba(255,255,255,0.95); border-radius:15px; margin-top:20px; }
-  h2 { color:#6a1b9a; margin-bottom:15px; }
-  select, input, textarea { width:100%; padding:12px; margin:10px 0; border-radius:8px; border:1px solid #ccc; font-size:14px; }
-  button {
-    background:#6a1b9a;
-    color:#fff;
-    border:none;
-    padding:12px 20px;
-    border-radius:50px;
-    cursor:pointer;
-    font-size:16px;
-    box-shadow:0 4px 15px rgba(0,0,0,0.2);
-    margin-top:10px;
-    transition:all 0.3s ease;
-  }
-  button:hover { background:#7b3fa0; transform:translateY(-2px); }
-  .comment { background:#fff; padding:12px; border-radius:10px; margin-bottom:12px; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
-  .comment-header { font-weight:bold; font-size:14px; }
-  .comment-email { font-size:12px; color:#555; }
-  .reactions button { margin-right:8px; font-size:14px; padding:4px 10px; border-radius:20px; border:1px solid #ccc; cursor:pointer; transition:0.2s; }
-  .reactions button:hover { background:#6a1b9a; color:#fff; border:none; }
-  .error { color:red; font-size:14px; }
-</style>
+    background: linear-gradient(135deg, #8e2de2, #6dd5fa);
+    color: #333;
+}
+
+header {
+    text-align: center;
+    padding: 30px 15px;
+    color: #fff;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 30px;
+}
+
+header p {
+    margin: 5px 0 0;
+    font-size: 16px;
+}
+
+/* Container */
+.container {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    background: rgba(255,255,255,0.95);
+    border-radius: 15px;
+}
+
+/* Headings */
+h2 {
+    color: #6a1b9a;
+    margin-bottom: 15px;
+}
+
+/* Inputs and Selects */
+select, input, textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+/* Buttons */
+button {
+    background: #6a1b9a;
+    color: #fff;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    margin-top: 10px;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background: #7b3fa0;
+    transform: translateY(-2px);
+}
+
+/* Comment Section */
+.comment {
+    background: #fff;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.comment-header {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.comment-email {
+    font-size: 12px;
+    color: #555;
+}
+
+/* Reactions buttons inside comments */
+.reactions button {
+    margin-right: 8px;
+    font-size: 14px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.reactions button:hover {
+    background: #6a1b9a;
+    color: #fff;
+    border: none;
+}
+
+/* Analytics Section */
+#analytics {
+    margin-top: 30px;
+    padding: 15px;
+    background: rgba(255,255,255,0.95);
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+#analytics h2 {
+    color: #6a1b9a;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    header h1 { font-size: 24px; }
+    button { font-size: 14px; padding: 10px 18px; }
+    .container { padding: 15px; }
+} your CSS styles here */
+    </style>
 </head>
 <body>
+    <header>
+        <h1>Student Feedback Platform</h1>
+        <p>Share your experiences and help improve our universities!</p>
+    </header>
 
-<header>
-  <h1>Varsity Feedback</h1>
-  <p>Safe & Kind Platform for Students</p>
-</header>
+    <main>
+        <section id="feedback-form">
+            <h2>Submit Your Feedback</h2>
+            <form id="feedbackForm">
+                <label for="university">Select University:</label>
+                <select id="university" name="university">
+                    <!-- Populate with university options -->
+                </select>
 
-<div class="container">
+                <label for="category">Select Category:</label>
+                <select id="category" name="category">
+                    <!-- Populate with category options -->
+                </select>
 
-  <h2>Submit Feedback</h2>
-  <div class="error" id="errorMsg"></div>
+                <label for="rating">Rating (1-5):</label>
+                <input type="number" id="rating" name="rating" min="1" max="5">
 
-  <select id="university">
-    <option value="">Select University</option>
-    <option value="Wits University">Wits University</option>
-    <option value="UCT">University of Cape Town</option>
-    <option value="UJ">University of Johannesburg</option>
-    <option value="UP">University of Pretoria</option>
-  </select>
+                <label for="comment">Your Comment:</label>
+                <textarea id="comment" name="comment"></textarea>
 
-  <select id="category">
-    <option value="">Select Category</option>
-    <option value="Academics">Academics</option>
-    <option value="Courses">Courses</option>
-    <option value="Professors">Professors / Lecturers</option>
-    <option value="Sports">Sports & Extracurriculars</option>
-    <option value="Environment">Campus Life & Environment</option>
-    <option value="Security">Safety & Security</option>
-    <option value="Facilities">Facilities & Infrastructure</option>
-    <option value="Administration">Administration</option>
-    <option value="Support">Support Services</option>
-    <option value="Other">Other / Suggestions</option>
-  </select>
+                <label for="email">Your Email:</label>
+                <input type="email" id="email" name="email">
 
-  <input type="text" id="course" placeholder="Course Name (if applicable)">
-  <input type="text" id="lecturer" placeholder="Lecturer Name (if applicable)">
-  <input type="number" id="rating" placeholder="Rating 1-5" min="1" max="5">
-  <textarea id="comment" placeholder="Your comment"></textarea>
-  <input type="email" id="email" placeholder="Your email">
-  <label><input type="checkbox" id="anonymous"> Post anonymously</label>
-  <button onclick="submitComment()">Submit Feedback</button>
+                <label for="anonymous">
+                    <input type="checkbox" id="anonymous" name="anonymous"> Post Anonymously
+                </label>
 
-  <h2>Comments</h2>
-  <div id="commentsSection"></div>
+                <button type="submit">Submit Feedback</button>
+            </form>
+        </section>
 
-</div>
+        <section id="comments">
+            <h2>Comments</h2>
+            <div id="commentsList">
+                <!-- Display comments here -->
+            </div>
+        </section>
 
-<script>
-let bannedEmails = [];
-let comments = [];
+        <section id="analytics">
+            <h2>Analytics Dashboard</h2>
+            <div id="analyticsData">
+                <!-- Display analytics data here -->
+            </div>
+        </section>
+    </main>
 
-function submitComment() {
-  const uni = document.getElementById('university').value;
-  const category = document.getElementById('category').value;
-  const course = document.getElementById('course').value.trim();
-  const lecturer = document.getElementById('lecturer').value.trim();
-  const rating = document.getElementById('rating').value.trim();
-  const comment = document.getElementById('comment').value.trim();
-  const email = document.getElementById('email').value.trim();
-  const anonymous = document.getElementById('anonymous').checked;
-  const errorMsg = document.getElementById('errorMsg');
-
-  if(!uni || !category || !email || !comment) {
-    errorMsg.innerText = "Please fill all required fields";
-    return;
-  }
-
-  if(bannedEmails.includes(email.toLowerCase())) {
-    errorMsg.innerText = "This email is banned from commenting.";
-    return;
-  }
-
-  const newComment = {
-    uni, category, course, lecturer, rating, comment,
-    email: anonymous ? "Anonymous" : email,
-    helpful:0,
-    notHelpful:0
-  };
-  comments.push(newComment);
-  displayComments();
-
-  // clear
-  document.getElementById('course').value = '';
-  document.getElementById('lecturer').value = '';
-  document.getElementById('rating').value = '';
-  document.getElementById('comment').value = '';
-  document.getElementById('email').value = '';
-  document.getElementById('anonymous').checked = false;
-  errorMsg.innerText = '';
-}
-
-function displayComments() {
-  const section = document.getElementById('commentsSection');
-  section.innerHTML = '';
-  comments.forEach((c, index) => {
-    const div = document.createElement('div');
-    div.className = 'comment';
-    div.innerHTML = `<div class="comment-header">${c.uni} | ${c.category} ${c.course ? "- "+c.course : ""} ${c.lecturer ? "- "+c.lecturer : ""}</div>
-                     <p>${c.comment}</p>
-                     <span class="comment-email">${c.email}</span>
-                     <div class="reactions">
-                       <button onclick="react(${index}, 'helpful')">👍 ${c.helpful}</button>
-                       <button onclick="react(${index}, 'notHelpful')">👎 ${c.notHelpful}</button>
-                     </div>`;
-    section.appendChild(div);
-  });
-}
-
-function react(index, type) {
-  if(type==='helpful') comments[index].helpful++;
-  if(type==='notHelpful') comments[index].notHelpful++;
-  displayComments();
-}
-
-// admin function
-function banEmail(email) {
-  if(!bannedEmails.includes(email.toLowerCase())) {
-    bannedEmails.push(email.toLowerCase());
-    alert(email + " has been banned from commenting.");
-  }
-}
-</script>
-
+    <script>
+        // Add your JavaScript functionality here
+    </script>
 </body>
 </html>
