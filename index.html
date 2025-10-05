@@ -1,189 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Feedback Platform</title>
-    <style>
-        /* Add/* General Styles */
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Feedback Platform</title>
+<style>
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #8e2de2, #6dd5fa);
-    color: #333;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #8e2de2, #6dd5fa);
+  color: #333;
 }
-
 header {
-    text-align: center;
-    padding: 30px 15px;
-    color: #fff;
+  text-align: center;
+  padding: 30px 15px;
+  color: #fff;
 }
-
-header h1 {
-    margin: 0;
-    font-size: 30px;
+header h1 { margin: 0; font-size: 28px; }
+header p { margin: 5px 0 0; font-size: 16px; }
+header button {
+  margin-top: 10px;
+  background:#fff; color:#6a1b9a;
+  border:none; padding:10px 20px;
+  border-radius:50px; cursor:pointer;
+  font-weight:bold;
 }
+header button:hover { background:#eee; }
 
-header p {
-    margin: 5px 0 0;
-    font-size: 16px;
-}
-
-/* Container */
 .container {
-    max-width: 900px;
-    margin: 20px auto;
-    padding: 20px;
-    background: rgba(255,255,255,0.95);
-    border-radius: 15px;
+  max-width: 950px;
+  margin: 20px auto;
+  padding: 20px;
+  background: rgba(255,255,255,0.95);
+  border-radius: 15px;
 }
 
-/* Headings */
-h2 {
-    color: #6a1b9a;
-    margin-bottom: 15px;
-}
-
-/* Inputs and Selects */
+h2 { color: #6a1b9a; margin-bottom: 15px; }
 select, input, textarea {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 14px;
+  width: 100%; padding: 12px; margin: 10px 0;
+  border-radius: 8px; border: 1px solid #ccc;
+  font-size: 14px;
 }
-
-/* Buttons */
-button {
-    background: #6a1b9a;
-    color: #fff;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 50px;
-    cursor: pointer;
-    font-size: 16px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    margin-top: 10px;
-    transition: all 0.3s ease;
+button.submit-btn {
+  background: #6a1b9a; color:#fff; border:none;
+  padding:12px 25px; border-radius:50px;
+  cursor:pointer; font-size:16px;
+  box-shadow:0 4px 15px rgba(0,0,0,0.2);
+  margin-top:10px; transition:0.3s;
 }
+button.submit-btn:hover { background:#7b3fa0; transform:translateY(-2px); }
 
-button:hover {
-    background: #7b3fa0;
-    transform: translateY(-2px);
-}
-
-/* Comment Section */
 .comment {
-    background: #fff;
-    padding: 15px;
-    border-radius: 12px;
-    margin-bottom: 12px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  background: #fff; padding: 15px; border-radius:12px;
+  margin-bottom:12px; box-shadow:0 2px 10px rgba(0,0,0,0.1);
 }
-
-.comment-header {
-    font-weight: bold;
-    font-size: 14px;
-}
-
-.comment-email {
-    font-size: 12px;
-    color: #555;
-}
-
-/* Reactions buttons inside comments */
+.comment-header { font-weight:bold; font-size:14px; }
+.comment-email { font-size:12px; color:#555; }
 .reactions button {
-    margin-right: 8px;
-    font-size: 14px;
-    padding: 4px 12px;
-    border-radius: 20px;
-    border: 1px solid #ccc;
-    cursor: pointer;
-    transition: 0.2s;
+  margin-right:8px; font-size:14px; padding:4px 12px;
+  border-radius:20px; border:1px solid #ccc; cursor:pointer;
+  transition:0.2s;
 }
+.reactions button:hover { background:#6a1b9a; color:#fff; border:none; }
 
-.reactions button:hover {
-    background: #6a1b9a;
-    color: #fff;
-    border: none;
-}
-
-/* Analytics Section */
 #analytics {
-    margin-top: 30px;
-    padding: 15px;
-    background: rgba(255,255,255,0.95);
-    border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  margin-top: 30px; padding: 15px;
+  background: rgba(255,255,255,0.95); border-radius:12px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.1);
 }
 
-#analytics h2 {
-    color: #6a1b9a;
-}
+.error { color:red; font-size:14px; }
 
-/* Responsive */
-@media (max-width: 600px) {
-    header h1 { font-size: 24px; }
-    button { font-size: 14px; padding: 10px 18px; }
-    .container { padding: 15px; }
-} your CSS styles here */
-    </style>
+/* Modal */
+.modal { display:none; position:fixed; z-index:100; padding-top:60px;
+  left:0; top:0; width:100%; height:100%; overflow:auto;
+  background-color:rgba(0,0,0,0.6);
+}
+.modal-content { background-color:#fff; margin:auto; padding:20px;
+  border-radius:12px; max-width:700px; }
+.close { color:#aaa; float:right; font-size:28px; font-weight:bold; cursor:pointer; }
+.close:hover { color:#000; }
+
+@media (max-width:600px){
+  header h1{font-size:24px;}
+  button.submit-btn{font-size:14px;padding:10px 18px;}
+  .container{padding:15px;}
+}
+</style>
 </head>
 <body>
-    <header>
-        <h1>Student Feedback Platform</h1>
-        <p>Share your experiences and help improve our universities!</p>
-    </header>
 
-    <main>
-        <section id="feedback-form">
-            <h2>Submit Your Feedback</h2>
-            <form id="feedbackForm">
-                <label for="university">Select University:</label>
-                <select id="university" name="university">
-                    <!-- Populate with university options -->
-                </select>
+<header>
+  <h1>Student Feedback Platform</h1>
+  <p>Safe & Kind Platform for Students</p>
+  <button onclick="openModal()">Terms & Conditions</button>
+</header>
 
-                <label for="category">Select Category:</label>
-                <select id="category" name="category">
-                    <!-- Populate with category options -->
-                </select>
+<div class="container">
+  <h2>Submit Feedback</h2>
+  <div class="error" id="errorMsg"></div>
+  <select id="university"></select>
+  <select id="category">
+    <option value="">Select Category</option>
+    <option value="Academics">Academics</option>
+    <option value="Courses">Courses</option>
+    <option value="Professors">Professors / Lecturers</option>
+    <option value="Sports">Sports & Extracurriculars</option>
+    <option value="Environment">Campus Life & Environment</option>
+    <option value="Security">Safety & Security</option>
+    <option value="Facilities">Facilities & Infrastructure</option>
+    <option value="Administration">Administration</option>
+    <option value="Support">Support Services</option>
+    <option value="Other">Other / Suggestions</option>
+  </select>
+  <input type="text" id="course" placeholder="Course Name (optional)">
+  <input type="text" id="lecturer" placeholder="Lecturer Name (optional)">
+  <input type="number" id="rating" placeholder="Rating 1-5" min="1" max="5">
+  <textarea id="comment" placeholder="Your comment"></textarea>
+  <input type="email" id="email" placeholder="Your email">
+  <label><input type="checkbox" id="anonymous"> Post anonymously</label>
+  <button class="submit-btn" onclick="submitComment()">Submit Feedback</button>
 
-                <label for="rating">Rating (1-5):</label>
-                <input type="number" id="rating" name="rating" min="1" max="5">
+  <h2>View Comments</h2>
+  <select id="filterUniversity" onchange="displayComments()"></select>
+  <select id="filterCategory" onchange="displayComments()">
+    <option value="">All Categories</option>
+    <option value="Academics">Academics</option>
+    <option value="Courses">Courses</option>
+    <option value="Professors">Professors / Lecturers</option>
+    <option value="Sports">Sports & Extracurriculars</option>
+    <option value="Environment">Campus Life & Environment</option>
+    <option value="Security">Safety & Security</option>
+    <option value="Facilities">Facilities & Infrastructure</option>
+    <option value="Administration">Administration</option>
+    <option value="Support">Support Services</option>
+    <option value="Other">Other / Suggestions</option>
+  </select>
+  <div id="comments"></div>
 
-                <label for="comment">Your Comment:</label>
-                <textarea id="comment" name="comment"></textarea>
+  <div id="analytics">
+    <h2>Analytics</h2>
+    <div id="analyticsContent">Select university & category to see analytics.</div>
+  </div>
+</div>
 
-                <label for="email">Your Email:</label>
-                <input type="email" id="email" name="email">
+<!-- Terms Modal -->
+<div id="termsModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <h2>Terms & Conditions</h2>
+    <p>All students must provide a valid email. Anonymity is optional, but misbehavior leads to permanent ban of the email. The platform is safe and kind. Use responsibly.</p>
+  </div>
+</div>
 
-                <label for="anonymous">
-                    <input type="checkbox" id="anonymous" name="anonymous"> Post Anonymously
-                </label>
+<script>
+// Universities array
+const universities = [
+  "University of Cape Town","University of the Witwatersrand","Stellenbosch University",
+  "University of Pretoria","University of KwaZulu-Natal","University of the Western Cape",
+  "Rhodes University","University of the Free State","University of Fort Hare",
+  "Nelson Mandela University","University of Limpopo","University of Venda",
+  "Walter Sisulu University","University of Zululand","Cape Peninsula University of Technology",
+  "Tshwane University of Technology","Durban University of Technology","Central University of Technology",
+  "Vaal University of Technology","Sol Plaatje University","Mangosuthu University of Technology",
+  "University of Mpumalanga","University of Johannesburg","University of South Africa",
+  "North-West University","Monash South Africa"
+];
 
-                <button type="submit">Submit Feedback</button>
-            </form>
-        </section>
+// Fill university dropdowns
+let uniSelect = document.getElementById("university");
+let filterUni = document.getElementById("filterUniversity");
+universities.forEach(u => {
+  let opt = document.createElement("option"); opt.value=u; opt.text=u;
+  uniSelect.appendChild(opt);
+  let fOpt = document.createElement("option"); fOpt.value=u; fOpt.text=u;
+  filterUni.appendChild(fOpt);
+});
 
-        <section id="comments">
-            <h2>Comments</h2>
-            <div id="commentsList">
-                <!-- Display comments here -->
-            </div>
-        </section>
+// Comments storage
+let comments = [];
+let bannedEmails = [];
 
-        <section id="analytics">
-            <h2>Analytics Dashboard</h2>
-            <div id="analyticsData">
-                <!-- Display analytics data here -->
-            </div>
-        </section>
-    </main>
+// Modal functions
+function openModal(){document.getElementById("termsModal").style.display="block";}
+function closeModal(){document.getElementById("termsModal").style.display="none";}
 
-    <script>
-        // Add your JavaScript functionality here
-    </script>
+// Submit comment
+function submitComment(){
+  let uni = uniSelect.value, cat=document.getElementById("category").value,
+      course=document.getElementById("course").value,
+      lecturer=document.getElementById("lecturer").value,
+      rating=document.getElementById("rating").value,
+      comment=document.getElementById("comment").value,
+      email=document.getElementById("email").value,
+      anon=document.getElementById("anonymous").checked;
+
+  let errorDiv=document.getElementById("errorMsg");
+  if(!uni || !cat || !comment || !email){errorDiv.textContent="Please fill all required fields."; return;}
+  if(bannedEmails.includes(email)){errorDiv.textContent="This email is banned."; return;}
+  errorDiv.textContent="";
+
+  comments.push({uni,cat,course,lecturer,rating,comment,email:anon?"Anonymous":email,likes:0,dislikes:0});
+  displayComments();
+  document.getElementById("course").value="";
+  document.getElementById("lecturer").value="";
+  document.getElementById("rating").value="";
+  document.getElementById("comment").value="";
+  document.getElementById("email").value="";
+}
+
+// Display comments
+function displayComments(){
+  let u=document.getElementById("filterUniversity").value;
+  let c=document.getElementById("filterCategory").value;
+  let div=document.getElementById("comments"); div.innerHTML="";
+  let filtered = comments.filter(com => (u?com.uni===u:true) && (c?com.cat===c:true));
+  filtered.forEach((com,i)=>{
+    let el=document.createElement("div"); el.className="comment";
+    el.innerHTML=`<div class="comment-header">${com.uni} | ${com.cat} | Rating: ${com.rating||"N/A"}</div>
+                  <div>${com.comment}</div>
+                  <div class="comment-email">${com.email}</div>
+                  <div class="reactions">
+                    <button onclick="like(${i})">👍 ${com.likes}</button>
+                    <button onclick="dislike(${i})">👎 ${com.dislikes}</button>
+                  </div>`;
+    div.appendChild(el);
+  });
+  updateAnalytics(filtered);
+}
+
+// Reactions
+function like(i){comments[i].likes++; displayComments();}
+function dislike(i){comments[i].dislikes++; displayComments();}
+
+// Analytics
+function updateAnalytics(filtered){
+  let content=document.getElementById("analyticsContent");
+  if(filtered.length===0){content.innerHTML="No data available."; return;}
+  let avgRating=(filtered.reduce((sum,c)=>sum+(parseInt(c.rating)||0),0)/filtered.length).toFixed(2);
+  content.innerHTML=`Total Comments: ${filtered.length} | Average Rating: ${avgRating} | Top Rated: ${Math.max(...filtered.map(c=>parseInt(c.rating)||0))}`;
+}
+</script>
+
 </body>
 </html>
