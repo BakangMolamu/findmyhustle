@@ -1,273 +1,530 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Student Feedback Platform</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>CampusInsight — Varsity Feedback</title>
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
 <style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #8e2de2, #6dd5fa);
-  color: #333;
-}
-header {
-  text-align: center;
-  padding: 30px 15px;
-  color: #fff;
-}
-header h1 { margin: 0; font-size: 28px; }
-header p { margin: 5px 0 0; font-size: 16px; }
-header button {
-  margin-top: 10px;
-  background:#fff; color:#6a1b9a;
-  border:none; padding:10px 20px;
-  border-radius:50px; cursor:pointer;
-  font-weight:bold;
-}
-header button:hover { background:#eee; }
-
-.container {
-  max-width: 950px;
-  margin: 20px auto;
-  padding: 20px;
-  background: rgba(255,255,255,0.95);
-  border-radius: 15px;
-}
-
-h2 { color: #6a1b9a; margin-bottom: 15px; }
-select, input, textarea {
-  width: 100%; padding: 12px; margin: 10px 0;
-  border-radius: 8px; border: 1px solid #ccc;
-  font-size: 14px;
-}
-button.submit-btn {
-  background: #6a1b9a; color:#fff; border:none;
-  padding:12px 25px; border-radius:50px;
-  cursor:pointer; font-size:16px;
-  box-shadow:0 4px 15px rgba(0,0,0,0.2);
-  margin-top:10px; transition:0.3s;
-}
-button.submit-btn:hover { background:#7b3fa0; transform:translateY(-2px); }
-
-.comment {
-  background: #fff; padding: 15px; border-radius:12px;
-  margin-bottom:12px; box-shadow:0 2px 10px rgba(0,0,0,0.1);
-}
-.comment-header { font-weight:bold; font-size:14px; }
-.comment-email { font-size:12px; color:#555; margin-bottom:5px;}
-.reactions button {
-  margin-right:8px; font-size:14px; padding:4px 12px;
-  border-radius:20px; border:1px solid #ccc; cursor:pointer;
-  transition:0.2s;
-}
-.reactions button:hover { background:#6a1b9a; color:#fff; border:none; }
-
-#analytics {
-  margin-top: 30px; padding: 15px;
-  background: rgba(255,255,255,0.95); border-radius:12px;
-  box-shadow:0 2px 10px rgba(0,0,0,0.1);
-}
-
-.error { color:red; font-size:14px; }
-
-/* Modal */
-.modal { display:none; position:fixed; z-index:100; padding-top:60px;
-  left:0; top:0; width:100%; height:100%; overflow:auto;
-  background-color:rgba(0,0,0,0.6);
-}
-.modal-content { background-color:#fff; margin:auto; padding:20px;
-  border-radius:12px; max-width:700px; }
-.close { color:#aaa; float:right; font-size:28px; font-weight:bold; cursor:pointer; }
-.close:hover { color:#000; }
-
-@media (max-width:600px){
-  header h1{font-size:24px;}
-  button.submit-btn{font-size:14px;padding:10px 18px;}
-  .container{padding:15px;}
-}
+  /* ---------- Visual Style ---------- */
+  :root{
+    --purple:#6a1b9a;
+    --purple-2:#8e2de2;
+    --blue-2:#6dd5fa;
+    --muted:#6b7280;
+    --card-bg: rgba(255,255,255,0.96);
+  }
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial; background: linear-gradient(135deg,var(--purple-2),var(--blue-2)); -webkit-font-smoothing:antialiased;}
+  header{padding:18px 14px;text-align:center;color:white}
+  header h1{margin:0;font-size:20px;letter-spacing:0.2px}
+  header p{margin:6px 0 0;font-size:13px;opacity:0.95}
+  main{max-width:980px;margin:18px auto;padding:16px;background:var(--card-bg);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,0.12)}
+  h2{color:var(--purple);margin:12px 0;font-size:16px}
+  select,input,textarea{width:100%;padding:11px;border-radius:10px;border:1px solid #d1d5db;font-size:14px;box-sizing:border-box}
+  textarea{min-height:88px;resize:vertical}
+  .row{display:flex;gap:12px}
+  .col{flex:1}
+  .muted{color:var(--muted);font-size:13px}
+  .small{font-size:13px}
+  .btn{
+    display:inline-block;background:var(--purple);color:white;padding:11px 16px;border-radius:999px;border:0;cursor:pointer;font-weight:600;box-shadow:0 8px 20px rgba(106,27,154,0.18);transition:transform .15s,box-shadow .15s;
+  }
+  .btn:hover{transform:translateY(-3px);box-shadow:0 14px 26px rgba(106,27,154,0.22)}
+  .secondary{background:#fff;color:var(--purple);border:1px solid rgba(106,27,154,0.08)}
+  .note{font-size:13px;color:#444;margin-top:6px}
+  .error{color:#b91c1c;margin-top:6px}
+  /* comment area */
+  .controls{display:flex;gap:10px;flex-wrap:wrap}
+  .browseBtn{margin-top:6px}
+  .panel{background:#fff;padding:12px;border-radius:10px;border:1px solid rgba(0,0,0,0.04);margin-top:10px}
+  .comment-list{max-height:320px;overflow:auto;padding:8px;border-radius:8px;border:1px solid #eef2ff;background:#fafafa}
+  .comment{
+    background:white;border-radius:10px;padding:10px;margin-bottom:10px;box-shadow:0 2px 10px rgba(12,12,12,0.03);
+  }
+  .comment .meta{font-size:12px;color:var(--muted);margin-bottom:6px}
+  .comment .body{font-size:14px;margin-bottom:8px}
+  .comment .reactions{display:flex;gap:8px}
+  .reactionBtn{border:1px solid #e6e6e6;background:#fff;padding:6px 8px;border-radius:999px;cursor:pointer;font-size:13px}
+  .reactionBtn.active{background:var(--purple);color:white;border-color:transparent}
+  /* analytics */
+  .chart-card{padding:10px;border-radius:10px;background:#fff;border:1px solid rgba(0,0,0,0.03);margin-top:12px}
+  /* admin area */
+  .admin-area{margin-top:12px;padding:10px;background:#fff;border-radius:10px;border:1px solid rgba(0,0,0,0.04)}
+  /* terms modal */
+  .modal{position:fixed;left:0;top:0;width:100%;height:100%;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.5);z-index:40}
+  .modal.open{display:flex}
+  .modal-card{width:95%;max-width:720px;background:white;padding:18px;border-radius:12px}
+  .flex{display:flex;gap:10px;align-items:center}
+  footer{margin-top:18px;text-align:center;color:#ffffff;font-size:13px}
+  /* responsive */
+  @media (max-width:720px){
+    .row{flex-direction:column}
+    main{margin:10px}
+  }
 </style>
 </head>
 <body>
+  <header>
+    <h1>CampusInsight — Varsity Feedback</h1>
+    <p class="muted">Step-by-step: pick your varsity, pick category, browse comments, add feedback — safe & kind.</p>
+  </header>
 
-<header>
-  <h1>Student Feedback Platform</h1>
-  <p>Safe & Kind Platform for Students</p>
-  <button onclick="openModal()">Terms & Conditions</button>
-</header>
+  <main>
+    <!-- STEP 1: University -->
+    <h2>Step 1 — Choose University</h2>
+    <select id="universitySelect" aria-label="Select university">
+      <option value="">-- pick a university --</option>
+    </select>
 
-<div class="container">
-  <h2>Step 1: Select University</h2>
-  <select id="university" onchange="enableCategory()">
-    <option value="">Select University</option>
-  </select>
+    <!-- STEP 2: Category -->
+    <h2>Step 2 — Choose Category</h2>
+    <select id="categorySelect" aria-label="Select category" disabled>
+      <option value="">-- pick category --</option>
+      <option value="Academics">Academics</option>
+      <option value="Courses">Courses</option>
+      <option value="Professors">Professors / Lecturers</option>
+      <option value="Sports">Sports & Extracurriculars</option>
+      <option value="Environment">Campus Life & Environment</option>
+      <option value="Security">Safety & Security</option>
+      <option value="Facilities">Facilities & Infrastructure</option>
+      <option value="Administration">Administration</option>
+      <option value="Support">Support Services</option>
+      <option value="Other">Other / Suggestions</option>
+    </select>
 
-  <h2>Step 2: Select Category</h2>
-  <select id="category" disabled onchange="displayComments()">
-    <option value="">Select Category</option>
-    <option value="Academics">Academics</option>
-    <option value="Courses">Courses</option>
-    <option value="Professors">Professors / Lecturers</option>
-    <option value="Sports">Sports & Extracurriculars</option>
-    <option value="Environment">Campus Life & Environment</option>
-    <option value="Security">Safety & Security</option>
-    <option value="Facilities">Facilities & Infrastructure</option>
-    <option value="Administration">Administration</option>
-    <option value="Support">Support Services</option>
-    <option value="Other">Other / Suggestions</option>
-  </select>
+    <!-- Browse Comments action -->
+    <div style="margin-top:10px">
+      <button id="browseBtn" class="btn secondary" disabled>Browse Comments for selection</button>
+      <span class="note">After selecting varsity & category, click <strong>Browse Comments</strong> to open the scrollable list below.</span>
+    </div>
 
-  <h2>Step 3: View Comments</h2>
-  <div id="comments"></div>
+    <!-- Browse area -->
+    <div class="panel" style="margin-top:14px">
+      <h2 style="margin-top:0">Browse Comments (scrollable)</h2>
+      <div id="commentContainer" class="comment-list">
+        <div class="muted">No selection yet — choose a university & category and click "Browse Comments".</div>
+      </div>
+    </div>
 
-  <h2>Step 4: Submit Feedback</h2>
-  <div class="error" id="errorMsg"></div>
-  <input type="text" id="course" placeholder="Course Name (optional)">
-  <input type="text" id="lecturer" placeholder="Lecturer Name (optional)">
-  <input type="number" id="rating" placeholder="Rating 1-5" min="1" max="5">
-  <textarea id="comment" placeholder="Your comment"></textarea>
-  <input type="email" id="email" placeholder="Your email">
-  <label><input type="checkbox" id="anonymous"> Post anonymously</label>
-  <button class="submit-btn" onclick="submitComment()">Submit Feedback</button>
+    <!-- Submit feedback -->
+    <div style="margin-top:14px" class="panel">
+      <h2 style="margin-top:0">Submit Feedback</h2>
+      <div class="muted small">(You must choose varsity & category first.)</div>
 
-  <h2>Step 5: Analytics</h2>
-  <canvas id="analyticsChart" height="150"></canvas>
-</div>
+      <div class="row" style="margin-top:8px">
+        <div class="col">
+          <input id="courseInput" placeholder="Course (optional)">
+        </div>
+        <div class="col">
+          <input id="lecturerInput" placeholder="Lecturer (optional)">
+        </div>
+      </div>
 
-<!-- Terms Modal -->
-<div id="termsModal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal()">&times;</span>
-    <h2>Terms & Conditions</h2>
-    <p>All students must provide a valid email. Anonymity is optional, but misbehavior leads to permanent ban of the email. The platform is safe and kind. Use responsibly.</p>
+      <div style="margin-top:8px" class="row">
+        <div class="col">
+          <!-- Star rating UI -->
+          <div id="starWrap" style="display:flex;gap:6px;align-items:center">
+            <div class="muted small">Rating</div>
+            <div id="stars" style="display:flex;gap:4px"></div>
+            <div id="ratingValue" class="muted small" style="margin-left:8px">0</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:8px">
+        <textarea id="commentInput" placeholder="Write your comment (required)"></textarea>
+      </div>
+
+      <div style="margin-top:8px" class="row">
+        <div class="col"><input id="emailInput" placeholder="Your email (required unless anonymous)"></div>
+        <div style="width:120px" class="col"><label style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="anonymousCheck"> Post anonymously</label></div>
+      </div>
+
+      <div style="margin-top:8px" class="flex">
+        <label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="acceptTerms"> I accept the <a href="#" id="openTerms">Terms & Conditions</a></label>
+      </div>
+
+      <div class="error" id="submitError"></div>
+
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+        <button id="submitBtn" class="btn">Submit Feedback</button>
+        <button id="clearLocalBtn" class="btn secondary">Clear Local Data</button>
+        <button id="adminLoginBtn" class="btn secondary">Admin</button>
+      </div>
+      <div class="note" style="margin-top:8px">You can post anonymously; admins can ban misbehaving emails.</div>
+    </div>
+
+    <!-- Analytics -->
+    <div class="chart-card">
+      <h2 style="margin:0 0 8px 0">Analytics — selected university</h2>
+      <canvas id="barChart"></canvas>
+      <div class="muted small" style="margin-top:8px">Bar = comments per category; Line = average rating (0–5)</div>
+    </div>
+
+    <!-- Admin area (hidden until login) -->
+    <div id="adminArea" style="display:none" class="admin-area">
+      <h3>Admin Tools</h3>
+      <div class="muted small">Banned emails (local): <span id="bannedList">none</span></div>
+      <div style="margin-top:8px">
+        <input id="banEmailInput" placeholder="email to ban (exact)" />
+        <button id="banBtn" class="btn secondary">Ban Email</button>
+      </div>
+      <div style="margin-top:10px"><button id="exportBtn" class="btn">Export Local Comments (JSON)</button></div>
+    </div>
+  </main>
+
+  <div class="modal" id="termsModal">
+    <div class="modal-card">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <h3 style="margin:0">Terms & Conditions</h3>
+        <button class="btn secondary" id="closeTerms">Close</button>
+      </div>
+      <div style="margin-top:12px;color:#333;line-height:1.4">
+        <p><strong>Use responsibly.</strong> CampusInsight collects student feedback intended to be honest and constructive. Do not post hate speech, harassment, or false reports. Content that violates policies may lead to email bans.</p>
+        <p>Reactions are limited to one per person per comment. Anonymous posting is allowed; admins will act on rule violations and can ban emails. Data is stored locally in this demo; for production we will move to a secure backend/Google Sheets and provide university-only access.</p>
+      </div>
+      <div style="margin-top:12px"><button id="acceptTermsBtn" class="btn">I accept</button></div>
+    </div>
   </div>
-</div>
 
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <footer>© 2025 CampusInsight — Built for South African universities</footer>
 
 <script>
-// Universities array
-const universities = [
-  "University of Cape Town","University of the Witwatersrand","Stellenbosch University",
-  "University of Pretoria","University of KwaZulu-Natal","University of the Western Cape",
-  "Rhodes University","University of the Free State","University of Fort Hare",
-  "Nelson Mandela University","University of Limpopo","University of Venda",
-  "Walter Sisulu University","University of Zululand","Cape Peninsula University of Technology",
-  "Tshwane University of Technology","Durban University of Technology","Central University of Technology",
-  "Vaal University of Technology","Sol Plaatje University","Mangosuthu University of Technology",
-  "University of Mpumalanga","University of Johannesburg","University of South Africa",
-  "North-West University","Monash South Africa"
+/* ============================
+   Initialization & persistence
+   ============================ */
+const ALL_UNIS = [
+  "University of Cape Town (UCT)",
+  "University of the Witwatersrand (WITS)",
+  "Stellenbosch University",
+  "University of Pretoria (UP)",
+  "University of KwaZulu-Natal (UKZN)",
+  "University of the Western Cape (UWC)",
+  "Rhodes University",
+  "University of the Free State (UFS)",
+  "University of Fort Hare (UFH)",
+  "Nelson Mandela University (NMU)",
+  "University of Limpopo (UL)",
+  "University of Venda (UNIVEN)",
+  "Walter Sisulu University (WSU)",
+  "University of Zululand (UNIZULU)",
+  "Cape Peninsula University of Technology (CPUT)",
+  "Tshwane University of Technology (TUT)",
+  "Durban University of Technology (DUT)",
+  "Central University of Technology (CUT)",
+  "Vaal University of Technology (VUT)",
+  "Sol Plaatje University (SPU)",
+  "Mangosuthu University of Technology (MUT)",
+  "University of Mpumalanga (UMP)",
+  "University of Johannesburg (UJ)",
+  "University of South Africa (UNISA)",
+  "North-West University (NWU)",
+  "Monash South Africa"
 ];
 
-// Fill university dropdown
-const uniSelect = document.getElementById("university");
-universities.forEach(u=>{
-  const opt=document.createElement("option"); opt.value=u; opt.text=u;
-  uniSelect.appendChild(opt);
+const uniSel = document.getElementById('universitySelect');
+const catSel = document.getElementById('categorySelect');
+const browseBtn = document.getElementById('browseBtn');
+const commentContainer = document.getElementById('commentContainer');
+const submitBtn = document.getElementById('submitBtn');
+const commentInput = document.getElementById('commentInput') || document.getElementById('commentText'); // support earlier ids
+const emailInput = document.getElementById('emailInput') || document.getElementById('email'); // fallback
+const anonymousCheck = document.getElementById('anonymousCheck');
+const submitError = document.getElementById('submitError');
+const acceptTerms = document.getElementById('acceptTerms');
+const openTermsLink = document.getElementById('openTerms');
+const termsModal = document.getElementById('termsModal');
+const closeTerms = document.getElementById('closeTerms');
+const acceptTermsBtn = document.getElementById('acceptTermsBtn');
+const starsDiv = document.getElementById('stars');
+const ratingValue = document.getElementById('ratingValue');
+
+const clearLocalBtn = document.getElementById('clearLocalBtn') || null;
+const adminLoginBtn = document.getElementById('adminLoginBtn');
+const adminArea = document.getElementById('adminArea');
+const banEmailInput = document.getElementById('banEmailInput');
+const banBtn = document.getElementById('banBtn');
+const bannedListSpan = document.getElementById('bannedList');
+const exportBtn = document.getElementById('exportBtn');
+
+let COMMENTS = []; // {id, uni, cat, course, lecturer, rating, text, email, anon, date, helpful, notHelpful}
+let BANNED = [];   // [email,...]
+let RATED = {};    // local reaction tracking keyed by userId_commentId
+
+// load from localStorage if present
+try {
+  COMMENTS = JSON.parse(localStorage.getItem('campus_comments') || '[]');
+  BANNED = JSON.parse(localStorage.getItem('campus_banned') || '[]');
+  RATED = JSON.parse(localStorage.getItem('campus_rated') || '{}');
+} catch(e) {
+  COMMENTS = []; BANNED = []; RATED = {};
+}
+
+// fill university list
+(function populateUnis(){
+  ALL_UNIS.forEach(u=>{
+    const opt=document.createElement('option'); opt.value=u; opt.text=u;
+    uniSel.appendChild(opt);
+  });
+})();
+
+/* ============================
+   UI helpers
+   ============================ */
+function saveLocal(){
+  localStorage.setItem('campus_comments', JSON.stringify(COMMENTS));
+  localStorage.setItem('campus_banned', JSON.stringify(BANNED));
+  localStorage.setItem('campus_rated', JSON.stringify(RATED));
+}
+
+function genId(){
+  return Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+}
+
+/* ---------- star rating UI ---------- */
+let currentRating = 0;
+function renderStars(){
+  starsDiv.innerHTML = '';
+  for(let s=1;s<=5;s++){
+    const star = document.createElement('button');
+    star.className='reactionBtn';
+    star.style.padding='6px 10px';
+    star.innerHTML = (s <= currentRating) ? '★' : '☆';
+    star.title = s + ' star' + (s>1?'s':'');
+    star.onclick = ()=>{ currentRating = s; ratingValue.textContent = currentRating; };
+    starsDiv.appendChild(star);
+  }
+}
+renderStars();
+
+/* ============================
+   Browse, display, paging
+   ============================ */
+browseBtn.addEventListener('click', ()=> {
+  displayComments(); // refresh and scroll to comments
+  commentContainer.scrollIntoView({behavior:'smooth'});
 });
 
-// Data storage
-let comments = [];
-let bannedEmails = [];
-let reacted = {}; // {email_commentIndex: true}
+// category enabling
+uniSel.addEventListener('change', ()=>{
+  catSel.disabled = !uniSel.value;
+  browseBtn.disabled = !(uniSel.value && catSel.value);
+  updateChart(); // clear or update chart
+});
+catSel.addEventListener('change', ()=> {
+  browseBtn.disabled = !(uniSel.value && catSel.value);
+});
 
-// Modal functions
-function openModal(){document.getElementById("termsModal").style.display="block";}
-function closeModal(){document.getElementById("termsModal").style.display="none";}
-
-// Enable category after university selected
-function enableCategory(){
-  const cat=document.getElementById("category");
-  if(uniSelect.value) cat.disabled=false;
-  else cat.disabled=true;
-  displayComments();
-}
-
-// Submit comment
-function submitComment(){
-  const uni=uniSelect.value;
-  const cat=document.getElementById("category").value;
-  const course=document.getElementById("course").value;
-  const lecturer=document.getElementById("lecturer").value;
-  const rating=document.getElementById("rating").value;
-  const comment=document.getElementById("comment").value;
-  const email=document.getElementById("email").value;
-  const anon=document.getElementById("anonymous").checked;
-  const errorDiv=document.getElementById("errorMsg");
-
-  if(!uni||!cat||!comment||!email){errorDiv.textContent="Please fill all required fields."; return;}
-  if(bannedEmails.includes(email)){errorDiv.textContent="This email is banned."; return;}
-  errorDiv.textContent="";
-
-  comments.push({uni,cat,course,lecturer,rating:Number(rating)||0,comment,email:anon?"Anonymous":email,likes:0,dislikes:0});
-  document.getElementById("course").value="";
-  document.getElementById("lecturer").value="";
-  document.getElementById("rating").value="";
-  document.getElementById("comment").value="";
-  document.getElementById("email").value="";
-  displayComments();
-}
-
-// Display comments for selected uni & category
 function displayComments(){
-  const uni=uniSelect.value;
-  const cat=document.getElementById("category").value;
-  const div=document.getElementById("comments"); div.innerHTML="";
-  if(!uni||!cat) return;
-  const filtered=comments.filter(c=>c.uni===uni && c.cat===cat);
-  filtered.forEach((c,i)=>{
-    const el=document.createElement("div"); el.className="comment";
-    el.innerHTML=`<div class="comment-header">${c.uni} | ${c.cat} | Rating: ${c.rating}</div>
-                  <div>${c.comment}</div>
-                  <div class="comment-email">${c.email}</div>
-                  <div class="reactions">
-                    <button onclick="react(${i},'like')">👍 ${c.likes}</button>
-                    <button onclick="react(${i},'dislike')">👎 ${c.dislikes}</button>
-                  </div>`;
-    div.appendChild(el);
-  });
-  updateChart(uni);
-}
+  commentContainer.innerHTML = '';
+  const u = uniSel.value;
+  const c = catSel.value;
+  if(!u || !c){
+    commentContainer.innerHTML = '<div class="muted">Choose a university and category, then click "Browse Comments".</div>';
+    updateChart();
+    return;
+  }
+  const filtered = COMMENTS.filter(x => x.uni === u && x.cat === c);
+  if(filtered.length === 0){
+    commentContainer.innerHTML = '<div class="muted">No comments yet for this selection.</div>';
+    updateChart();
+    return;
+  }
+  // show each comment (newest first)
+  filtered.slice().reverse().forEach(comm=>{
+    const d = document.createElement('div'); d.className='comment';
+    const meta = document.createElement('div'); meta.className='meta';
+    meta.innerHTML = `<div class="meta">${comm.date && comm.date.split('T')[0]} • ${comm.course?comm.course+' • ':''}${comm.lecturer?comm.lecturer+' • ':''}Rating: ${comm.rating || 'N/A'}</div>`;
+    const body = document.createElement('div'); body.className='body'; body.textContent = comm.text;
+    const author = document.createElement('div'); author.className='muted small'; author.textContent = comm.anon ? 'Anonymous' : comm.email;
+    const reactionsWrap = document.createElement('div'); reactionsWrap.className='reactions';
 
-// Reaction system (once per user)
-function react(i,type){
-  const email=document.getElementById("email").value||"anon_"+i;
-  const key=email+"_"+i;
-  if(reacted[key]){alert("You can react only once per comment."); return;}
-  reacted[key]=true;
-  if(type==="like") comments[i].likes++;
-  else comments[i].dislikes++;
-  displayComments();
-}
+    // helpful / notHelpful reactions (one-per-user-per-comment)
+    const btnHelpful = document.createElement('button'); btnHelpful.className='reactionBtn'; btnHelpful.innerText = `👍 ${comm.helpful || 0}`;
+    const btnNot = document.createElement('button'); btnNot.className='reactionBtn'; btnNot.innerText = `👎 ${comm.notHelpful || 0}`;
 
-// Chart.js analytics
-let chart;
-function updateChart(uni){
-  const ctx=document.getElementById("analyticsChart").getContext("2d");
-  const categories=["Academics","Courses","Professors","Sports","Environment","Security","Facilities","Administration","Support","Other"];
-  const dataCounts=categories.map(cat=>comments.filter(c=>c.uni===uni && c.cat===cat).length);
-  const avgRatings=categories.map(cat=>{
-    const c=comments.filter(c=>c.uni===uni && c.cat===cat && c.rating>0);
-    if(c.length===0) return 0;
-    return (c.reduce((sum,v)=>sum+v.rating,0)/c.length).toFixed(2);
-  });
-  if(chart) chart.destroy();
-  chart=new Chart(ctx,{
-    type:'bar',
-    data:{
-      labels:categories,
-      datasets:[
-        {label:'Comments Count', data:dataCounts, backgroundColor:'rgba(106,27,154,0.7)'},
-        {label:'Average Rating', data:avgRatings, backgroundColor:'rgba(109,213,250,0.7)'}
-      ]
-    },
-    options:{
-      responsive:true,
-      scales:{ y:{ beginAtZero:true } }
+    // set active if user already reacted for this comment
+    const userId = getUserId(); // email if provided otherwise visitorId
+    const keyHelpful = `${userId}_${comm.id}_helpful`;
+    const keyNot = `${userId}_${comm.id}_not`;
+    if(RATED[keyHelpful]) btnHelpful.classList.add('active');
+    if(RATED[keyNot]) btnNot.classList.add('active');
+
+    btnHelpful.onclick = ()=>{
+      if(RATED[keyHelpful] || RATED[`${userId}_${comm.id}_not`]) { alert('You can react only once per comment.'); return; }
+      comm.helpful = (comm.helpful||0) + 1;
+      RATED[keyHelpful] = true;
+      saveLocal(); displayComments(); updateChart();
+    };
+    btnNot.onclick = ()=>{
+      if(RATED[keyNot] || RATED[`${userId}_${comm.id}_helpful`]) { alert('You can react only once per comment.'); return; }
+      comm.notHelpful = (comm.notHelpful||0) + 1;
+      RATED[keyNot] = true;
+      saveLocal(); displayComments(); updateChart();
+    };
+
+    reactionsWrap.appendChild(btnHelpful);
+    reactionsWrap.appendChild(btnNot);
+
+    d.appendChild(meta);
+    d.appendChild(body);
+    d.appendChild(author);
+    d.appendChild(reactionsWrap);
+
+    // If admin is logged in, show ban button
+    if(adminArea.style.display === 'block'){
+      const banBtn = document.createElement('button');
+      banBtn.className = 'reactionBtn';
+      banBtn.innerText = 'Ban this email';
+      banBtn.onclick = ()=>{ banEmail(comm.email); displayComments(); };
+      d.appendChild(banBtn);
     }
+
+    commentContainer.appendChild(d);
   });
 }
+
+/* ============================
+   Submit comment flow
+   ============================ */
+submitBtn.addEventListener('click', ()=>{
+  const uni = uniSel.value;
+  const cat = catSel.value;
+  const text = document.getElementById('commentInput') ? document.getElementById('commentInput').value.trim() : document.getElementById('commentText').value.trim();
+  const course = document.getElementById('courseInput').value.trim();
+  const lecturer = document.getElementById('lecturerInput').value.trim();
+  const email = (document.getElementById('emailInput') ? document.getElementById('emailInput').value.trim() : (document.getElementById('email') ? document.getElementById('email').value.trim() : ''));
+  const anon = anonymousCheck.checked;
+  const rating = currentRating || 0;
+
+  // validate
+  if(!uni || !cat){ submitError.textContent = 'Select university and category first.'; return; }
+  if(!text){ submitError.textContent = 'Comment text is required.'; return; }
+  if(!anon && !email){ submitError.textContent = 'Provide email or check "Post anonymously".'; return; }
+  if(BANNED.includes(email) && !anon){ submitError.textContent = 'This email is banned.'; return; }
+  if(!acceptTerms.checked){ submitError.textContent = 'You must accept the Terms & Conditions.'; return; }
+
+  submitError.textContent = '';
+
+  const newC = {
+    id: genId(),
+    uni, cat, course, lecturer, rating, text,
+    email: anon ? 'Anonymous' : email.toLowerCase(),
+    anon, date: new Date().toISOString(),
+    helpful:0, notHelpful:0
+  };
+  COMMENTS.push(newC);
+  saveLocal();
+  // after posting, clear fields and show comment list
+  document.getElementById('commentInput') ? document.getElementById('commentInput').value = '' : document.getElementById('commentText').value = '';
+  document.getElementById('courseInput').value = '';
+  document.getElementById('lecturerInput').value = '';
+  if(document.getElementById('emailInput')) document.getElementById('emailInput').value = '';
+  currentRating = 0; ratingValue.textContent = '0'; renderStars();
+  displayComments();
+});
+
+/* ============================
+   Analytics (Chart.js)
+   ============================ */
+const ctx = document.getElementById('barChart').getContext('2d');
+let barChart = new Chart(ctx, {
+  type: 'bar',
+  data: { labels: [], datasets: [
+    { type:'bar', label: 'Comments', data: [], backgroundColor: 'rgba(106,27,154,0.85)', yAxisID:'y' },
+    { type:'line', label: 'Avg Rating', data: [], borderColor:'rgba(109,213,250,0.95)', backgroundColor:'rgba(109,213,250,0.3)', yAxisID:'y1', tension:0.35 }
+  ]},
+  options: {
+    responsive:true,
+    interaction: { mode:'index', intersect:false },
+    scales: {
+      y: { beginAtZero:true, position:'left', title:{display:true,text:'Comments'} },
+      y1: { beginAtZero:true, position:'right', suggestedMax:5, title:{display:true,text:'Avg Rating (0-5)'} }
+    }
+  }
+});
+
+function updateChart(){
+  const u = uniSel.value;
+  const categories = ["Academics","Courses","Professors","Sports","Environment","Security","Facilities","Administration","Support","Other"];
+  if(!u){ barChart.data.labels = categories; barChart.data.datasets[0].data = categories.map(()=>0); barChart.data.datasets[1].data = categories.map(()=>0); barChart.update(); return; }
+  const counts = categories.map(cat => COMMENTS.filter(c => c.uni===u && c.cat===cat).length);
+  const avgRatings = categories.map(cat=>{
+    const arr = COMMENTS.filter(c => c.uni===u && c.cat===cat && c.rating>0);
+    if(arr.length===0) return 0;
+    const avg = arr.reduce((s,x)=>s+x.rating,0)/arr.length;
+    return Number(avg.toFixed(2));
+  });
+  barChart.data.labels = categories;
+  barChart.data.datasets[0].data = counts;
+  barChart.data.datasets[1].data = avgRatings;
+  barChart.update();
+}
+
+/* ============================
+   Admin / ban functionality
+   ============================ */
+adminLoginBtn.addEventListener('click', ()=>{
+  const pass = prompt('Enter admin passphrase to access tools:');
+  if(pass === 'admin123'){ adminArea.style.display = 'block'; updateBannedList(); alert('Admin mode enabled'); }
+  else alert('Wrong passphrase.');
+});
+
+function banEmail(email){
+  if(!email) return alert('No email provided.');
+  if(!BANNED.includes(email.toLowerCase())){ BANNED.push(email.toLowerCase()); saveLocal(); updateBannedList(); alert('Banned ' + email); }
+  else alert('Email already banned.');
+}
+banBtn.addEventListener('click', ()=>{ banEmail(banEmailInput.value.trim()); banEmailInput.value = ''; displayComments(); });
+
+function updateBannedList(){
+  if(BANNED.length === 0) bannedListSpan.textContent = 'none';
+  else bannedListSpan.textContent = BANNED.join(', ');
+}
+
+/* export & clear */
+exportBtn && exportBtn.addEventListener('click', ()=>{
+  const dataStr = JSON.stringify(COMMENTS, null, 2);
+  const blob = new Blob([dataStr], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'campus_comments.json'; a.click(); URL.revokeObjectURL(url);
+});
+clearLocalBtn && clearLocalBtn.addEventListener('click', ()=>{
+  if(confirm('Clear all local comments, bans, and reactions? This is permanent in this browser.')) {
+    COMMENTS = []; BANNED = []; RATED = {}; saveLocal(); displayComments(); updateChart(); updateBannedList(); alert('Cleared.');
+  }
+});
+
+/* ============================
+   Terms modal handlers
+   ============================ */
+openTermsLink.addEventListener('click', (e)=>{ e.preventDefault(); termsModal.classList.add('open'); });
+closeTerms.addEventListener('click', ()=>{ termsModal.classList.remove('open'); });
+acceptTermsBtn.addEventListener('click', ()=>{ acceptTerms.checked = true; termsModal.classList.remove('open'); });
+
+/* ============================
+   Visitor ID for anonymous reactions
+   ============================ */
+function getUserId(){
+  // prefer current email input if filled & not anonymous
+  const emField = document.getElementById('emailInput') || document.getElementById('email');
+  if(emField && emField.value.trim()) return emField.value.trim().toLowerCase();
+  // otherwise fallback to persistent visitor id
+  let vid = localStorage.getItem('campus_visitor_id');
+  if(!vid){ vid = 'v_'+genId(); localStorage.setItem('campus_visitor_id', vid); }
+  return vid;
+}
+
+/* ============================
+   on-load: initial paint
+   ============================ */
+displayComments();
+updateChart();
+updateBannedList();
+
+/* keep UI star rendering updated after load */
+renderStars();
 </script>
 </body>
-</html>
+  </html>
