@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plant Matchmaker | Cultivate</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    * {box-sizing:border-box;}
+    body {
+      font-family: 'Poppins', sans-serif;
+      background:#f7f8f5;
+      margin:0;
+      padding:0;
+      color:#1a1a1a;
+    }
+    header {
+      background:#ffffff;
+      padding:1rem 2rem;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      box-shadow:0 2px 6px rgba(0,0,0,0.05);
+    }
+    .logo {font-weight:700; font-size:1.3rem; color:#2d6a4f;}
+    main {
+      max-width:700px;
+      margin:2rem auto;
+      background:#fff;
+      padding:2rem;
+      border-radius:20px;
+      box-shadow:0 4px 10px rgba(0,0,0,0.05);
+    }
+    h1 {text-align:center; color:#2d6a4f;}
+    .question {
+      margin-top:2rem;
+      display:none;
+    }
+    .question.active {display:block;}
+    .question h2 {font-size:1.1rem; margin-bottom:1rem;}
+    button.option {
+      display:block;
+      width:100%;
+      background:#e9f5ef;
+      border:2px solid transparent;
+      color:#1a1a1a;
+      padding:0.8rem;
+      margin:0.5rem 0;
+      border-radius:12px;
+      font-weight:500;
+      cursor:pointer;
+      transition:0.3s;
+    }
+    button.option:hover {border-color:#2d6a4f;}
+    .btn {
+      display:inline-block;
+      background:#2d6a4f;
+      color:#fff;
+      border:none;
+      padding:0.8rem 1.5rem;
+      border-radius:30px;
+      margin-top:1.5rem;
+      cursor:pointer;
+      font-weight:500;
+      transition:background 0.3s;
+    }
+    .btn:hover {background:#40916c;}
+    .result {
+      display:none;
+      text-align:center;
+    }
+    .result.active {display:block;}
+    img.plant {
+      width:200px; height:200px; object-fit:cover; border-radius:15px; margin:1rem auto;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">🌿 Cultivate</div>
+  <a href="index.html" style="text-decoration:none; color:#2d6a4f;">← Back Home</a>
+</header>
+
+<main>
+  <h1>🌱 Plant Matchmaker Quiz</h1>
+  <p style="text-align:center;">Answer a few quick questions to find your perfect plant match!</p>
+
+  <!-- Question 1 -->
+  <div class="question active" id="q1">
+    <h2>1️⃣ How much sunlight does your space get?</h2>
+    <button class="option" data-next="q2" data-value="low">Low light 🌑</button>
+    <button class="option" data-next="q2" data-value="medium">Moderate / Indirect ☁️</button>
+    <button class="option" data-next="q2" data-value="bright">Bright & Sunny ☀️</button>
+  </div>
+
+  <!-- Question 2 -->
+  <div class="question" id="q2">
+    <h2>2️⃣ Do you have pets that might chew your plants?</h2>
+    <button class="option" data-next="q3" data-value="yes">Yes 🐶🐱</button>
+    <button class="option" data-next="q3" data-value="no">No 🏡</button>
+  </div>
+
+  <!-- Question 3 -->
+  <div class="question" id="q3">
+    <h2>3️⃣ How often can you care for your plants?</h2>
+    <button class="option" data-next="q4" data-value="low">I forget sometimes 😅</button>
+    <button class="option" data-next="q4" data-value="medium">Every few days 💧</button>
+    <button class="option" data-next="q4" data-value="high">Daily – I love it ❤️</button>
+  </div>
+
+  <!-- Question 4 -->
+  <div class="question" id="q4">
+    <h2>4️⃣ What’s your interior style?</h2>
+    <button class="option" data-next="result" data-value="modern">Modern & Minimal</button>
+    <button class="option" data-next="result" data-value="boho">Boho & Relaxed</button>
+    <button class="option" data-next="result" data-value="tropical">Tropical & Vibrant</button>
+  </div>
+
+  <!-- Result -->
+  <div class="result" id="result">
+    <h2>Your Perfect Plant Match 🌿</h2>
+    <img id="plantImg" class="plant" src="" alt="Plant Image" />
+    <h3 id="plantName"></h3>
+    <p id="plantDesc"></p>
+    <a href="index.html#collections" class="btn">Shop the Collection</a>
+  </div>
+
+</main>
+
+<script>
+  const answers = {};
+  const options = document.querySelectorAll(".option");
+  const questions = document.querySelectorAll(".question");
+  const resultBox = document.getElementById("result");
+  const plantName = document.getElementById("plantName");
+  const plantDesc = document.getElementById("plantDesc");
+  const plantImg = document.getElementById("plantImg");
+
+  options.forEach(option => {
+    option.addEventListener("click", () => {
+      const value = option.getAttribute("data-value");
+      const next = option.getAttribute("data-next");
+      const currentQuestion = option.parentElement.id;
+      answers[currentQuestion] = value;
+
+      option.parentElement.classList.remove("active");
+      if (next === "result") {
+        showResult();
+      } else {
+        document.getElementById(next).classList.add("active");
+      }
+    });
+  });
+
+  function showResult() {
+    let plant = {
+      name: "Snake Plant",
+      desc: "Tough, elegant, and perfect for low-light homes. Thrives on neglect.",
+      img: "https://images.unsplash.com/photo-1585840339869-1efcbcf82b8c?auto=format&fit=crop&w=800&q=80",
+      collection: "Low-Light Legends"
+    };
+
+    // Pet-safe + bright combo
+    if (answers.q1 === "bright" && answers.q2 === "yes") {
+      plant = {
+        name: "Areca Palm",
+        desc: "Pet-safe and loves bright spaces. Adds tropical vibes effortlessly.",
+        img: "https://images.unsplash.com/photo-1581697969860-f10a5d6f8c1b?auto=format&fit=crop&w=800&q=80",
+        collection: "Tropical Bliss"
+      };
+    }
+    // Medium light, no pets, low care
+    else if (answers.q1 === "medium" && answers.q3 === "low") {
+      plant = {
+        name: "ZZ Plant",
+        desc: "Low-maintenance beauty that thrives on neglect. Great for beginners.",
+        img: "https://images.unsplash.com/photo-1629992802645-4cbf2fdbd8b3?auto=format&fit=crop&w=800&q=80",
+        collection: "Effortless Greens"
+      };
+    }
+    // High light, modern style
+    else if (answers.q1 === "bright" && answers.q4 === "modern") {
+      plant = {
+        name: "Fiddle Leaf Fig",
+        desc: "Bold and architectural, ideal for statement spaces with bright light.",
+        img: "https://images.unsplash.com/photo-1618220179428-22790b1a4e1b?auto=format&fit=crop&w=800&q=80",
+        collection: "Mid-Century Modern"
+      };
+    }
+
+    resultBox.classList.add("active");
+    plantName.textContent = `${plant.name} (${plant.collection})`;
+    plantDesc.textContent = plant.desc;
+    plantImg.src = plant.img;
+  }
+</script>
+
+</body>
+</html>
