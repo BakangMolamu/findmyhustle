@@ -13,16 +13,8 @@
     color: #03396c;
   }
 
-  h2 {
-    font-size: 2em;
-    margin-bottom: 10px;
-  }
-
-  p {
-    font-size: 1em;
-    margin-bottom: 20px;
-  }
-
+  h2 { font-size: 2em; margin-bottom: 10px; }
+  p { font-size: 1em; margin-bottom: 20px; }
   input, select, button {
     padding: 12px;
     border-radius: 10px;
@@ -32,7 +24,6 @@
     margin: 8px 0;
     font-size: 1em;
   }
-
   button {
     background: #0288d1;
     color: white;
@@ -40,37 +31,12 @@
     cursor: pointer;
     transition: background 0.3s ease;
   }
+  button:hover { background: #0277bd; }
 
-  button:hover {
-    background: #0277bd;
-  }
-
-  .poster-container {
-    margin-top: 30px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .poster-container img {
-    max-width: 90%;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    margin-top: 15px;
-  }
-
-  .loading {
-    margin-top: 20px;
-    font-size: 1.1em;
-    color: #0288d1;
-    font-weight: bold;
-  }
-
-  footer {
-    margin-top: 40px;
-    font-size: 0.9em;
-    color: #01579b;
-  }
+  .poster-container { margin-top: 30px; display: flex; flex-direction: column; align-items: center; }
+  .poster-container img { max-width: 90%; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-top: 15px; }
+  .loading { margin-top: 20px; font-size: 1.1em; color: #0288d1; font-weight: bold; }
+  footer { margin-top: 40px; font-size: 0.9em; color: #01579b; }
 </style>
 </head>
 <body>
@@ -78,7 +44,6 @@
 <h2>🎨 AI Poster Generator</h2>
 <p id="categoryDesc">Describe your event or theme, and AI will create a beautiful poster for you.</p>
 
-<!-- Category-specific fields -->
 <div id="formFields">
   <input type="text" id="title" placeholder="Title / Names / Business Name">
   <input type="text" id="details" placeholder="Additional details (Date, Venue, Menu Items, etc.)">
@@ -105,75 +70,75 @@
 <footer>Made with ❤️ by FindMyHustle AI Posters</footer>
 
 <script>
-  const webAppURL = "https://script.google.com/macros/s/AKfycbwaW1orvZyopEJ29UK_e5m3LziMyrTJTpbAqZehndbvvqszsDiKKCcJ6f6J2Oh5GVMe/exec";
+const webAppURL = "https://script.google.com/macros/s/AKfycbwaW1orvZyopEJ29UK_e5m3LziMyrTJTpbAqZehndbvvqszsDiKKCcJ6f6J2Oh5GVMe/exec";
 
-  // Read URL parameter "category"
-  const urlParams = new URLSearchParams(window.location.search);
-  const category = urlParams.get('category') || 'general';
-  const categoryDesc = document.getElementById("categoryDesc");
+// URL parameter
+const urlParams = new URLSearchParams(window.location.search);
+const category = urlParams.get('category') || 'general';
+const categoryDesc = document.getElementById("categoryDesc");
 
-  // Map default prompts per category
-  const categoryPrompts = {
-    wedding: "Create a beautiful wedding poster with the couple names {title}, date and venue {details}, elegant floral decorations, soft romantic colors, and {font} font style.",
-    business: "Create a modern business/menu poster for {title}, highlighting {details}, use {themeColor} theme color and {font} font style.",
-    event: "Create a vibrant event poster with title {title}, details {details}, bold colors {themeColor}, festive elements, and {font} font style.",
-    general: "Create a beautiful poster for any event with title {title}, details {details}, colors {themeColor}, and {font} font style."
-  };
+// Category-specific prompt templates including images/icons/backgrounds
+const categoryPrompts = {
+  wedding: "Create a stunning wedding poster for {title}, including {details}, with elegant floral decorations, soft romantic colors, rings and heart icons, soft bokeh background, in {font} font style.",
+  business: "Create a modern business/menu poster for {title}, highlighting {details}, include professional product images/icons, clear layout, {themeColor} theme color, minimalistic background, in {font} font style.",
+  event: "Create a vibrant event poster for {title}, including {details}, with balloons, confetti, festival icons, bold colors {themeColor}, lively background, in {font} font style.",
+  general: "Create a beautiful poster for {title}, including {details}, attractive design, colors {themeColor}, elegant layout, in {font} font style."
+};
 
-  // Set default prompt
-  const defaultPromptTemplate = categoryPrompts[category.toLowerCase()] || categoryPrompts['general'];
-  categoryDesc.innerText = `Generating a ${category} poster. You can customize the fields below.`;
+const defaultPromptTemplate = categoryPrompts[category.toLowerCase()] || categoryPrompts['general'];
+categoryDesc.innerText = `Generating a ${category} poster. Customize the fields below if you want.`;
 
-  async function generatePoster() {
-    const title = document.getElementById("title").value.trim() || "Your Event";
-    const details = document.getElementById("details").value.trim() || "";
-    const themeColor = document.getElementById("themeColor").value;
-    const font = document.getElementById("fontStyle").value;
+async function generatePoster() {
+  const title = document.getElementById("title").value.trim() || "Your Event";
+  const details = document.getElementById("details").value.trim() || "";
+  const themeColor = document.getElementById("themeColor").value;
+  const font = document.getElementById("fontStyle").value;
 
-    let prompt = defaultPromptTemplate
-      .replace("{title}", title)
-      .replace("{details}", details)
-      .replace("{themeColor}", themeColor)
-      .replace("{font}", font);
+  // Fill template
+  let prompt = defaultPromptTemplate
+    .replace("{title}", title)
+    .replace("{details}", details)
+    .replace("{themeColor}", themeColor)
+    .replace("{font}", font);
 
-    const container = document.getElementById("posterContainer");
-    const loading = document.getElementById("loading");
-    const posterImg = document.getElementById("posterImage");
-    const downloadBtn = document.getElementById("downloadBtn");
+  const container = document.getElementById("posterContainer");
+  const loading = document.getElementById("loading");
+  const posterImg = document.getElementById("posterImage");
+  const downloadBtn = document.getElementById("downloadBtn");
 
-    container.style.display = "flex";
-    loading.style.display = "block";
-    posterImg.style.display = "none";
-    downloadBtn.style.display = "none";
+  container.style.display = "flex";
+  loading.style.display = "block";
+  posterImg.style.display = "none";
+  downloadBtn.style.display = "none";
 
-    try {
-      const response = await fetch(webAppURL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: prompt })
-      });
+  try {
+    const response = await fetch(webAppURL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt: prompt })
+    });
 
-      const data = await response.json();
-      if (data.data && data.data[0] && data.data[0].url) {
-        posterImg.src = data.data[0].url;
-        posterImg.style.display = "block";
-        downloadBtn.style.display = "inline-block";
-        loading.style.display = "none";
-      } else {
-        loading.innerText = "❌ Failed to generate poster. Try again!";
-      }
-    } catch (error) {
-      loading.innerText = "❌ Error: " + error.message;
+    const data = await response.json();
+    if (data.data && data.data[0] && data.data[0].url) {
+      posterImg.src = data.data[0].url;
+      posterImg.style.display = "block";
+      downloadBtn.style.display = "inline-block";
+      loading.style.display = "none";
+    } else {
+      loading.innerText = "❌ Failed to generate poster. Try again!";
     }
+  } catch (error) {
+    loading.innerText = "❌ Error: " + error.message;
   }
+}
 
-  function downloadPoster() {
-    const posterImg = document.getElementById("posterImage");
-    const link = document.createElement('a');
-    link.href = posterImg.src;
-    link.download = `${category}_poster.png`;
-    link.click();
-  }
+function downloadPoster() {
+  const posterImg = document.getElementById("posterImage");
+  const link = document.createElement('a');
+  link.href = posterImg.src;
+  link.download = `${category}_poster.png`;
+  link.click();
+}
 </script>
 </body>
 </html>
