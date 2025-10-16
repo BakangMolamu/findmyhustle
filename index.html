@@ -3,179 +3,108 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cultivate | Curated Urban Plants Marketplace</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <title>PosterGen | AI Poster Creator</title>
   <style>
-    * {margin:0; padding:0; box-sizing:border-box;}
+    /* 🌈 Background and layout */
     body {
+      margin: 0;
       font-family: 'Poppins', sans-serif;
-      background-color: #f7f8f5;
-      color:#1a1a1a;
-      line-height:1.6;
+      background: linear-gradient(135deg, #b3e5fc, #e3f2fd);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      color: #03396c;
+      text-align: center;
+      overflow-x: hidden;
     }
-    header {
-      background:#ffffff;
-      padding:1rem 2rem;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      box-shadow:0 2px 6px rgba(0,0,0,0.05);
-      position:sticky; top:0; z-index:10;
+
+    h1 {
+      font-size: 2em;
+      margin-bottom: 10px;
+      animation: fadeIn 1s ease-in;
     }
-    .logo {font-weight:700; font-size:1.4rem; color:#2d6a4f;}
-    nav a {
-      margin-left:1.5rem;
-      text-decoration:none;
-      color:#1a1a1a;
-      font-weight:500;
+
+    p {
+      font-size: 1.1em;
+      margin-bottom: 30px;
+      animation: fadeIn 1.2s ease-in;
     }
-    nav a:hover {color:#2d6a4f;}
-    .hero {
-      background:url('https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
-      height:80vh;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      align-items:center;
-      text-align:center;
-      color:#fff;
-      padding:0 1rem;
+
+    /* 🧭 Category buttons */
+    .categories {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      width: 90%;
+      max-width: 400px;
     }
-    .hero h1 {
-      font-size:2.5rem;
-      background:rgba(0,0,0,0.5);
-      padding:1rem 2rem;
-      border-radius:12px;
+
+    .category {
+      background: white;
+      border-radius: 15px;
+      padding: 20px;
+      font-size: 1.2em;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease, background 0.3s ease;
     }
-    .hero p {
-      margin-top:1rem;
-      font-size:1.1rem;
-      background:rgba(0,0,0,0.4);
-      padding:0.5rem 1rem;
-      border-radius:8px;
+
+    .category:hover {
+      transform: scale(1.05);
+      background: #e1f5fe;
     }
-    .btn {
-      display:inline-block;
-      margin-top:1.5rem;
-      padding:0.8rem 1.5rem;
-      background:#2d6a4f;
-      color:#fff;
-      border:none;
-      border-radius:30px;
-      text-decoration:none;
-      font-weight:500;
-      transition:background 0.3s;
+
+    /* 💬 Floating Help Button */
+    .help-btn {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      background: #0288d1;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 15px 20px;
+      font-size: 1em;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: background 0.3s ease;
     }
-    .btn:hover {background:#40916c;}
-    section {padding:4rem 1.5rem; max-width:1100px; margin:auto;}
-    .how-it-works {
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-      gap:2rem;
-      text-align:center;
+
+    .help-btn:hover {
+      background: #0277bd;
     }
-    .how-it-works div {
-      background:#fff;
-      border-radius:20px;
-      padding:2rem 1rem;
-      box-shadow:0 4px 10px rgba(0,0,0,0.05);
+
+    /* ✨ Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-    .collections {
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-      gap:2rem;
-    }
-    .collection-card {
-      background:#fff;
-      border-radius:20px;
-      overflow:hidden;
-      box-shadow:0 4px 10px rgba(0,0,0,0.05);
-      transition:transform 0.3s;
-    }
-    .collection-card:hover {transform:translateY(-5px);}
-    .collection-card img {width:100%; height:220px; object-fit:cover;}
-    .collection-card h3 {padding:1rem;}
+
     footer {
-      background:#1a1a1a;
-      color:#fff;
-      text-align:center;
-      padding:2rem 1rem;
+      position: absolute;
+      bottom: 10px;
+      font-size: 0.9em;
+      color: #01579b;
     }
-    footer a {color:#74c69d; text-decoration:none;}
   </style>
 </head>
 <body>
 
-<header>
-  <div class="logo">🌿 Cultivate</div>
-  <nav>
-    <a href="#how">How It Works</a>
-    <a href="#collections">Collections</a>
-    <a href="#quiz">Matchmaker</a>
-    <a href="#about">About</a>
-  </nav>
-</header>
+  <h1>🎨 Welcome to PosterGen</h1>
+  <p>Choose your poster type and let AI design it for you!</p>
 
-<section class="hero">
-  <h1>Bring Nature Home, Effortlessly</h1>
-  <p>Discover rare, low-maintenance plants from trusted local growers.</p>
-  <a href="#quiz" class="btn">Find My Perfect Plant</a>
-</section>
-
-<section id="how">
-  <h2 style="text-align:center; margin-bottom:2rem;">How Cultivate Works</h2>
-  <div class="how-it-works">
-    <div>
-      <h3>1️⃣ Browse Curated Plants</h3>
-      <p>Explore hand-selected collections tailored for city living and modern spaces.</p>
-    </div>
-    <div>
-      <h3>2️⃣ Order Seamlessly</h3>
-      <p>Place your order directly through Cultivate — we forward it to our partner grower.</p>
-    </div>
-    <div>
-      <h3>3️⃣ Delivered from the Source</h3>
-      <p>Your plant ships directly from a verified grower using eco-friendly packaging.</p>
-    </div>
+  <div class="categories">
+    <div class="category" onclick="location.href='wedding.html'">💍 Wedding Poster</div>
+    <div class="category" onclick="location.href='business.html'">🍔 Business / Menu Poster</div>
+    <div class="category" onclick="location.href='event.html'">🎉 Event Poster</div>
   </div>
-</section>
 
-<section id="collections">
-  <h2 style="text-align:center; margin-bottom:2rem;">Shop Curated Collections</h2>
-  <div class="collections">
-    <div class="collection-card">
-      <img src="https://images.unsplash.com/photo-1592595896551-12b84a1786b7?auto=format&fit=crop&w=800&q=80" alt="Low-Light Legends">
-      <h3>Low-Light Legends</h3>
-    </div>
-    <div class="collection-card">
-      <img src="https://images.unsplash.com/photo-1560184897-d4d8e547b7c6?auto=format&fit=crop&w=800&q=80" alt="Pet-Safe Picks">
-      <h3>Pet-Safe Picks</h3>
-    </div>
-    <div class="collection-card">
-      <img src="https://images.unsplash.com/photo-1516594798947-e65505dbb29d?auto=format&fit=crop&w=800&q=80" alt="Mid-Century Modern">
-      <h3>Mid-Century Modern</h3>
-    </div>
-  </div>
-</section>
+  <button class="help-btn">💬 Need Help?</button>
 
-<section id="quiz" style="text-align:center;">
-  <h2>Not Sure Which Plant Fits You?</h2>
-  <p>Take our quick <strong>Plant Matchmaker Quiz</strong> to find the ideal plant for your light, style, and lifestyle.</p>
-  <a href="quiz.html" class="btn">Start the Quiz</a>
-</section>
-
-<section id="about" style="text-align:center;">
-  <h2>Our Sustainability Promise</h2>
-  <p style="max-width:700px; margin:1rem auto;">
-    Cultivate partners only with small, ethical growers who care for their plants and our planet. 
-    Every delivery uses recycled packaging and carbon-neutral shipping options.
-  </p>
-</section>
-
-<footer>
-  <p>&copy; 2025 Cultivate. All rights reserved.</p>
-  <p><a href="#">Partner With Us</a> | <a href="#">Privacy Policy</a></p>
-</footer>
+  <footer>Made with ❤️ by FindMyHustle AI Posters</footer>
 
 </body>
 </html>
