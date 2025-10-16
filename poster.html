@@ -3,40 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Poster Generator | PosterGen</title>
+<title>AI Poster Generator</title>
 <style>
-  body {
-    font-family: 'Poppins', sans-serif;
-    background: #f3f7ff;
-    text-align: center;
-    padding: 30px;
-    color: #03396c;
-  }
-
-  h2 { font-size: 2em; margin-bottom: 10px; }
-  p { font-size: 1em; margin-bottom: 20px; }
-  input, select, button {
-    padding: 12px;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-    width: 80%;
-    max-width: 400px;
-    margin: 8px 0;
-    font-size: 1em;
-  }
-  button {
-    background: #0288d1;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.3s ease;
-  }
-  button:hover { background: #0277bd; }
-
-  .poster-container { margin-top: 30px; display: flex; flex-direction: column; align-items: center; }
-  .poster-container img { max-width: 90%; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-top: 15px; }
-  .loading { margin-top: 20px; font-size: 1.1em; color: #0288d1; font-weight: bold; }
-  footer { margin-top: 40px; font-size: 0.9em; color: #01579b; }
+body { font-family: 'Poppins', sans-serif; background: #f3f7ff; text-align: center; padding: 30px; color: #03396c; }
+h2 { font-size: 2em; margin-bottom: 10px; }
+p { font-size: 1em; margin-bottom: 20px; }
+input, select, button { padding: 12px; border-radius: 10px; border: 1px solid #ccc; width: 80%; max-width: 400px; margin: 8px 0; font-size: 1em; }
+button { background: #0288d1; color: white; font-weight: bold; cursor: pointer; transition: background 0.3s ease; }
+button:hover { background: #0277bd; }
+.poster-container { margin-top: 30px; display: flex; flex-direction: column; align-items: center; }
+.poster-container img { max-width: 90%; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-top: 15px; }
+.loading { margin-top: 20px; font-size: 1.1em; color: #0288d1; font-weight: bold; }
+footer { margin-top: 40px; font-size: 0.9em; color: #01579b; }
 </style>
 </head>
 <body>
@@ -70,14 +48,12 @@
 <footer>Made with ❤️ by FindMyHustle AI Posters</footer>
 
 <script>
-const webAppURL = "https://script.google.com/macros/s/AKfycbwaW1orvZyopEJ29UK_e5m3LziMyrTJTpbAqZehndbvvqszsDiKKCcJ6f6J2Oh5GVMe/exec";
+const webAppURL = "https://script.google.com/macros/s/AKfycbyvfypoOl3QKq7UK_slRijgbAuX-JhNvAQO6-j11QyUNCTXgMBC8Gcp-Tr_4bTbHwQgug/exec";
 
-// URL parameter
 const urlParams = new URLSearchParams(window.location.search);
 const category = urlParams.get('category') || 'general';
 const categoryDesc = document.getElementById("categoryDesc");
 
-// Category-specific prompt templates including images/icons/backgrounds
 const categoryPrompts = {
   wedding: "Create a stunning wedding poster for {title}, including {details}, with elegant floral decorations, soft romantic colors, rings and heart icons, soft bokeh background, in {font} font style.",
   business: "Create a modern business/menu poster for {title}, highlighting {details}, include professional product images/icons, clear layout, {themeColor} theme color, minimalistic background, in {font} font style.",
@@ -94,7 +70,6 @@ async function generatePoster() {
   const themeColor = document.getElementById("themeColor").value;
   const font = document.getElementById("fontStyle").value;
 
-  // Fill template
   let prompt = defaultPromptTemplate
     .replace("{title}", title)
     .replace("{details}", details)
@@ -112,7 +87,7 @@ async function generatePoster() {
   downloadBtn.style.display = "none";
 
   try {
-    const response = await fetch(webAppURL, {
+    const response = await fetch(webAppURL + "?userId=" + Date.now(), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ prompt: prompt })
@@ -125,7 +100,7 @@ async function generatePoster() {
       downloadBtn.style.display = "inline-block";
       loading.style.display = "none";
     } else {
-      loading.innerText = "❌ Failed to generate poster. Try again!";
+      loading.innerText = data.error || "❌ Failed to generate poster. Try again!";
     }
   } catch (error) {
     loading.innerText = "❌ Error: " + error.message;
