@@ -1,143 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Poster Generator | PosterGen</title>
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: #f3f7ff;
-      text-align: center;
-      padding: 30px;
-      color: #03396c;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Poster Generator | PosterGen</title>
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #f3f7ff;
+    text-align: center;
+    padding: 30px;
+    color: #03396c;
+  }
 
-    h2 {
-      font-size: 2em;
-      margin-bottom: 10px;
-    }
+  h2 {
+    font-size: 2em;
+    margin-bottom: 10px;
+  }
 
-    p {
-      font-size: 1em;
-      margin-bottom: 20px;
-    }
+  p {
+    font-size: 1em;
+    margin-bottom: 20px;
+  }
 
-    input, button {
-      padding: 12px;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-      width: 80%;
-      max-width: 400px;
-      margin: 10px 0;
-      font-size: 1em;
-    }
+  input, select, button {
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    width: 80%;
+    max-width: 400px;
+    margin: 8px 0;
+    font-size: 1em;
+  }
 
-    button {
-      background: #0288d1;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
+  button {
+    background: #0288d1;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
 
-    button:hover {
-      background: #0277bd;
-    }
+  button:hover {
+    background: #0277bd;
+  }
 
-    .poster-container {
-      margin-top: 30px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+  .poster-container {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
-    .poster-container img {
-      max-width: 90%;
-      border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      margin-top: 15px;
-    }
+  .poster-container img {
+    max-width: 90%;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    margin-top: 15px;
+  }
 
-    .loading {
-      margin-top: 20px;
-      font-size: 1.1em;
-      color: #0288d1;
-      font-weight: bold;
-    }
+  .loading {
+    margin-top: 20px;
+    font-size: 1.1em;
+    color: #0288d1;
+    font-weight: bold;
+  }
 
-    footer {
-      margin-top: 40px;
-      font-size: 0.9em;
-      color: #01579b;
-    }
-  </style>
+  footer {
+    margin-top: 40px;
+    font-size: 0.9em;
+    color: #01579b;
+  }
+</style>
 </head>
 <body>
 
-  <h2>🎨 AI Poster Generator</h2>
-  <p>Describe your event or theme, and AI will create a beautiful poster for you.</p>
+<h2>🎨 AI Poster Generator</h2>
+<p id="categoryDesc">Describe your event or theme, and AI will create a beautiful poster for you.</p>
 
-  <input id="prompt" type="text" placeholder="e.g. Wedding poster with gold and white theme" />
-  <button onclick="generatePoster()">Generate Poster</button>
+<!-- Category-specific fields -->
+<div id="formFields">
+  <input type="text" id="title" placeholder="Title / Names / Business Name">
+  <input type="text" id="details" placeholder="Additional details (Date, Venue, Menu Items, etc.)">
+  <label>Theme Color:</label>
+  <input type="color" id="themeColor" value="#ffb6c1">
+  <label>Font Style:</label>
+  <select id="fontStyle">
+    <option value="serif">Elegant (Serif)</option>
+    <option value="cursive">Romantic (Cursive)</option>
+    <option value="sans-serif">Modern (Sans)</option>
+    <option value="bold">Bold</option>
+    <option value="handwriting">Handwriting</option>
+  </select>
+</div>
 
-  <div class="poster-container" id="posterContainer" style="display:none;">
-    <div class="loading" id="loading">🎨 Creating your poster... Please wait.</div>
-    <img id="posterImage" src="" alt="AI Poster" style="display:none;">
-    <button id="downloadBtn" style="display:none;" onclick="downloadPoster()">⬇️ Download Poster</button>
-  </div>
+<button onclick="generatePoster()">🎨 Generate Poster</button>
 
-  <footer>Made with ❤️ by FindMyHustle AI Posters</footer>
+<div class="poster-container" id="posterContainer" style="display:none;">
+  <div class="loading" id="loading">🎨 Creating your poster... Please wait.</div>
+  <img id="posterImage" src="" alt="AI Poster" style="display:none;">
+  <button id="downloadBtn" style="display:none;" onclick="downloadPoster()">⬇️ Download Poster</button>
+</div>
 
-  <script>
-    const webAppURL = "https://script.google.com/macros/s/AKfycbwaW1orvZyopEJ29UK_e5m3LziMyrTJTpbAqZehndbvvqszsDiKKCcJ6f6J2Oh5GVMe/exec";
+<footer>Made with ❤️ by FindMyHustle AI Posters</footer>
 
-    async function generatePoster() {
-      const prompt = document.getElementById("prompt").value.trim();
-      if (!prompt) {
-        alert("Please enter a description for your poster!");
-        return;
+<script>
+  const webAppURL = "https://script.google.com/macros/s/AKfycbwaW1orvZyopEJ29UK_e5m3LziMyrTJTpbAqZehndbvvqszsDiKKCcJ6f6J2Oh5GVMe/exec";
+
+  // Read URL parameter "category"
+  const urlParams = new URLSearchParams(window.location.search);
+  const category = urlParams.get('category') || 'general';
+  const categoryDesc = document.getElementById("categoryDesc");
+
+  // Map default prompts per category
+  const categoryPrompts = {
+    wedding: "Create a beautiful wedding poster with the couple names {title}, date and venue {details}, elegant floral decorations, soft romantic colors, and {font} font style.",
+    business: "Create a modern business/menu poster for {title}, highlighting {details}, use {themeColor} theme color and {font} font style.",
+    event: "Create a vibrant event poster with title {title}, details {details}, bold colors {themeColor}, festive elements, and {font} font style.",
+    general: "Create a beautiful poster for any event with title {title}, details {details}, colors {themeColor}, and {font} font style."
+  };
+
+  // Set default prompt
+  const defaultPromptTemplate = categoryPrompts[category.toLowerCase()] || categoryPrompts['general'];
+  categoryDesc.innerText = `Generating a ${category} poster. You can customize the fields below.`;
+
+  async function generatePoster() {
+    const title = document.getElementById("title").value.trim() || "Your Event";
+    const details = document.getElementById("details").value.trim() || "";
+    const themeColor = document.getElementById("themeColor").value;
+    const font = document.getElementById("fontStyle").value;
+
+    let prompt = defaultPromptTemplate
+      .replace("{title}", title)
+      .replace("{details}", details)
+      .replace("{themeColor}", themeColor)
+      .replace("{font}", font);
+
+    const container = document.getElementById("posterContainer");
+    const loading = document.getElementById("loading");
+    const posterImg = document.getElementById("posterImage");
+    const downloadBtn = document.getElementById("downloadBtn");
+
+    container.style.display = "flex";
+    loading.style.display = "block";
+    posterImg.style.display = "none";
+    downloadBtn.style.display = "none";
+
+    try {
+      const response = await fetch(webAppURL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: prompt })
+      });
+
+      const data = await response.json();
+      if (data.data && data.data[0] && data.data[0].url) {
+        posterImg.src = data.data[0].url;
+        posterImg.style.display = "block";
+        downloadBtn.style.display = "inline-block";
+        loading.style.display = "none";
+      } else {
+        loading.innerText = "❌ Failed to generate poster. Try again!";
       }
-
-      const container = document.getElementById("posterContainer");
-      const loading = document.getElementById("loading");
-      const posterImg = document.getElementById("posterImage");
-      const downloadBtn = document.getElementById("downloadBtn");
-
-      container.style.display = "flex";
-      loading.style.display = "block";
-      posterImg.style.display = "none";
-      downloadBtn.style.display = "none";
-
-      try {
-        const response = await fetch(webAppURL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ prompt: prompt })
-        });
-
-        const data = await response.json();
-        if (data.data && data.data[0] && data.data[0].url) {
-          posterImg.src = data.data[0].url;
-          posterImg.style.display = "block";
-          downloadBtn.style.display = "inline-block";
-          loading.style.display = "none";
-        } else {
-          loading.innerText = "❌ Failed to generate poster. Try again!";
-        }
-      } catch (error) {
-        loading.innerText = "❌ Error: " + error.message;
-      }
+    } catch (error) {
+      loading.innerText = "❌ Error: " + error.message;
     }
+  }
 
-    function downloadPoster() {
-      const posterImg = document.getElementById("posterImage");
-      const link = document.createElement('a');
-      link.href = posterImg.src;
-      link.download = "ai_poster.png";
-      link.click();
-    }
-  </script>
-
+  function downloadPoster() {
+    const posterImg = document.getElementById("posterImage");
+    const link = document.createElement('a');
+    link.href = posterImg.src;
+    link.download = `${category}_poster.png`;
+    link.click();
+  }
+</script>
 </body>
 </html>
