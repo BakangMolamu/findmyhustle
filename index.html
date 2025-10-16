@@ -5,23 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PosterGen | AI Poster Creator</title>
   <style>
-    /* 🌈 Background and layout */
+    /* 🌈 Background gradient */
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #b3e5fc, #e3f2fd);
+      background: linear-gradient(135deg, #9c27b0, #03a9f4); /* Purple → Light Blue */
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      color: #03396c;
+      color: #fff;
       text-align: center;
       overflow-x: hidden;
+      padding: 20px;
     }
 
     h1 {
-      font-size: 2em;
+      font-size: 2.2em;
       margin-bottom: 10px;
       animation: fadeIn 1s ease-in;
     }
@@ -42,19 +43,20 @@
     }
 
     .category {
-      background: white;
+      background: rgba(255,255,255,0.2);
       border-radius: 15px;
       padding: 20px;
       font-size: 1.2em;
       font-weight: bold;
       cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
       transition: transform 0.2s ease, background 0.3s ease;
+      color: #fff;
     }
 
     .category:hover {
       transform: scale(1.05);
-      background: #e1f5fe;
+      background: rgba(255,255,255,0.4);
     }
 
     /* 💬 Floating Help Button */
@@ -69,7 +71,7 @@
       padding: 15px 20px;
       font-size: 1em;
       cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
       transition: background 0.3s ease;
     }
 
@@ -87,7 +89,7 @@
       position: absolute;
       bottom: 10px;
       font-size: 0.9em;
-      color: #01579b;
+      color: #e0e0e0;
     }
   </style>
 </head>
@@ -97,14 +99,18 @@
   <p>Choose your poster type and let AI design it for you!</p>
 
   <div class="categories">
-    <div class="category" onclick="location.href='wedding.html'">💍 Wedding Poster</div>
-    <div class="category" onclick="location.href='business.html'">🍔 Business / Menu Poster</div>
-    <div class="category" onclick="location.href='event.html'">🎉 Event Poster</div>
+    <div class="category" onclick="location.href='poster.html?category=wedding'">💍 Wedding Poster</div>
+    <div class="category" onclick="location.href='poster.html?category=business'">🍔 Business / Menu Poster</div>
+    <div class="category" onclick="location.href='poster.html?category=event'">🎉 Event Poster</div>
   </div>
 
   <button class="help-btn">💬 Need Help?</button>
 
   <footer>Made with ❤️ by FindMyHustle AI Posters</footer>
+
+  <script>
+    // Optional: You can read URL parameter "category" on poster.html and customize prompts accordingly
+  </script>
 
 </body>
 </html>
