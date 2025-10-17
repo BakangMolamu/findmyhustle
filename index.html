@@ -1,98 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PosterGen | AI Poster Creator</title>
-<style>
-  body {
-    margin: 0;
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #9c27b0, #03a9f4);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    color: #fff;
-    text-align: center;
-    padding: 20px;
-  }
-  h1 { font-size: 2.5em; margin-bottom: 10px; }
-  p { font-size: 1.2em; margin-bottom: 30px; }
-  .categories {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    width: 90%;
-    max-width: 450px;
-  }
-  .category {
-    background: rgba(255,255,255,0.2);
-    border-radius: 20px;
-    padding: 25px;
-    font-size: 1.2em;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    justify-content: center;
-    color: #fff;
-    transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
-  }
-  .category:hover {
-    transform: scale(1.05);
-    background: rgba(255,255,255,0.4);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-  }
-  .category img { width: 40px; height: 40px; }
-  .help-btn {
-    position: fixed;
-    bottom: 25px;
-    right: 25px;
-    background: #0288d1;
-    color: white;
-    border: none;
-    border-radius: 50px;
-    padding: 15px 20px;
-    font-size: 1em;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    transition: background 0.3s ease;
-  }
-  .help-btn:hover { background: #0277bd; }
-  footer {
-    position: absolute;
-    bottom: 10px;
-    font-size: 0.9em;
-    color: #e0e0e0;
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎨 AI Poster Generator</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #b993d6, #8ca6db);
+      color: #222;
+      text-align: center;
+      padding: 30px;
+      margin: 0;
+    }
+
+    h1 {
+      font-size: 30px;
+      color: #1a237e;
+      font-weight: 700;
+    }
+
+    select, input, textarea, button {
+      width: 90%;
+      max-width: 420px;
+      padding: 12px;
+      margin: 10px auto;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      display: block;
+    }
+
+    button {
+      background: #4a90e2;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #357abd;
+    }
+
+    #status {
+      margin-top: 15px;
+      font-weight: 500;
+      color: #1a237e;
+    }
+
+    #result img {
+      width: 90%;
+      max-width: 450px;
+      margin-top: 25px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    footer {
+      margin-top: 40px;
+      font-size: 14px;
+      color: #444;
+    }
+
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      max-width: 500px;
+      margin: 20px auto;
+    }
+  </style>
 </head>
 <body>
 
-<h1>🎨 Welcome to PosterGen</h1>
-<p>Create stunning AI-powered posters instantly! Choose a category to start.</p>
+  <h1>🎨 AI Poster Generator</h1>
+  <p>Create stunning posters for any event or business using AI!</p>
 
-<div class="categories">
-  <div class="category" onclick="location.href='poster.html?category=wedding'">
-    <img src="https://img.icons8.com/emoji/48/ffffff/wedding-emoji.png" alt="Wedding Icon"/>
-    Wedding Poster
-  </div>
-  <div class="category" onclick="location.href='poster.html?category=business'">
-    <img src="https://img.icons8.com/emoji/48/ffffff/fork-and-knife-emoji.png" alt="Business Icon"/>
-    Business/Menu Poster
-  </div>
-  <div class="category" onclick="location.href='poster.html?category=event'">
-    <img src="https://img.icons8.com/emoji/48/ffffff/party-popper-emoji.png" alt="Event Icon"/>
-    Event Poster
-  </div>
-</div>
+  <div class="container">
+    <select id="category">
+      <option value="wedding">💍 Wedding Poster</option>
+      <option value="event">🎉 Event Poster</option>
+      <option value="business">💼 Business/Menu Poster</option>
+      <option value="restaurant">🍔 Restaurant Poster</option>
+      <option value="family">👨‍👩‍👧 Family Gathering Poster</option>
+    </select>
 
-<button class="help-btn">💬 Need Help?</button>
-<footer>Made with ❤️ by FindMyHustle AI Posters</footer>
+    <input id="title" type="text" placeholder="Enter title (e.g. Bakang’s Birthday Bash)">
+    <textarea id="details" placeholder="Enter details (Date, Venue, Message, etc.)"></textarea>
 
+    <label>🎨 Theme Color:</label>
+    <input id="color" type="color" value="#3f51b5">
+
+    <label>🖋 Font Style:</label>
+    <select id="style">
+      <option value="Elegant Serif">Elegant (Serif)</option>
+      <option value="Modern Sans">Modern (Sans)</option>
+      <option value="Bold Display">Bold Display</option>
+      <option value="Handwritten">Handwritten</option>
+    </select>
+
+    <button id="generateBtn">🎨 Generate Poster</button>
+
+    <div id="status"></div>
+    <div id="result"></div>
+  </div>
+
+  <footer>
+    Made with ❤️ by FindMyHustle AI Posters
+  </footer>
+
+  <script>
+    // 🔗 Your Apps Script Web App URL
+    const webAppURL = "https://script.google.com/macros/s/AKfycbyvJoUvjx3GE4FK2zix2NaqLyFlPlsDYXGtIDPnSc70tfAngl58VAQov7v2CmgLC9sZ9A/exec";
+
+    document.getElementById("generateBtn").addEventListener("click", async () => {
+      const category = document.getElementById("category").value;
+      const title = document.getElementById("title").value.trim();
+      const details = document.getElementById("details").value.trim();
+      const color = document.getElementById("color").value;
+      const style = document.getElementById("style").value;
+      const status = document.getElementById("status");
+      const result = document.getElementById("result");
+
+      if (!title) {
+        alert("Please enter a title for your poster.");
+        return;
+      }
+
+      status.textContent = "⏳ Generating your poster... please wait.";
+      result.innerHTML = "";
+
+      // 🧠 Create AI prompt
+      const prompt = `Design a beautiful ${category} poster titled "${title}" with details: "${details}". 
+      Use the main color ${color} and ${style} font style. 
+      The design should look professional, eye-catching, and printable.`;
+
+      try {
+        const response = await fetch(webAppURL, {
+          method: "POST",
+          mode: "cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt })
+        });
+
+        if (!response.ok) throw new Error("Network response was not ok.");
+
+        const data = await response.json();
+        if (data.data && data.data[0].url) {
+          const imageUrl = data.data[0].url;
+          result.innerHTML = `<img src="${imageUrl}" alt="Generated Poster">`;
+          status.textContent = "✅ Poster generated successfully!";
+        } else {
+          throw new Error("No image URL found in the server response.");
+        }
+      } catch (err) {
+        status.textContent = "❌ Error: " + err.message;
+      }
+    });
+  </script>
 </body>
 </html>
