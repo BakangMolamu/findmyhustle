@@ -1,138 +1,196 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FindMyHustle | Home</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>FindMyHustle — Home</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
-    /* ---------- GLOBAL STYLES ---------- */
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #3a0ca3, #4361ee, #7209b7);
+    :root{
+      --dark-purple: #2b0b5a;
+      --light-blue: #6dd5fa;
+      --white: #ffffff;
+      --glass: rgba(255,255,255,0.10);
+      --accent: #6a4de0;
+      --btn-bg: linear-gradient(90deg,#6a4de0,#3b82f6);
+    }
+    html,body{height:100%;margin:0;font-family:'Poppins',sans-serif;}
+    body{
+      background: linear-gradient(135deg,var(--dark-purple),var(--light-blue));
       background-size: 400% 400%;
-      animation: gradientMove 12s ease infinite;
-      color: #fff;
-      text-align: center;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+      color: var(--white);
+      display:flex;
+      flex-direction:column;
+      min-height:100vh;
+      align-items:center;
+      justify-content:flex-start;
+    }
+    /* subtle movement */
+    @keyframes bgmove {
+      0%{background-position:0% 50%}
+      50%{background-position:100% 50%}
+      100%{background-position:0% 50%}
+    }
+    body{ animation: bgmove 14s ease infinite; }
+
+    .container{
+      width:100%;
+      max-width:1100px;
+      padding:28px 20px;
+      box-sizing:border-box;
     }
 
-    @keyframes gradientMove {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .logo-circle{
+      width:56px;height:56px;border-radius:12px;
+      background:rgba(255,255,255,0.12); display:grid;place-items:center;
+      font-weight:800;font-size:20px;color:var(--white);
+      box-shadow: 0 6px 18px rgba(10,10,10,0.2);
+    }
+    h1{margin:0;font-size:1.5rem;letter-spacing:0.6px}
+    nav a{color:rgba(255,255,255,0.95);text-decoration:none;margin-left:18px;font-weight:600}
+
+    main{
+      margin-top:36px;
+      text-align:center;
+      padding:30px 20px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03));
+      border-radius:18px;
+      box-shadow: 0 12px 40px rgba(8,8,20,0.35);
+    }
+    .hero-title{font-size:28px;margin:6px 0 8px;font-weight:700}
+    .hero-sub{max-width:820px;margin:0 auto;color:rgba(255,255,255,0.92);line-height:1.45}
+
+    .actions{margin-top:22px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+    .btn{
+      padding:12px 22px;border-radius:10px;border:0;cursor:pointer;font-weight:700;
+      box-shadow: 0 6px 20px rgba(10,10,20,0.25);text-decoration:none;color:var(--white);
+      transition:transform .14s ease, box-shadow .14s ease;
+      background: var(--btn-bg);
+    }
+    .btn.secondary{ background: rgba(255,255,255,0.14); color:var(--white); font-weight:600; }
+    .btn:hover{ transform:translateY(-4px); }
+
+    /* info card */
+    .info{
+      margin-top:20px;
+      padding:14px;
+      background: var(--glass);
+      border-radius:12px;
+      color: #f8f9fb;
+      max-width:820px;
+      text-align:left;
+      line-height:1.5;
+      font-size:0.96rem;
+    }
+    .info strong{color:#fff}
+
+    /* floating help button */
+    .help-fab{
+      position:fixed; right:18px; bottom:18px; z-index:1200;
+      width:64px;height:64px;border-radius:50%;
+      background:linear-gradient(180deg,#ffd166,#fb5607);
+      display:grid;place-items:center;font-size:26px;cursor:pointer;
+      box-shadow:0 12px 30px rgba(0,0,0,0.35);
+      border:4px solid rgba(255,255,255,0.12);
     }
 
-    header {
-      padding: 20px;
-      font-size: 1.8em;
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-shadow: 0 3px 10px rgba(0,0,0,0.3);
+    /* modal */
+    .modal-backdrop{
+      position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:1300;
     }
-
-    .welcome-section {
-      margin-top: 40px;
-      padding: 20px;
+    .modal{
+      width:100%;max-width:560px;background:var(--white);color:#111;border-radius:12px;padding:18px;box-shadow:0 20px 50px rgba(0,0,0,0.45);
     }
+    .modal h3{margin:0 0 8px}
+    .modal p{margin:8px 0;color:#333;line-height:1.45}
+    .modal .close{display:inline-block;margin-top:12px;padding:8px 12px;border-radius:8px;background:#e5e7eb;border:0;cursor:pointer}
 
-    .welcome-section h2 {
-      font-size: 1.6em;
-      margin-bottom: 10px;
+    footer{
+      margin-top:30px;width:100%;display:flex;justify-content:center;gap:18px;padding:16px 6px;color:rgba(255,255,255,0.9);
+      font-size:0.92rem;
     }
-
-    .bubble-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 15px;
-      margin: 25px 0;
-    }
-
-    .bubble {
-      background: rgba(255,255,255,0.15);
-      padding: 10px 20px;
-      border-radius: 25px;
-      backdrop-filter: blur(6px);
-      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-      font-size: 0.9em;
-      transition: transform 0.2s ease;
-    }
-
-    .bubble:hover {
-      transform: scale(1.1);
-    }
-
-    .buttons {
-      margin: 30px 0;
-    }
-
-    .buttons a {
-      display: inline-block;
-      text-decoration: none;
-      background: #fff;
-      color: #3a0ca3;
-      font-weight: 600;
-      padding: 12px 25px;
-      border-radius: 30px;
-      margin: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      transition: all 0.3s ease;
-    }
-
-    .buttons a:hover {
-      background: #7209b7;
-      color: #fff;
-      transform: translateY(-3px);
-    }
-
-    footer {
-      background: rgba(255,255,255,0.1);
-      padding: 15px;
-      font-size: 0.9em;
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-
-    footer a {
-      color: #fff;
-      text-decoration: none;
-      transition: opacity 0.3s;
-    }
-
-    footer a:hover {
-      opacity: 0.7;
+    footer a{color:rgba(255,255,255,0.95);text-decoration:none;font-weight:600}
+    @media(max-width:720px){
+      .hero-title{font-size:22px}
+      .logo-circle{width:48px;height:48px}
+      .modal{margin:12px}
     }
   </style>
 </head>
 <body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo-circle">FH</div>
+        <div>
+          <h1>FindMyHustle</h1>
+          <div style="font-size:0.85rem;color:rgba(255,255,255,0.88);margin-top:2px">Find local skills. Book with confidence.</div>
+        </div>
+      </div>
 
-  <header>✨ FindMyHustle ✨</header>
+      <nav>
+        <a href="browse.html">Browse</a>
+        <a href="upload.html">Upload</a>
+        <a href="support.html">Support</a>
+      </nav>
+    </header>
 
-  <div class="welcome-section">
-    <h2>Where South Africa’s Talents Shine!</h2>
-    <p>Discover skilled hustlers — nail technicians, barbers, stylists, designers, and more!</p>
+    <main>
+      <div class="hero-title">Where South Africa’s Talents Shine</div>
+      <p class="hero-sub">
+        Discover local hustlers — nail technicians, hair stylists, barbers, designers and more.  
+        Find services near you, contact sellers directly, and book with confidence.
+      </p>
 
-    <div class="bubble-container">
-      <div class="bubble">💅 Nail Technician</div>
-      <div class="bubble">💇 Hair Stylist</div>
-      <div class="bubble">🎨 Makeup Artist</div>
-      <div class="bubble">👕 Fashion Designer</div>
-      <div class="bubble">🎧 DJ</div>
-      <div class="bubble">🍳 Chef</div>
-      <div class="bubble">🚗 Mechanic</div>
-      <div class="bubble">📸 Photographer</div>
-    </div>
+      <div class="actions">
+        <!-- Join Now should go to upload.html where the form exists -->
+        <a class="btn" href="upload.html">📤 Join Now — Upload Your Hustle</a>
+        <a class="btn secondary" href="browse.html">🔎 Browse Hustles</a>
+      </div>
 
-    <div class="buttons">
-      <a href="browse.html">Browse Skills</a>
-      <a href="upload.html">Join Now</a>
-      <a href="leaderboard.html">Hall of Hustle</a>
+      <div class="info" aria-live="polite" role="note">
+        <strong>Upload requirements:</strong>
+        Hustlers must provide: <em>Name, Surname, Skill, Province, Location (City/Town),</em> and a <em>Date</em> (date set / availability).  
+        <br><br>
+        <strong>Important:</strong> All uploads are reviewed by the FindMyHustle team. Listings will appear in <em>Browse</em> only after they are checked and <strong>confirmed by FindMyHustle</strong>. This helps keep the platform safe and trustworthy.
+        <br><br>
+        Want tips on how to add a WhatsApp link or proof-of-payment image? Click the orange grandma button at the bottom-right — <strong>Umama Suzan</strong> will guide you.
+      </div>
+    </main>
+  </div>
+
+  <!-- floating Mama Suzan help button -->
+  <div class="help-fab" id="helpFab" title="Ask Umama Suzan">👵🏾</div>
+
+  <!-- modal -->
+  <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <h3 id="modalTitle">Umama Suzan — Upload Helper</h3>
+      <p><strong>Hi dear!</strong> I'm Umama Suzan. I’ll help you upload your hustle properly so buyers can find you.</p>
+
+      <p><strong>How to add your WhatsApp link:</strong><br>
+      Use this format (no spaces): <code>https://wa.me/27XXXXXXXXX</code> — replace X with your number and drop the leading 0. Example: <code>https://wa.me/27729489377</code>.</p>
+
+      <p><strong>Proof / Paid image:</strong><br>
+      If you paid to be listed, paste a direct image URL (from Imgbb or Drive). Make sure the image is publicly viewable and ends with <code>.jpg</code> or <code>.png</code> when possible.</p>
+
+      <p><strong>What we check before confirming:</strong><br>
+      We look for a clear name, real contact (WhatsApp link), correct location (province & city), and a valid proof image when required. Keep photos clear and honest — it helps you get bookings faster.</p>
+
+      <p style="color:#6b7280;font-size:0.95rem">If you need extra help, contact support via <a href="support.html">Support</a>.</p>
+
+      <button class="close" id="closeModal">Close</button>
     </div>
   </div>
 
@@ -142,5 +200,28 @@
     <a href="about.html">About Us</a>
   </footer>
 
+  <script>
+    const fab = document.getElementById('helpFab');
+    const backdrop = document.getElementById('modalBackdrop');
+    const closeBtn = document.getElementById('closeModal');
+
+    function openHelp(){
+      backdrop.style.display = 'flex';
+      backdrop.setAttribute('aria-hidden','false');
+    }
+    function closeHelp(){
+      backdrop.style.display = 'none';
+      backdrop.setAttribute('aria-hidden','true');
+    }
+
+    fab.addEventListener('click', openHelp);
+    closeBtn.addEventListener('click', closeHelp);
+    backdrop.addEventListener('click', (e)=>{ if(e.target === backdrop) closeHelp(); });
+
+    // keyboard accessibility
+    document.addEventListener('keydown', (e)=>{
+      if(e.key === 'Escape') closeHelp();
+    });
+  </script>
 </body>
 </html>
