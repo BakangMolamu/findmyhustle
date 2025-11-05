@@ -1,22 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FindMyHustle AI Poster Generator</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FindMyHustle | Home</title>
+  <style>
+    /* ---------- GLOBAL STYLES ---------- */
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #3a0ca3, #4361ee, #7209b7);
+      background-size: 400% 400%;
+      animation: gradientMove 12s ease infinite;
+      color: #fff;
+      text-align: center;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    header {
+      padding: 20px;
+      font-size: 1.8em;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-shadow: 0 3px 10px rgba(0,0,0,0.3);
+    }
+
+    .welcome-section {
+      margin-top: 40px;
+      padding: 20px;
+    }
+
+    .welcome-section h2 {
+      font-size: 1.6em;
+      margin-bottom: 10px;
+    }
+
+    .bubble-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin: 25px 0;
+    }
+
+    .bubble {
+      background: rgba(255,255,255,0.15);
+      padding: 10px 20px;
+      border-radius: 25px;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      font-size: 0.9em;
+      transition: transform 0.2s ease;
+    }
+
+    .bubble:hover {
+      transform: scale(1.1);
+    }
+
+    .buttons {
+      margin: 30px 0;
+    }
+
+    .buttons a {
+      display: inline-block;
+      text-decoration: none;
+      background: #fff;
+      color: #3a0ca3;
+      font-weight: 600;
+      padding: 12px 25px;
+      border-radius: 30px;
+      margin: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+    }
+
+    .buttons a:hover {
+      background: #7209b7;
+      color: #fff;
+      transform: translateY(-3px);
+    }
+
+    footer {
+      background: rgba(255,255,255,0.1);
+      padding: 15px;
+      font-size: 0.9em;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    footer a {
+      color: #fff;
+      text-decoration: none;
+      transition: opacity 0.3s;
+    }
+
+    footer a:hover {
+      opacity: 0.7;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>🎨 Generate Your AI Poster</h1>
-    <p>Type your poster description below:</p>
-    <input type="text" id="promptInput" placeholder="e.g., Wedding poster with flowers and gold text">
-    <button onclick="generatePoster()">Generate Poster (R20)</button>
-    
-    <p id="previewMessage"></p>
-    <div id="posterContainer"></div>
+
+  <header>✨ FindMyHustle ✨</header>
+
+  <div class="welcome-section">
+    <h2>Where South Africa’s Talents Shine!</h2>
+    <p>Discover skilled hustlers — nail technicians, barbers, stylists, designers, and more!</p>
+
+    <div class="bubble-container">
+      <div class="bubble">💅 Nail Technician</div>
+      <div class="bubble">💇 Hair Stylist</div>
+      <div class="bubble">🎨 Makeup Artist</div>
+      <div class="bubble">👕 Fashion Designer</div>
+      <div class="bubble">🎧 DJ</div>
+      <div class="bubble">🍳 Chef</div>
+      <div class="bubble">🚗 Mechanic</div>
+      <div class="bubble">📸 Photographer</div>
+    </div>
+
+    <div class="buttons">
+      <a href="browse.html">Browse Skills</a>
+      <a href="upload.html">Join Now</a>
+      <a href="leaderboard.html">Hall of Hustle</a>
+    </div>
   </div>
 
-  <script src="script.js"></script>
+  <footer>
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms & Conditions</a>
+    <a href="about.html">About Us</a>
+  </footer>
+
 </body>
 </html>
