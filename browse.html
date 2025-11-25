@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Browse Hustlers – FindMyHustle</title>
+
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #3d0b81, #001f54);
+    color: #fff;
+  }
+
+  header {
+    padding: 20px;
+    text-align: center;
+    background: rgba(0,0,0,0.3);
+    backdrop-filter: blur(6px);
+  }
+
+  header h1 {
+    margin: 0;
+    font-size: 2rem;
+    color: #fff;
+  }
+
+  .container {
+    padding: 20px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+  }
+
+  .card {
+    background: rgba(255,255,255,0.15);
+    padding: 15px;
+    border-radius: 12px;
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .card:hover {
+    transform: scale(1.03);
+  }
+
+  .card img {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+
+  .card h3 {
+    margin: 10px 0 5px;
+  }
+
+  .card p {
+    margin: 3px 0;
+    font-size: 0.9rem;
+  }
+
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Browse Local Hustlers</h1>
+</header>
+
+<div class="container">
+  <div id="hustlers" class="grid"></div>
+</div>
+
+<script>
+async function loadHustlers() {
+  const url = "YOUR_APPS_SCRIPT_WEB_APP_URL"; // replace this
+
+  const response = await fetch(url);
+  const hustlers = await response.json();
+
+  const container = document.getElementById("hustlers");
+  container.innerHTML = "";
+
+  hustlers.forEach((hustler, index) => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.onclick = () => {
+      window.location.href = `profile.html?id=${index}`;
+    };
+
+    const picture = hustler.Picture1
+      ? `data:image/jpeg;base64,${hustler.Picture1}`
+      : "";
+
+    card.innerHTML = `
+      <img src="${picture}" alt="Hustler Image">
+      <h3>${hustler.Name}</h3>
+      <p><strong>Skill:</strong> ${hustler.Skill}</p>
+      <p><strong>Province:</strong> ${hustler.Province}</p>
+      <p><strong>City:</strong> ${hustler.City}</p>
+    `;
+
+    container.appendChild(card);
+  });
+}
+
+loadHustlers();
+</script>
+
+</body>
+</html>
