@@ -3,67 +3,98 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FindMyHustle</title>
+  <title>FindMyHustle – Skills Marketplace</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #ffffff;
-      color: #333;
       margin: 0;
       padding: 0;
       text-align: center;
-    }
-    header {
-      background-color: #004080; /* calming dark blue */
+      background: linear-gradient(135deg, #4b0082, #001f4d);
       color: white;
-      padding: 20px;
     }
+
+    header {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 20px;
+      backdrop-filter: blur(4px);
+    }
+
     header h1 {
       margin: 0;
-      font-size: 2rem;
+      font-size: 2.2rem;
+      font-weight: bold;
     }
-    nav {
-      margin-top: 10px;
-    }
+
     nav a {
       text-decoration: none;
-      color: white;
+      color: #cce0ff;
       margin: 0 15px;
       font-weight: bold;
     }
+
     .hero {
-      padding: 50px 20px;
-      background-color: #f0f4f8; /* light gray-blue */
+      padding: 60px 20px;
     }
     .hero h2 {
-      font-size: 1.8rem;
-      margin-bottom: 20px;
+      font-size: 2rem;
+      margin-bottom: 15px;
     }
     .hero p {
-      font-size: 1rem;
       max-width: 700px;
-      margin: 0 auto 20px auto;
+      margin: 0 auto;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: #e6e6ff;
     }
-    .cta {
-      margin-top: 20px;
+
+    /* NEW BEAUTIFUL BUTTONS */
+    .button-row {
+      margin-top: 30px;
     }
-    .cta a {
+    .btn {
       display: inline-block;
-      padding: 12px 25px;
-      background-color: #0073e6;
-      color: white;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: bold;
+      padding: 15px 35px;
       margin: 10px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      text-decoration: none;
+      color: white;
+      border-radius: 10px;
+      transition: 0.3s;
     }
+    .btn-blue {
+      background: #007bff;
+    }
+    .btn-blue:hover {
+      background: #3399ff;
+    }
+    .btn-green {
+      background: #28a745;
+    }
+    .btn-green:hover {
+      background: #3dd163;
+    }
+    .btn-purple {
+      background: #6a0dad;
+    }
+    .btn-purple:hover {
+      background: #9140ff;
+    }
+
     section {
       padding: 40px 20px;
+      background: rgba(255, 255, 255, 0.05);
+      margin: 30px 10px;
+      border-radius: 15px;
+      backdrop-filter: blur(3px);
     }
-    section h3 {
-      font-size: 1.5rem;
-      margin-bottom: 20px;
+
+    h3 {
+      font-size: 1.6rem;
     }
+
+    /* step cards */
     .steps {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -72,26 +103,23 @@
       margin: 0 auto;
     }
     .step-card {
-      background: #ffffff;
-      border: 1px solid #dcdcdc;
-      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.25);
       padding: 20px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      border-radius: 12px;
       text-align: left;
+      color: #f2f2ff;
     }
     .step-card h4 {
       margin-top: 0;
-      color: #004080;
+      color: #cce0ff;
     }
+
+    /* Footer */
     footer {
-      background-color: #004080;
-      color: white;
       padding: 20px;
-      margin-top: 30px;
-    }
-    footer a {
-      color: #66b3ff;
-      text-decoration: none;
+      background: rgba(0, 0, 0, 0.4);
+      margin-top: 40px;
+      backdrop-filter: blur(4px);
     }
   </style>
 </head>
@@ -100,20 +128,22 @@
   <header>
     <h1>FindMyHustle</h1>
     <nav>
-      <a href="upload.html">Upload</a>
-      <a href="browse.html">Browse</a>
+      <a href="upload.html">Register Skill</a>
+      <a href="browse.html">Find Hustlers</a>
     </nav>
   </header>
 
   <div class="hero">
-    <h2>Connecting Local Hustlers with Retail Stores</h2>
+    <h2>Find Local Skilled Hustlers Near You</h2>
     <p>
-      FindMyHustle is a professional bridge between local hustlers who sell <strong>caps, hats, and t-shirts</strong>  
-      and retail stores looking for affordable, authentic, locally made products.
+      A free platform helping local hustlers such as plumbers, hair stylists, nail technicians,
+      electricians, mechanics, builders, and more connect with customers in their area.
     </p>
-    <div class="cta">
-      <a href="upload.html">Upload Products</a>
-      <a href="browse.html" style="background-color:#28a745;">Browse Products</a>
+
+    <div class="button-row">
+      <a href="upload.html" class="btn btn-purple">Register Your Skill</a>
+      <a href="browse.html" class="btn btn-green">Browse Hustlers</a>
+      <a href="#" class="btn btn-blue">About Us</a>
     </div>
   </div>
 
@@ -121,78 +151,35 @@
     <h3>How It Works</h3>
     <div class="steps">
       <div class="step-card">
-        <h4>Step 1: Upload</h4>
-        <p>Local hustlers upload their products on the <a href="upload.html">Upload Page</a> by filling in product details such as type, name, price, image, and contact information.</p>
+        <h4>1. Register Your Skill</h4>
+        <p>Fill in your details and upload your hustle for free. Simple & fast.</p>
       </div>
       <div class="step-card">
-        <h4>Step 2: Browse</h4>
-        <p>Retailers visit the <a href="browse.html">Browse Page</a> to view all uploaded products in a clean and professional layout.</p>
+        <h4>2. Get Listed</h4>
+        <p>Your profile appears on the Find Hustlers page instantly.</p>
       </div>
       <div class="step-card">
-        <h4>Step 3: Connect</h4>
-        <p>Retailers search by location or city, view seller details, and connect directly through WhatsApp or call buttons.</p>
+        <h4>3. Get Customers</h4>
+        <p>People contact you directly through call or WhatsApp.</p>
       </div>
       <div class="step-card">
-        <h4>Step 4: Grow Together</h4>
-        <p>Once connected, hustlers and retailers agree on delivery, payment, and sales terms — bringing local products to shelves.</p>
+        <h4>4. Grow Your Hustle</h4>
+        <p>More jobs, more exposure, more income — all for free.</p>
       </div>
     </div>
   </section>
 
   <section>
-    <h3>Why FindMyHustle?</h3>
+    <h3>Why Choose FindMyHustle?</h3>
     <p>
-      We help local hustlers gain exposure and grow their businesses,  
-      while retail stores discover new, affordable products to stock.  
-      Simple. Fair. Professional.
+      We empower local hustlers by giving them a free digital platform to showcase their skills
+      and connect with customers in need of reliable services.
     </p>
   </section>
 
   <footer>
-    <p>&copy; 2025 FindMyHustle. All Rights Reserved.</p>
-    <p>
-      <a href="terms.html">Terms & Conditions</a> | 
-      <a href="privacy.html">Privacy Policy</a>
-    </p>
+    <p>© 2025 FindMyHustle — Free Skills Platform for All Hustlers.</p>
   </footer>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
