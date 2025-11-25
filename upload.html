@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload Your Hustle</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #3b0a57, #0d1a5e);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px 10px;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 25px;
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 14px;
+            margin-top: 12px;
+            display: block;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 5px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+        }
+
+        input[type="file"] {
+            background: none;
+            color: #fff;
+        }
+
+        button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 14px;
+            background: #7b3fe4;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #9b63ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Upload Your Hustle</h2>
+        <form id="uploadForm" enctype="multipart/form-data">
+            
+            <label>Name</label>
+            <input type="text" name="name" required />
+
+            <label>Skill</label>
+            <select name="skill" required>
+                <option value="">Select Skill</option>
+                <option>Hairdresser</option>
+                <option>Plumber</option>
+                <option>Electrician</option>
+                <option>Mechanic</option>
+                <option>Makeup Artist</option>
+                <option>Photographer</option>
+                <option>Welder</option>
+                <option>Painter</option>
+                <option>Braiding</option>
+                <option>Tiler</option>
+                <option>Chef / Cooking</option>
+                <option>Seamstress / Tailor</option>
+                <option>Gardener</option>
+                <option>DJ</option>
+                <option>Personal Trainer</option>
+                <option>Car Wash</option>
+                <option>Interior Decorator</option>
+                <option>Bricklayer</option>
+                <option>Furniture Maker</option>
+                <option>Video Editor</option>
+                <option>MC / Host</option>
+                <option>Security Guard</option>
+                <option>Babysitter</option>
+                <option>Nail Technician</option>
+                <option>Shoemaker</option>
+            </select>
+
+            <label>Province</label>
+            <select name="province" required>
+                <option value="">Select Province</option>
+                <option>North West</option>
+                <option>Gauteng</option>
+                <option>Limpopo</option>
+                <option>Mpumalanga</option>
+                <option>Free State</option>
+                <option>Eastern Cape</option>
+                <option>Western Cape</option>
+                <option>Northern Cape</option>
+                <option>KwaZulu-Natal</option>
+            </select>
+
+            <label>City</label>
+            <input type="text" name="city" required />
+
+            <label>Phone</label>
+            <input type="tel" name="phone" required />
+
+            <label>Email</label>
+            <input type="email" name="email" />
+
+            <label>Upload Picture 1</label>
+            <input type="file" name="pic1" accept="image/*" required />
+
+            <label>Upload Picture 2</label>
+            <input type="file" name="pic2" accept="image/*" required />
+
+            <label>Upload Video (Your Skill Demo)</label>
+            <input type="file" name="video" accept="video/*" required />
+
+            <button type="submit">Submit Hustle</button>
+        </form>
+    </div>
+</body>
+</html>
