@@ -3,115 +3,222 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Browse Hustlers – FindMyHustle</title>
+<title>Browse Hustlers - FindMyHustle</title>
 
 <style>
   body {
-    margin: 0;
     font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #3d0b81, #001f54);
-    color: #fff;
-  }
-
-  header {
-    padding: 20px;
-    text-align: center;
-    background: rgba(0,0,0,0.3);
-    backdrop-filter: blur(6px);
-  }
-
-  header h1 {
     margin: 0;
-    font-size: 2rem;
-    color: #fff;
+    background: #f3f6fa;
   }
 
-  .container {
-    padding: 20px;
+  /* Safety Popup */
+  #safetyPopup {
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background: rgba(0,0,0,0.7);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
   }
 
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 20px;
-    margin-top: 20px;
+  .popup-box {
+    background:white;
+    padding:20px;
+    width:90%;
+    max-width:400px;
+    border-radius:10px;
+    text-align:center;
+    animation: popIn .4s ease;
+  }
+
+  @keyframes popIn {
+    from { transform: scale(0.7); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  #continueBtn {
+    background:#007bff;
+    border:none;
+    padding:10px 20px;
+    color:white;
+    border-radius:5px;
+    cursor:pointer;
+    margin-top:15px;
+  }
+
+  /* Filter Bar */
+  #filterBar {
+    display:flex;
+    gap:10px;
+    padding:15px;
+    background:white;
+    box-shadow:0 2px 5px rgba(0,0,0,0.1);
+    position: sticky;
+    top:0;
+    z-index:50;
+  }
+
+  select {
+    padding:8px;
+    width:50%;
+    border:1px solid #ccc;
+    border-radius:5px;
+  }
+
+  /* Profiles Grid */
+  #profiles {
+    padding:20px;
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap:15px;
   }
 
   .card {
-    background: rgba(255,255,255,0.15);
-    padding: 15px;
-    border-radius: 12px;
-    backdrop-filter: blur(6px);
-    cursor: pointer;
-    transition: 0.3s;
+    background:white;
+    padding:10px;
+    border-radius:8px;
+    box-shadow:0 2px 4px rgba(0,0,0,0.1);
+    text-align:center;
+    transition:0.2s;
   }
 
   .card:hover {
-    transform: scale(1.03);
+    transform: scale(1.04);
   }
 
-  .card img {
-    width: 100%;
-    height: 190px;
-    object-fit: cover;
-    border-radius: 10px;
+  .pic {
+    width:100%;
+    height:130px;
+    background:#eee;
+    border-radius:5px;
+    object-fit:cover;
   }
 
-  .card h3 {
-    margin: 10px 0 5px;
+  .name {
+    font-weight:bold;
+    margin-top:6px;
   }
 
-  .card p {
-    margin: 3px 0;
-    font-size: 0.9rem;
+  .skill {
+    font-size:14px;
+    color:#555;
   }
-
 </style>
 </head>
+
 <body>
 
-<header>
-  <h1>Browse Local Hustlers</h1>
-</header>
-
-<div class="container">
-  <div id="hustlers" class="grid"></div>
+<!-- SAFETY POPUP -->
+<div id="safetyPopup">
+  <div class="popup-box">
+    <h3>⚠️ Safety First</h3>
+    <p>Always verify a Hustler before making payments or meeting in person.</p>
+    <p>FindMyHustle is NOT responsible for scams.</p>
+    <button id="continueBtn">Continue</button>
+  </div>
 </div>
 
+<!-- FILTER BAR -->
+<div id="filterBar" style="display:none;">
+  <select id="provinceFilter">
+    <option value="">Filter by Province</option>
+    <option>Gauteng</option>
+    <option>North West</option>
+    <option>Western Cape</option>
+    <option>Eastern Cape</option>
+    <option>Northern Cape</option>
+    <option>Free State</option>
+    <option>KwaZulu-Natal</option>
+    <option>Mpumalanga</option>
+    <option>Limpopo</option>
+  </select>
+
+  <select id="skillFilter">
+    <option value="">Filter by Skill</option>
+    <option>Plumber</option>
+    <option>Electrician</option>
+    <option>Hair Stylist</option>
+    <option>Painter</option>
+    <option>Mechanic</option>
+    <option>Photographer</option>
+    <option>Baker</option>
+    <option>Gardener</option>
+    <option>DJ</option>
+    <option>Caterer</option>
+    <option>Other</option>
+  </select>
+</div>
+
+<!-- PROFILES -->
+<div id="profiles"></div>
+
+
 <script>
-async function loadHustlers() {
-  const url = "https://script.google.com/macros/s/AKfycbyN_E1iih2a88JNIa0Uiuj3BRIxJsjhxEDT5o5p0Qa_p6GVAvlCtVXmHIT7h4hHdgCz/exec"; // replace this
+const SCRIPT_URL = "YOUR_WEB_APP_URL_HERE"; // <--- Replace this
 
-  const response = await fetch(url);
-  const hustlers = await response.json();
+// Safety popup
+document.getElementById("continueBtn").onclick = () => {
+  document.getElementById("safetyPopup").style.display = "none";
+  document.getElementById("filterBar").style.display = "flex";
+  loadProfiles();
+};
 
-  const container = document.getElementById("hustlers");
-  container.innerHTML = "";
+async function loadProfiles() {
+  try {
+    const res = await fetch(SCRIPT_URL);
+    const data = await res.json();
 
-  hustlers.forEach((hustler, index) => {
-    const card = document.createElement("div");
-    card.className = "card";
-    card.onclick = () => {
-      window.location.href = `profile.html?id=${index}`;
-    };
+    window.fullData = data; 
+    displayProfiles(data);
 
-    const picture = hustler.Picture1
-      ? `data:image/jpeg;base64,${hustler.Picture1}`
-      : "";
-
-    card.innerHTML = `
-      <img src="${picture}" alt="Hustler Image">
-      <h3>${hustler.Name}</h3>
-      <p><strong>Skill:</strong> ${hustler.Skill}</p>
-      <p><strong>Province:</strong> ${hustler.Province}</p>
-      <p><strong>City:</strong> ${hustler.City}</p>
-    `;
-
-    container.appendChild(card);
-  });
+  } catch (err) {
+    alert("Failed to load profiles.");
+  }
 }
 
-loadHustlers();
+// Filter logic
+document.getElementById("provinceFilter").onchange = filterData;
+document.getElementById("skillFilter").onchange = filterData;
+
+function filterData() {
+  let prov = provinceFilter.value;
+  let skill = skillFilter.value;
+
+  let filtered = fullData.filter(p => {
+    return (prov === "" || p.Province === prov) &&
+           (skill === "" || p.Skill === skill);
+  });
+
+  displayProfiles(filtered);
+}
+
+function displayProfiles(list) {
+  const area = document.getElementById("profiles");
+  area.innerHTML = "";
+
+  if (list.length === 0) {
+    area.innerHTML = "<p>No results found.</p>";
+    return;
+  }
+
+  list.forEach(p => {
+    let div = document.createElement("div");
+    div.className = "card";
+
+    div.innerHTML = `
+      <img class="pic" src="${p.Image}" alt="pic">
+      <div class="name">${p.Name}</div>
+      <div class="skill">${p.Skill}</div>
+    `;
+
+    area.appendChild(div);
+  });
+}
 </script>
 
 </body>
