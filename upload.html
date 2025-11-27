@@ -1,204 +1,221 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Upload Your Hustle</title>
-
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #3b0a57, #0d1a5e);
-            color: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 40px 10px;
-            min-height: 100vh;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 450px;
-            background: rgba(255, 255, 255, 0.15);
-            padding: 25px;
-            border-radius: 16px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
-        }
-
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        label {
-            font-size: 14px;
-            margin-top: 12px;
-            display: block;
-            font-weight: bold;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 12px;
-            margin-top: 5px;
-            border: none;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.8);
-            font-size: 14px;
-        }
-
-        input[type="file"] {
-            background: none;
-            color: #fff;
-        }
-
-        button {
-            margin-top: 20px;
-            width: 100%;
-            padding: 14px;
-            background: #7b3fe4;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            color: #fff;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        button:hover {
-            background: #9b63ff;
-        }
-
-        /* SUCCESS POPUP */
-        #successPopup {
-            position: fixed;
-            top: -120px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(135deg, #00e676, #1de9b6);
-            padding: 16px 25px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: bold;
-            color: #000;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-            z-index: 9999;
-            opacity: 0;
-            transition: all 0.7s ease;
-        }
-
-        #successPopup.show {
-            top: 20px;
-            opacity: 1;
-        }
-    </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Upload Your Hustle</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root { --accent1:#6a0dad; --accent2:#001f4d; }
+  body { font-family: 'Poppins', sans-serif; margin:0; background: linear-gradient(135deg,#3b0a57,#0d1a5e); color:#fff; min-height:100vh; display:flex; align-items:flex-start; justify-content:center; padding:28px; }
+  .card { width:100%; max-width:560px; background: rgba(255,255,255,0.06); padding:22px; border-radius:14px; box-shadow: 0 12px 30px rgba(0,0,0,0.35); }
+  h2 { margin:0 0 8px; text-align:center; color:#fff; }
+  label { display:block; margin-top:12px; font-weight:600; font-size:14px; }
+  input[type="text"], input[type="email"], input[type="tel"], select, input[type="date"] { width:100%; padding:10px 12px; margin-top:6px; border-radius:8px; border:none; font-size:14px; }
+  input[type="file"] { margin-top:8px; color:#fff; }
+  .note { font-size:13px; color:rgba(255,255,255,0.85); margin-top:8px; }
+  .btn { width:100%; margin-top:18px; padding:12px 14px; border-radius:10px; border:none; cursor:pointer; font-weight:700; background: linear-gradient(90deg,var(--accent1),#3498ff); color:#fff; }
+  .btn:active { transform:translateY(1px); }
+  /* success popup */
+  #successPopup { position:fixed; left:50%; transform:translateX(-50%) translateY(-120%); top:0; background:linear-gradient(135deg,#4cd964,#38f9d7); color:#001; padding:14px 18px; border-radius:12px; font-weight:700; box-shadow:0 8px 30px rgba(0,0,0,0.35); z-index:9999; opacity:0; transition:all .6s cubic-bezier(.2,.9,.2,1); }
+  #successPopup.show { transform:translateX(-50%) translateY(20px); opacity:1; }
+  .small { font-size:13px; color:rgba(255,255,255,0.9); }
+</style>
 </head>
-
 <body>
 
-    <!-- ANIMATED POPUP MESSAGE -->
-    <div id="successPopup">✔️ Submission Successful! You will be contacted for verification.</div>
+<div id="successPopup">✅ Submission successful — redirecting to your profile...</div>
 
-    <div class="container">
-        <h2>Upload Your Hustle</h2>
+<main class="card" role="main">
+  <h2>Upload Your Hustle</h2>
+  <p class="note">One picture and one short video only. After submission you'll be redirected to your profile. Your listing will be Pending Verification until approved.</p>
 
-        <!-- Your original form -->
-        <form id="uploadForm"
-              action="https://script.google.com/macros/s/AKfycbxQtOEmR8EaF1xsuG7UaRQq4QSH5JNQtlQVoDWEX_qGizU0_wvobqq8ynGQoCqUzhX9/exec"
-              method="POST"
-              enctype="multipart/form-data"
-              novalidate>
+  <form id="uploadForm" novalidate>
+    <label>Full name</label>
+    <input type="text" name="name" required placeholder="Your full name">
 
-            <label>Name</label>
-            <input type="text" name="name" required />
+    <label>Skill</label>
+    <select name="skill" required>
+      <option value="">Select skill</option>
+      <option>Barber</option>
+      <option>Hairdresser</option>
+      <option>Braids / Hair Stylist</option>
+      <option>Nail Technician</option>
+      <option>Makeup Artist</option>
+      <option>Photographer</option>
+      <option>Videographer</option>
+      <option>Graphic Designer</option>
+      <option>Plumber</option>
+      <option>Electrician</option>
+      <option>Welder</option>
+      <option>Mechanic</option>
+      <option>Panel Beater</option>
+      <option>Tiler</option>
+      <option>Painter</option>
+      <option>Construction Worker</option>
+      <option>Bricklayer</option>
+      <option>Carpenter</option>
+      <option>Landscaper / Gardener</option>
+      <option>Car Wash</option>
+      <option>Tailor / Seamstress</option>
+      <option>Fashion Designer</option>
+      <option>Shoemaker</option>
+      <option>Chef / Caterer</option>
+      <option>Baker</option>
+      <option>Event Decor</option>
+      <option>MC / Host</option>
+      <option>DJ</option>
+      <option>Music Producer</option>
+      <option>Fitness Trainer</option>
+      <option>Tutor</option>
+      <option>Babysitter / Nanny</option>
+      <option>Laundry / Ironing</option>
+      <option>House Cleaning</option>
+      <option>Furniture Maker</option>
+      <option>Tech Repair (Phones / Laptops)</option>
+      <option>Courier / Delivery</option>
+      <option>Upholstery</option>
+      <option>Tattoo Artist</option>
+      <option>Massage Therapist</option>
+    </select>
 
-            <label>Skill</label>
-            <select name="skill" required>
-                <option value="">Select Skill</option>
-                <option>Hairdresser</option>
-                <option>Plumber</option>
-                <option>Electrician</option>
-                <option>Mechanic</option>
-                <option>Makeup Artist</option>
-                <option>Photographer</option>
-                <option>Welder</option>
-                <option>Painter</option>
-                <option>Braiding</option>
-                <option>Tiler</option>
-                <option>Chef / Cooking</option>
-                <option>Seamstress / Tailor</option>
-                <option>Gardener</option>
-                <option>DJ</option>
-                <option>Personal Trainer</option>
-                <option>Car Wash</option>
-                <option>Interior Decorator</option>
-                <option>Bricklayer</option>
-                <option>Furniture Maker</option>
-                <option>Video Editor</option>
-                <option>MC / Host</option>
-                <option>Security Guard</option>
-                <option>Babysitter</option>
-                <option>Nail Technician</option>
-                <option>Shoemaker</option>
-            </select>
+    <label>Province</label>
+    <select name="province" required>
+      <option value="">Select province</option>
+      <option>Eastern Cape</option>
+      <option>Free State</option>
+      <option>Gauteng</option>
+      <option>KwaZulu-Natal</option>
+      <option>Limpopo</option>
+      <option>Mpumalanga</option>
+      <option>Northern Cape</option>
+      <option>North West</option>
+      <option>Western Cape</option>
+    </select>
 
-            <label>Province</label>
-            <select name="province" required>
-                <option value="">Select Province</option>
-                <option>North West</option>
-                <option>Gauteng</option>
-                <option>Limpopo</option>
-                <option>Mpumalanga</option>
-                <option>Free State</option>
-                <option>Eastern Cape</option>
-                <option>Western Cape</option>
-                <option>Northern Cape</option>
-                <option>KwaZulu-Natal</option>
-            </select>
+    <label>City / Town</label>
+    <input type="text" name="city" required placeholder="e.g. Mahikeng">
 
-            <label>City</label>
-            <input type="text" name="city" required />
+    <label>Phone (WhatsApp)</label>
+    <input type="tel" name="phone" required placeholder="+27...">
 
-            <label>Phone</label>
-            <input type="tel" name="phone" required />
+    <label>Email (optional)</label>
+    <input type="email" name="email" placeholder="you@example.com">
 
-            <label>Email</label>
-            <input type="email" name="email" />
+    <label>Upload Picture (JPG/PNG) — max 6MB</label>
+    <input id="pic" type="file" accept="image/*" required>
 
-            <label>Upload Picture 1</label>
-            <input type="file" name="pic1" accept="image/*" required />
+    <label>Upload Video (MP4/WEBM) — max 50MB</label>
+    <input id="video" type="file" accept="video/*" required>
 
-            <label>Upload Picture 2</label>
-            <input type="file" name="pic2" accept="image/*" required />
+    <p class="note small">By submitting you agree that your information is accurate. Your profile will be verified before appearing publicly.</p>
 
-            <label>Upload Video (Your Skill Demo)</label>
-            <input type="file" name="video" accept="video/*" required />
-
-            <button type="submit">Submit Hustle</button>
-        </form>
-    </div>
+    <button id="submitBtn" type="submit" class="btn">Submit Hustle</button>
+  </form>
+</main>
 
 <script>
-document.getElementById("uploadForm").addEventListener("submit", function(e) {
-    // allow form to actually submit normally
-    setTimeout(() => {
-        showPopup();
-    }, 600); // delay popup slightly so it feels natural
-});
+/* ---------- CONFIG ---------- */
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxQtOEmR8EaF1xsuG7UaRQq4QSH5JNQtlQVoDWEX_qGizU0_wvobqq8ynGQoCqUzhX9/exec";
+const MAX_IMAGE = 6 * 1024 * 1024; // 6MB
+const MAX_VIDEO = 50 * 1024 * 1024; // 50MB
 
-function showPopup() {
-    const popup = document.getElementById("successPopup");
-    popup.classList.add("show");
+const form = document.getElementById('uploadForm');
+const picInput = document.getElementById('pic');
+const videoInput = document.getElementById('video');
+const submitBtn = document.getElementById('submitBtn');
+const popup = document.getElementById('successPopup');
 
-    setTimeout(() => {
-        popup.classList.remove("show");
-    }, 3500);
+function readFileAsDataURL(file) {
+  return new Promise((res, rej) => {
+    const fr = new FileReader();
+    fr.onload = () => res(fr.result);
+    fr.onerror = rej;
+    fr.readAsDataURL(file);
+  });
 }
-</script>
 
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  // basic validation
+  if (!picInput.files[0] || !videoInput.files[0]) {
+    alert('Please select both image and video.');
+    return;
+  }
+  const picFile = picInput.files[0];
+  const videoFile = videoInput.files[0];
+  if (picFile.size > MAX_IMAGE) { alert('Image is too large (max 6MB).'); return; }
+  if (videoFile.size > MAX_VIDEO) { alert('Video is too large (max 50MB).'); return; }
+
+  // disable button
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Uploading… please wait';
+
+  try {
+    // convert files to data URLs (base64)
+    const picDataUrl = await readFileAsDataURL(picFile); // data:<mime>;base64,xxxx
+    const videoDataUrl = await readFileAsDataURL(videoFile);
+
+    // extract mime and base64 portion
+    function splitDataUrl(dataUrl) {
+      const match = dataUrl.match(/^data:(.+);base64,(.*)$/);
+      if (!match) return null;
+      return { mime: match[1], base64: match[2] };
+    }
+    const picParts = splitDataUrl(picDataUrl);
+    const videoParts = splitDataUrl(videoDataUrl);
+    if (!picParts || !videoParts) throw new Error('Failed to read files.');
+
+    // gather form fields
+    const payload = {
+      Name: form.name.value.trim(),
+      Skill: form.skill.value,
+      Province: form.province.value,
+      City: form.city.value.trim(),
+      Phone: form.phone.value.trim(),
+      Email: form.email.value.trim(),
+      Picture: { base64: picParts.base64, mime: picParts.mime, filename: picFile.name },
+      Video: { base64: videoParts.base64, mime: videoParts.mime, filename: videoFile.name }
+    };
+
+    // send JSON
+    const response = await fetch(WEB_APP_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const resultText = await response.text();
+    let result;
+    try { result = JSON.parse(resultText); } catch(e) { throw new Error('Server returned unexpected response.'); }
+
+    if (result.status && result.status === 'success') {
+      // show animated popup and then redirect to profile
+      popup.classList.add('show');
+      setTimeout(() => popup.classList.remove('show'), 3000);
+
+      // reset form briefly
+      form.reset();
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit Hustle';
+
+      // redirect to profile page (profile will show pending verification)
+      const id = encodeURIComponent(result.id);
+      setTimeout(() => {
+        window.location.href = `profile.html?id=${id}`;
+      }, 1200); // gives user time to read popup
+    } else {
+      throw new Error(result.message || 'Upload failed');
+    }
+
+  } catch (err) {
+    console.error(err);
+    alert('Upload failed: ' + (err.message || err));
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Submit Hustle';
+  }
+});
+</script>
 </body>
-</html>
+                             </html>
