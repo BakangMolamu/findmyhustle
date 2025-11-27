@@ -1,210 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FindMyHustle – Upload Your Skill</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload Your Hustle</title>
 
-<!-- Font -->
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #3b0a57, #0d1a5e);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px 10px;
+            min-height: 100vh;
+        }
 
-<style>
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Poppins', sans-serif;
-    background: #eef2f7;
-  }
+        .container {
+            width: 100%;
+            max-width: 450px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 25px;
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+        }
 
-  .container {
-    max-width: 600px;
-    margin: 40px auto;
-    background: #ffffff;
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0px 4px 20px rgba(0,0,0,0.12);
-  }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
 
-  h2 {
-    text-align: center;
-    color: #1a73e8;
-    font-weight: 600;
-    margin-bottom: 20px;
-  }
+        label {
+            font-size: 14px;
+            margin-top: 12px;
+            display: block;
+            font-weight: bold;
+        }
 
-  label {
-    font-weight: 500;
-  }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 5px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+        }
 
-  input, select {
-    width: 100%;
-    padding: 12px;
-    margin: 8px 0 18px 0;
-    border-radius: 10px;
-    border: 1px solid #cbd3df;
-    outline: none;
-    font-size: 15px;
-  }
+        input[type="file"] {
+            background: none;
+            color: #fff;
+        }
 
-  input:focus, select:focus {
-    border-color: #1a73e8;
-  }
+        button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 14px;
+            background: #7b3fe4;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
 
-  button {
-    width: 100%;
-    padding: 14px;
-    font-size: 17px;
-    border: none;
-    border-radius: 12px;
-    background: linear-gradient(135deg, #1a73e8, #4bc0ff);
-    color: white;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.3s ease;
-  }
+        button:hover {
+            background: #9b63ff;
+        }
 
-  button:hover {
-    transform: scale(1.03);
-  }
+        /* SUCCESS POPUP */
+        #successPopup {
+            position: fixed;
+            top: -120px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #00e676, #1de9b6);
+            padding: 16px 25px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            z-index: 9999;
+            opacity: 0;
+            transition: all 0.7s ease;
+        }
 
-  /* SUCCESS POPUP */
-  #successPopup {
-    position: fixed;
-    top: -120px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: linear-gradient(135deg, #43e97b, #38f9d7);
-    padding: 18px 25px;
-    border-radius: 15px;
-    color: white;
-    font-size: 16px;
-    font-weight: 600;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
-    z-index: 9999;
-    opacity: 0;
-    transition: 0.6s ease-in-out;
-  }
-
-  #successPopup.show {
-    top: 20px;
-    opacity: 1;
-  }
-</style>
+        #successPopup.show {
+            top: 20px;
+            opacity: 1;
+        }
+    </style>
 </head>
 
 <body>
 
-<div id="successPopup">✔ Submission Successful! You will be contacted for verification.</div>
+    <!-- ANIMATED POPUP MESSAGE -->
+    <div id="successPopup">✔️ Submission Successful! You will be contacted for verification.</div>
 
-<div class="container">
-  <h2>Upload Your Hustle</h2>
+    <div class="container">
+        <h2>Upload Your Hustle</h2>
 
-  <form id="uploadForm" method="POST" enctype="multipart/form-data">
+        <!-- Your original form -->
+        <form id="uploadForm"
+              action="https://script.google.com/macros/s/AKfycbxQtOEmR8EaF1xsuG7UaRQq4QSH5JNQtlQVoDWEX_qGizU0_wvobqq8ynGQoCqUzhX9/exec"
+              method="POST"
+              enctype="multipart/form-data"
+              novalidate>
 
-    <label>Name</label>
-    <input type="text" name="Name" required>
+            <label>Name</label>
+            <input type="text" name="name" required />
 
-    <label>Skill</label>
-    <select name="Skill" required>
-      <option value="">Select your skill</option>
-      <option>Haircut Barber</option>
-      <option>Makeup Artist</option>
-      <option>Hairdresser / Braiding</option>
-      <option>Nail Technician</option>
-      <option>Plumber</option>
-      <option>Electrician</option>
-      <option>Painter</option>
-      <option>Tiler</option>
-      <option>Construction / Builder</option>
-      <option>Welder</option>
-      <option>Mechanic</option>
-      <option>Panel Beater</option>
-      <option>Car Wash</option>
-      <option>Shoe Repair</option>
-      <option>Fashion Designer / Tailor</option>
-      <option>Graphic Designer</option>
-      <option>Videographer</option>
-      <option>Photographer</option>
-      <option>Catering / Cooking</option>
-      <option>Baking Cakes</option>
-      <option>Cleaning Services</option>
-      <option>Gardening / Landscaping</option>
-      <option>DJ</option>
-      <option>Music Artist</option>
-      <option>Dancer</option>
-      <option>Personal Trainer</option>
-      <option>Carpenter</option>
-      <option>Furniture Making</option>
-      <option>IT Technician</option>
-      <option>Phone Repair</option>
-      <option>Social Media Marketing</option>
-      <option>Tutor</option>
-    </select>
+            <label>Skill</label>
+            <select name="skill" required>
+                <option value="">Select Skill</option>
+                <option>Hairdresser</option>
+                <option>Plumber</option>
+                <option>Electrician</option>
+                <option>Mechanic</option>
+                <option>Makeup Artist</option>
+                <option>Photographer</option>
+                <option>Welder</option>
+                <option>Painter</option>
+                <option>Braiding</option>
+                <option>Tiler</option>
+                <option>Chef / Cooking</option>
+                <option>Seamstress / Tailor</option>
+                <option>Gardener</option>
+                <option>DJ</option>
+                <option>Personal Trainer</option>
+                <option>Car Wash</option>
+                <option>Interior Decorator</option>
+                <option>Bricklayer</option>
+                <option>Furniture Maker</option>
+                <option>Video Editor</option>
+                <option>MC / Host</option>
+                <option>Security Guard</option>
+                <option>Babysitter</option>
+                <option>Nail Technician</option>
+                <option>Shoemaker</option>
+            </select>
 
-    <label>Province</label>
-    <select name="Province" required>
-      <option value="">Select your province</option>
-      <option>North West</option>
-      <option>Gauteng</option>
-      <option>Limpopo</option>
-      <option>Eastern Cape</option>
-      <option>Western Cape</option>
-      <option>Northern Cape</option>
-      <option>Free State</option>
-      <option>KwaZulu-Natal</option>
-      <option>Mpumalanga</option>
-    </select>
+            <label>Province</label>
+            <select name="province" required>
+                <option value="">Select Province</option>
+                <option>North West</option>
+                <option>Gauteng</option>
+                <option>Limpopo</option>
+                <option>Mpumalanga</option>
+                <option>Free State</option>
+                <option>Eastern Cape</option>
+                <option>Western Cape</option>
+                <option>Northern Cape</option>
+                <option>KwaZulu-Natal</option>
+            </select>
 
-    <label>City</label>
-    <input type="text" name="City" required>
+            <label>City</label>
+            <input type="text" name="city" required />
 
-    <label>Phone</label>
-    <input type="text" name="Phone" required>
+            <label>Phone</label>
+            <input type="tel" name="phone" required />
 
-    <label>Email</label>
-    <input type="email" name="Email" required>
+            <label>Email</label>
+            <input type="email" name="email" />
 
-    <label>Date</label>
-    <input type="date" name="Date" required>
+            <label>Upload Picture 1</label>
+            <input type="file" name="pic1" accept="image/*" required />
 
-    <label>WhatsApp Link</label>
-    <input type="text" name="WhatsApp" placeholder="https://wa.me/yourNumber" required>
+            <label>Upload Picture 2</label>
+            <input type="file" name="pic2" accept="image/*" required />
 
-    <label>Proof of Payment (Image)</label>
-    <input type="file" name="PaidImage" accept="image/*" required>
+            <label>Upload Video (Your Skill Demo)</label>
+            <input type="file" name="video" accept="video/*" required />
 
-    <button type="submit">Submit Hustle</button>
-  </form>
-</div>
+            <button type="submit">Submit Hustle</button>
+        </form>
+    </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxQtOEmR8EaF1xsuG7UaRQq4QSH5JNQtlQVoDWEX_qGizU0_wvobqq8ynGQoCqUzhX9/exec";
-
 document.getElementById("uploadForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-
-    const form = document.getElementById("uploadForm");
-    const formData = new FormData(form);
-
-    fetch(SCRIPT_URL, {
-        method: "POST",
-        body: formData
-    })
-    .then(res => res.text())
-    .then(text => {
-        if (text.includes("success")) {
-            showSuccessPopup();
-            form.reset();
-        } else {
-            alert("Submission failed. Please try again.");
-        }
-    })
-    .catch(err => {
-        alert("Network error. Please check your internet.");
-    });
+    // allow form to actually submit normally
+    setTimeout(() => {
+        showPopup();
+    }, 600); // delay popup slightly so it feels natural
 });
 
-function showSuccessPopup() {
+function showPopup() {
     const popup = document.getElementById("successPopup");
     popup.classList.add("show");
 
@@ -215,4 +201,4 @@ function showSuccessPopup() {
 </script>
 
 </body>
-    </html>
+</html>
