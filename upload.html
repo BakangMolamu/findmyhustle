@@ -1,206 +1,365 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Upload Your Hustle</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Upload Your Hustle — FindMyHustle</title>
 <style>
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: linear-gradient(135deg, #3b0a57, #0d1a5e);
-        color: #fff;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        padding: 40px 10px;
-        min-height: 100vh;
-    }
+  :root {
+    --card-bg: rgba(255,255,255,0.08);
+    --accent-1: #d45cff;
+    --accent-2: #5c7bff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: Inter, system-ui, Arial, sans-serif;
+    background: linear-gradient(135deg,#3b0a57 0%,#0d1a5e 100%);
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 28px 16px;
+  }
 
-    .container {
-        width: 100%;
-        max-width: 450px;
-        background: rgba(255, 255, 255, 0.15);
-        padding: 25px;
-        border-radius: 16px;
-        backdrop-filter: blur(10px);
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
-        position: relative;
-    }
+  .card {
+    width: 100%;
+    max-width: 520px;
+    background: var(--card-bg);
+    border-radius: 14px;
+    padding: 22px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+  }
 
-    h2 {
-        text-align: center;
-        margin-bottom: 20px;
-    }
+  h2 {
+    margin: 0 0 10px 0;
+    font-size: 22px;
+    text-align: center;
+    line-height: 1.05;
+  }
 
-    label {
-        font-size: 14px;
-        margin-top: 12px;
-        display: block;
-        font-weight: bold;
-    }
+  p.lead {
+    margin: 0 0 18px 0;
+    text-align: center;
+    font-size: 14px;
+    color: rgba(230,230,255,0.9);
+  }
 
-    input, select {
-        width: 100%;
-        padding: 12px;
-        margin-top: 5px;
-        border: none;
-        border-radius: 8px;
-        background: rgba(255, 255, 255, 0.8);
-        font-size: 14px;
-    }
+  label {
+    display:block;
+    margin-top:12px;
+    font-weight:700;
+    font-size:13px;
+    color: #e8e8ff;
+  }
 
-    input[type="file"] {
-        background: none;
-        color: #fff;
-    }
+  input[type="text"], input[type="tel"], input[type="email"], select {
+    width:100%;
+    padding:11px 12px;
+    margin-top:6px;
+    border-radius:8px;
+    border:none;
+    font-size:14px;
+  }
 
-    button {
-        margin-top: 20px;
-        width: 100%;
-        padding: 14px;
-        background: #7b3fe4;
-        border: none;
-        border-radius: 10px;
-        font-size: 16px;
-        color: #fff;
-        font-weight: bold;
-        cursor: pointer;
-        transition: 0.3s;
-    }
+  input[type="file"] {
+    margin-top:8px;
+    color: #fff;
+  }
 
-    button:hover {
-        background: #9b63ff;
-    }
+  .preview-row {
+    display:flex;
+    gap:10px;
+    margin-top:10px;
+    align-items:center;
+    flex-wrap:wrap;
+  }
 
-    .success-message {
-        display: none;
-        margin-top: 20px;
-        padding: 15px;
-        background: rgba(40, 200, 60, 0.9);
-        color: white;
-        font-weight: bold;
-        text-align: center;
-        border-radius: 10px;
-    }
+  .thumb {
+    width: calc(50% - 5px);
+    max-width: 240px;
+    border-radius:10px;
+    overflow:hidden;
+    background: rgba(0,0,0,0.25);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    min-height:110px;
+  }
+
+  .thumb img, .thumb video {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+
+  .note {
+    font-size:12px;
+    color: rgba(220,220,255,0.85);
+    margin-top:8px;
+  }
+
+  .row {
+    display:flex;
+    gap:10px;
+    margin-top:12px;
+  }
+
+  .btn {
+    width:100%;
+    padding:12px 14px;
+    border-radius:10px;
+    border:none;
+    font-weight:700;
+    font-size:16px;
+    cursor:pointer;
+    background: linear-gradient(90deg,var(--accent-1),var(--accent-2));
+    color:#fff;
+  }
+
+  .small {
+    font-size:13px;
+    opacity:0.95;
+  }
+
+  .overlay {
+    position:fixed;
+    inset:0;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    background:rgba(0,0,0,0.5);
+    z-index:9999;
+  }
+
+  .overlay.show { display:flex; }
+  .overlay .box {
+    background: #120826;
+    padding:18px 22px;
+    border-radius:12px;
+    text-align:center;
+    color:white;
+    font-weight:700;
+  }
+
+  @media (max-width:480px) {
+    .thumb { min-height:90px; }
+  }
 </style>
 </head>
 <body>
-<div class="container">
+
+  <main class="card" role="main">
     <h2>Upload Your Hustle</h2>
-    <form id="uploadForm" enctype="multipart/form-data">
-        
-        <label>Name</label>
-        <input type="text" name="name" required />
+    <p class="lead">Show two pictures and one short video of your skill. After submission your profile will be <strong>Pending Verification</strong>.</p>
 
-        <label>Skill</label>
-        <select name="skill" required>
-            <option value="">Select Skill</option>
-            <option>Hairdresser</option>
-            <option>Plumber</option>
-            <option>Electrician</option>
-            <option>Mechanic</option>
-            <option>Makeup Artist</option>
-            <option>Photographer</option>
-            <option>Welder</option>
-            <option>Painter</option>
-            <option>Braiding</option>
-            <option>Tiler</option>
-            <option>Chef / Cooking</option>
-            <option>Seamstress / Tailor</option>
-            <option>Gardener</option>
-            <option>DJ</option>
-            <option>Personal Trainer</option>
-            <option>Car Wash</option>
-            <option>Interior Decorator</option>
-            <option>Bricklayer</option>
-            <option>Furniture Maker</option>
-            <option>Video Editor</option>
-            <option>MC / Host</option>
-            <option>Security Guard</option>
-            <option>Babysitter</option>
-            <option>Nail Technician</option>
-            <option>Shoemaker</option>
-        </select>
+    <!--
+      IMPORTANT:
+      Replace the form action URL below with your deployed Apps Script Web App URL.
+      The backend will create the sheet and headers automatically and will keep a 'Verified' column.
+    -->
+    <form id="uploadForm" action="REPLACE_WITH_YOUR_WEB_APP_URL" method="POST" enctype="multipart/form-data" novalidate>
+      <!-- Basic Info -->
+      <label for="name">Full Name</label>
+      <input id="name" name="name" type="text" placeholder="Your full name" required>
 
-        <label>Province</label>
-        <select name="province" required>
-            <option value="">Select Province</option>
-            <option>North West</option>
-            <option>Gauteng</option>
-            <option>Limpopo</option>
-            <option>Mpumalanga</option>
-            <option>Free State</option>
-            <option>Eastern Cape</option>
-            <option>Western Cape</option>
-            <option>Northern Cape</option>
-            <option>KwaZulu-Natal</option>
-        </select>
+      <label for="skill">Skill</label>
+      <select id="skill" name="skill" required>
+        <option value="">Select skill</option>
+        <option>Barber</option>
+        <option>Hairdresser</option>
+        <option>Braids / Hair Stylist</option>
+        <option>Nail Technician</option>
+        <option>Makeup Artist</option>
+        <option>Photographer</option>
+        <option>Videographer</option>
+        <option>Graphic Designer</option>
+        <option>Plumber</option>
+        <option>Electrician</option>
+        <option>Welder</option>
+        <option>Mechanic</option>
+        <option>Panel Beater</option>
+        <option>Tiler</option>
+        <option>Painter</option>
+        <option>Construction Worker</option>
+        <option>Bricklayer</option>
+        <option>Carpenter</option>
+        <option>Landscaper / Garden Services</option>
+        <option>Car Wash</option>
+        <option>Tailor / Seamstress</option>
+        <option>Fashion Designer</option>
+        <option>Shoemaker</option>
+        <option>Chef / Caterer</option>
+        <option>Baker</option>
+        <option>Event Decor</option>
+        <option>MC / Host</option>
+        <option>DJ</option>
+        <option>Music Producer</option>
+        <option>Fitness Trainer</option>
+        <option>Tutor</option>
+        <option>Babysitter / Nanny</option>
+        <option>Laundry / Ironing</option>
+        <option>House Cleaning</option>
+        <option>Furniture Maker</option>
+        <option>Tech Repair (Phones / Laptops)</option>
+        <option>Courier / Delivery</option>
+        <option>Upholstery</option>
+        <option>Tattoo Artist</option>
+        <option>Massage Therapist</option>
+      </select>
 
-        <label>City</label>
-        <input type="text" name="city" required />
+      <label for="province">Province</label>
+      <select id="province" name="province" required>
+        <option value="">Select province</option>
+        <option>Eastern Cape</option>
+        <option>Free State</option>
+        <option>Gauteng</option>
+        <option>KwaZulu-Natal</option>
+        <option>Limpopo</option>
+        <option>Mpumalanga</option>
+        <option>Northern Cape</option>
+        <option>North West</option>
+        <option>Western Cape</option>
+      </select>
 
-        <label>Phone</label>
-        <input type="tel" name="phone" required />
+      <label for="city">City / Town</label>
+      <input id="city" name="city" type="text" placeholder="e.g. Mahikeng" required>
 
-        <label>Email</label>
-        <input type="email" name="email" />
+      <label for="phone">Phone (WhatsApp number)</label>
+      <input id="phone" name="phone" type="tel" placeholder="+27..." required>
 
-        <label>Upload Picture 1</label>
-        <input type="file" name="pic1" accept="image/*" required />
+      <label for="email">Email (optional)</label>
+      <input id="email" name="email" type="email" placeholder="you@example.com">
 
-        <label>Upload Picture 2</label>
-        <input type="file" name="pic2" accept="image/*" required />
+      <!-- MEDIA -->
+      <label>Picture 1 (required) — JPG/PNG</label>
+      <input id="pic1" name="pic1" type="file" accept="image/*" required>
 
-        <label>Upload Video (Your Skill Demo)</label>
-        <input type="file" name="video" accept="video/*" required />
+      <label>Picture 2 (required) — JPG/PNG</label>
+      <input id="pic2" name="pic2" type="file" accept="image/*" required>
 
-        <button type="submit">Submit Hustle</button>
+      <div class="preview-row" aria-hidden="true">
+        <div id="thumb1" class="thumb" title="Picture 1 preview"></div>
+        <div id="thumb2" class="thumb" title="Picture 2 preview"></div>
+      </div>
+
+      <label>Video (required) — MP4/WEBM (short demo)</label>
+      <input id="video" name="video" type="file" accept="video/*" required>
+
+      <div class="preview-row" aria-hidden="true">
+        <div id="vidThumb" class="thumb" title="Video preview"></div>
+      </div>
+
+      <p class="note small">Max sizes: images 6MB each, video 50MB. If your video is too large, trim a short demo (10–30s) for faster uploads.</p>
+
+      <!-- Verified flag (keeps uploads hidden until you set Verified = Yes in the sheet) -->
+      <input type="hidden" name="verified" value="No">
+
+      <div class="row">
+        <button type="submit" class="btn">Submit Hustle</button>
+      </div>
+
+      <p class="small" style="margin-top:12px; color:rgba(230,230,255,0.8)">
+        After submit: your profile will be saved as **Pending Verification**. Only verified hustlers appear on Browse.
+      </p>
     </form>
+  </main>
 
-    <div class="success-message" id="successMessage"></div>
-</div>
+  <!-- SUBMITTING OVERLAY -->
+  <div id="overlay" class="overlay" aria-hidden="true">
+    <div class="box">Submitting your hustle… please wait</div>
+  </div>
 
 <script>
-const form = document.getElementById("uploadForm");
-const successDiv = document.getElementById("successMessage");
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyUXpIsR-ePBuCi16yphHAipAHqbXAQ4UH_S8mjtkTMNr1430bP-Z9POiLpHLaJ-YQK/exec";
+  // ---------- Preview and validation ----------
+  const pic1 = document.getElementById('pic1');
+  const pic2 = document.getElementById('pic2');
+  const videoInput = document.getElementById('video');
+  const thumb1 = document.getElementById('thumb1');
+  const thumb2 = document.getElementById('thumb2');
+  const vidThumb = document.getElementById('vidThumb');
+  const form = document.getElementById('uploadForm');
+  const overlay = document.getElementById('overlay');
 
-form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  const MAX_IMAGE_BYTES = 6 * 1024 * 1024; // 6MB
+  const MAX_VIDEO_BYTES = 50 * 1024 * 1024; // 50MB
 
-    const formData = new FormData(form);
-
-    try {
-        const response = await fetch(WEB_APP_URL, {
-            method: "POST",
-            body: formData
-        });
-
-        const text = await response.text();
-        const result = JSON.parse(text);
-
-        if(result.status === "success") {
-            const name = formData.get("name");
-            successDiv.textContent = `Welcome ${name}! Your hustle was submitted successfully 🚀`;
-            successDiv.style.display = "block";
-            form.reset();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-
-            // disappear after 5 seconds
-            setTimeout(() => successDiv.style.display = "none", 5000);
-
-        } else {
-            successDiv.textContent = "Oops! Something went wrong. Please try again.";
-            successDiv.style.display = "block";
-        }
-
-    } catch(err) {
-        console.error(err);
-        successDiv.textContent = "Error submitting form. Check your internet connection.";
-        successDiv.style.display = "block";
+  function showImagePreview(file, container) {
+    container.innerHTML = '';
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      container.textContent = 'Not an image';
+      return;
     }
-});
+    if (file.size > MAX_IMAGE_BYTES) {
+      container.textContent = 'Image too large';
+      return;
+    }
+    const img = document.createElement('img');
+    const reader = new FileReader();
+    reader.onload = e => img.src = e.target.result;
+    reader.readAsDataURL(file);
+    container.appendChild(img);
+  }
+
+  function showVideoPreview(file, container) {
+    container.innerHTML = '';
+    if (!file) return;
+    if (!file.type.startsWith('video/')) {
+      container.textContent = 'Not a video';
+      return;
+    }
+    if (file.size > MAX_VIDEO_BYTES) {
+      container.textContent = 'Video too large';
+      return;
+    }
+    const vid = document.createElement('video');
+    vid.controls = true;
+    vid.muted = true;
+    vid.playsInline = true;
+    const reader = new FileReader();
+    reader.onload = e => vid.src = e.target.result;
+    reader.readAsDataURL(file);
+    container.appendChild(vid);
+  }
+
+  pic1.addEventListener('change', () => showImagePreview(pic1.files[0], thumb1));
+  pic2.addEventListener('change', () => showImagePreview(pic2.files[0], thumb2));
+  videoInput.addEventListener('change', () => showVideoPreview(videoInput.files[0], vidThumb));
+
+  // When form is submitted, perform quick client validation, then allow normal POST.
+  form.addEventListener('submit', (ev) => {
+    // Quick checks
+    if (!pic1.files[0] || !pic2.files[0] || !videoInput.files[0]) {
+      ev.preventDefault();
+      alert('Please choose 2 pictures and 1 video.');
+      return false;
+    }
+    // size checks
+    if (pic1.files[0].size > MAX_IMAGE_BYTES || pic2.files[0].size > MAX_IMAGE_BYTES) {
+      ev.preventDefault();
+      alert('One of the images is too large. Max 6MB each.');
+      return false;
+    }
+    if (videoInput.files[0].size > MAX_VIDEO_BYTES) {
+      ev.preventDefault();
+      alert('Video too large. Max 50MB.');
+      return false;
+    }
+
+    // Show overlay and allow form to submit (do not prevent default)
+    overlay.classList.add('show');
+    overlay.setAttribute('aria-hidden', 'false');
+    return true;
+  });
+
+  // Accessibility: hide overlay when user navigates away
+  window.addEventListener('beforeunload', () => {
+    overlay.classList.remove('show');
+  });
 </script>
 </body>
-</html>
+                            </html>
