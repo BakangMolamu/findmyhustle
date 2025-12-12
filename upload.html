@@ -310,7 +310,7 @@ form.addEventListener('submit', async function(e) {
   e.preventDefault();
 
   // check WEB_APP_URL exists
-  if (typeof WEB_APP_URL === 'undefined' || !WEB_APP_URL || WEB_APP_URL.includes('PASTE_YOUR_WEB_APP_URL')) {
+  if (typeof WEB_APP_URL === 'undefined' || !WEB_APP_URL || WEB_APP_URL.includes('https://script.google.com/macros/s/AKfycbzPv4jMATIkjJma6j5Q2CnYL1UU9j6ANrBo7Sj3BFBcnkXkWae-fkGk6kesNJcjKsU2/exec')) {
     alert('Please paste your Apps Script Web App URL into the upload.html (see top of file).');
     return;
   }
