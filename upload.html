@@ -7,37 +7,31 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
 :root {
-    --purple1: #3b0a57;
-    --purple2: #0d1a5e;
-    --card-bg: rgba(255,255,255,0.06);
-    --accent1: #7b3fe4;
-    --accent2: #4bc0ff;
+  --purple1: #3b0a57;
+  --purple2: #0d1a5e;
+  --card-bg: rgba(255,255,255,0.06);
+  --accent1: #7b3fe4;
+  --accent2: #4bc0ff;
 }
-
-html, body {
-    height:100%;
-    margin:0;
-    font-family:'Poppins',system-ui,Arial,sans-serif;
-}
-
+html,body { height:100%; margin:0; font-family:'Poppins',system-ui,Arial,sans-serif; }
 body {
-    display:flex;
-    align-items:flex-start;
-    justify-content:center;
-    padding:28px;
-    min-height:100%;
-    background: linear-gradient(135deg, var(--purple1), var(--purple2));
-    color: #fff;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  padding:28px;
+  min-height:100%;
+  background: linear-gradient(135deg, var(--purple1), var(--purple2));
+  color: #fff;
 }
 
 .card {
-    width:100%;
-    max-width:720px;
-    background: var(--card-bg);
-    border-radius:14px;
-    padding:22px;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
-    backdrop-filter: blur(6px);
+  width:100%;
+  max-width:720px;
+  background: var(--card-bg);
+  border-radius:14px;
+  padding:22px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+  backdrop-filter: blur(6px);
 }
 
 h1 { margin:0 0 6px 0; font-size:22px; text-align:center; }
@@ -45,27 +39,27 @@ p.lead { margin:0 0 18px 0; text-align:center; color: rgba(255,255,255,0.9); }
 
 label { display:block; font-weight:600; margin-top:12px; font-size:13px; color: #f3f6ff; }
 input[type="text"], input[type="tel"], input[type="email"], select, textarea {
-    width:100%;
-    padding:10px 12px;
-    margin-top:6px;
-    border-radius:10px;
-    border: none;
-    font-size:14px;
-    outline: none;
+  width:100%;
+  padding:10px 12px;
+  margin-top:6px;
+  border-radius:10px;
+  border: none;
+  font-size:14px;
+  outline:none;
 }
 
 textarea { min-height:90px; resize: vertical; }
 
 .media-row { display:flex; gap:12px; margin-top:10px; flex-wrap:wrap; }
 .thumb {
-    width: calc(50% - 6px);
-    min-height:120px;
-    background: rgba(0,0,0,0.12);
-    border-radius:10px;
-    overflow:hidden;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+  width: calc(50% - 6px);
+  min-height:120px;
+  background: rgba(0,0,0,0.12);
+  border-radius:10px;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 .thumb img, .thumb video { width:100%; height:100%; object-fit:cover; display:block; }
 
@@ -75,62 +69,67 @@ textarea { min-height:90px; resize: vertical; }
 .row .col { flex:1; }
 
 button.primary {
-    margin-top:18px;
-    width:100%;
-    padding:13px 14px;
-    border-radius:10px;
-    border: none;
-    font-weight:800;
-    font-size:16px;
-    background: linear-gradient(90deg,var(--accent1),var(--accent2));
-    color:white;
-    cursor:pointer;
+  margin-top:18px;
+  width:100%;
+  padding:13px 14px;
+  border-radius:10px;
+  border: none;
+  font-weight:800;
+  font-size:16px;
+  background: linear-gradient(90deg,var(--accent1),var(--accent2));
+  color:white;
+  cursor:pointer;
 }
 button.primary:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
 
 /* success popup */
 #successPopup {
-    position:fixed;
-    left:50%;
-    top:-160px;
-    transform:translateX(-50%);
-    background: linear-gradient(135deg,#4cd964,#38f9d7);
-    color:#002;
-    padding:14px 18px;
-    border-radius:12px;
-    font-weight:700;
-    box-shadow:0 8px 30px rgba(0,0,0,0.35);
-    z-index:9999;
-    opacity:0;
-    transition: all 0.6s cubic-bezier(.2,.9,.2,1);
+  position:fixed;
+  left:50%;
+  top:-160px;
+  transform:translateX(-50%);
+  background: linear-gradient(135deg,#4cd964,#38f9d7);
+  color:#002;
+  padding:14px 18px;
+  border-radius:12px;
+  font-weight:700;
+  box-shadow:0 8px 30px rgba(0,0,0,0.35);
+  z-index:9999;
+  opacity:0;
+  transition: all 0.6s cubic-bezier(.2,.9,.2,1);
 }
 #successPopup.show { top:20px; opacity:1; }
 
 /* overlay during upload */
 #overlay {
-    display:none;
-    position:fixed;
-    inset:0;
-    background: rgba(0,0,0,0.45);
-    align-items:center;
-    justify-content:center;
-    z-index:9998;
+  display:none;
+  position:fixed;
+  inset:0;
+  background: rgba(0,0,0,0.45);
+  align-items:center;
+  justify-content:center;
+  z-index:9998;
 }
 #overlay.show { display:flex; }
 .overlay-box { background: rgba(255,255,255,0.06); padding:14px 18px; border-radius:10px; color:white; font-weight:700; }
 
 @media (max-width:520px) {
-    .thumb { width:100%; }
+  .thumb { width:100%; }
 }
 </style>
 </head>
+
 <body>
 <div id="successPopup">✅ Submission successful — we'll contact you for verification.</div>
 <div id="overlay"><div class="overlay-box">Uploading — please wait…</div></div>
 
 <main class="card" role="main">
-<h1>Upload Your Hustle</h1>
-<p class="lead">Showcase your skill with 2 pictures and one short video. Profiles appear on Browse only after verification.</p>
+  <h1>Upload Your Hustle</h1>
+  <p class="lead">Showcase your skill with 2 pictures and one short video. Profiles appear on Browse only after verification.</p>
+
+<script>
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzPv4jMATIkjJma6j5Q2CnYL1UU9j6ANrBo7Sj3BFBcnkXkWae-fkGk6kesNJcjKsU2/exec";
+</script>
 
 <form id="uploadForm" novalidate>
 <label for="name">Full Name</label>
@@ -221,24 +220,15 @@ button.primary:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
 <input id="pic2" type="file" accept="image/*" required>
 
 <p class="note">By submitting you confirm you own the media and agree to be contacted for verification. New profiles are hidden from Browse until verified.</p>
-
 <button id="submitBtn" class="primary" type="submit">Submit Hustle</button>
 </form>
 </main>
 
 <script>
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzPv4jMATIkjJma6j5Q2CnYL1UU9j6ANrBo7Sj3BFBcnkXkWae-fkGk6kesNJcjKsU2/exec"; // <-- Replace this with your Apps Script URL
-
-const MAX_IMAGE = 6 * 1024 * 1024;
-const MAX_VIDEO = 50 * 1024 * 1024;
+const MAX_IMAGE = 6 * 1024 * 1024; // 6MB
+const MAX_VIDEO = 50 * 1024 * 1024; // 50MB
 
 const form = document.getElementById('uploadForm');
-const nameInput = document.getElementById('name');
-const skillInput = document.getElementById('skill');
-const provinceInput = document.getElementById('province');
-const cityInput = document.getElementById('city');
-const descriptionInput = document.getElementById('description');
-const phoneInput = document.getElementById('phone');
 const pic1Input = document.getElementById('pic1');
 const pic2Input = document.getElementById('pic2');
 const videoInput = document.getElementById('video');
@@ -249,116 +239,118 @@ const overlay = document.getElementById('overlay');
 const submitBtn = document.getElementById('submitBtn');
 
 function showImagePreview(file, container) {
-    container.innerHTML = '';
-    const img = document.createElement('img');
-    const reader = new FileReader();
-    reader.onload = e => img.src = e.target.result;
-    reader.readAsDataURL(file);
-    container.appendChild(img);
+  container.innerHTML = '';
+  const img = document.createElement('img');
+  const reader = new FileReader();
+  reader.onload = e => img.src = e.target.result;
+  reader.readAsDataURL(file);
+  container.appendChild(img);
 }
 
 function readAsDataURL(file) {
-    return new Promise((resolve, reject) => {
-        const fr = new FileReader();
-        fr.onload = () => resolve(fr.result);
-        fr.onerror = reject;
-        fr.readAsDataURL(file);
-    });
+  return new Promise((resolve, reject) => {
+    const fr = new FileReader();
+    fr.onload = () => resolve(fr.result);
+    fr.onerror = reject;
+    fr.readAsDataURL(file);
+  });
 }
 
 function splitDataUrl(dataUrl) {
-    const m = dataUrl.match(/^data:(.+);base64,(.*)$/);
-    return m ? { mime: m[1], base64: m[2] } : null;
+  const m = dataUrl.match(/^data:(.+);base64,(.*)$/);
+  return m ? { mime: m[1], base64: m[2] } : null;
 }
 
 function setUploading(flag) {
-    overlay.classList.toggle('show', flag);
+  overlay.classList.toggle('show', flag);
 }
 
 pic1Input.addEventListener('change', () => {
-    const f = pic1Input.files[0];
-    if (f && f.size <= MAX_IMAGE) showImagePreview(f, thumbPic1);
+  const f = pic1Input.files[0];
+  if (f && f.size <= MAX_IMAGE) showImagePreview(f, thumbPic1);
 });
-
 pic2Input.addEventListener('change', () => {
-    const f = pic2Input.files[0];
-    if (f && f.size <= MAX_IMAGE) showImagePreview(f, thumbPic2);
+  const f = pic2Input.files[0];
+  if (f && f.size <= MAX_IMAGE) showImagePreview(f, thumbPic2);
 });
 
 form.addEventListener('submit', async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const name = nameInput.value.trim();
-    const skill = skillInput.value.trim();
-    const province = provinceInput.value.trim();
-    const city = cityInput.value.trim();
-    const description = descriptionInput.value.trim();
-    const phone = phoneInput.value.trim();
+  // FIXED: get values from elements
+  const nameValue = document.getElementById('name').value.trim();
+  const skillValue = document.getElementById('skill').value.trim();
+  const provinceValue = document.getElementById('province').value.trim();
+  const cityValue = document.getElementById('city').value.trim();
+  const descriptionValue = document.getElementById('description').value.trim();
+  const phoneValue = document.getElementById('phone').value.trim();
 
-    if (!name || !skill || !province || !city || !description || !phone) {
-        alert("Please fill all fields.");
-        return;
+  if (!nameValue || !skillValue || !provinceValue || !cityValue || !descriptionValue || !phoneValue) {
+    alert("Please fill all fields.");
+    return;
+  }
+
+  const pic1 = pic1Input.files[0];
+  const pic2 = pic2Input.files[0];
+  const video = videoInput.files[0];
+
+  if (!pic1 || !pic2 || !video) {
+    alert("Please upload all media files.");
+    return;
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Uploading…";
+  setUploading(true);
+
+  try {
+    const [p1, p2, v] = await Promise.all([
+      readAsDataURL(pic1),
+      readAsDataURL(pic2),
+      readAsDataURL(video),
+    ]);
+
+    const payload = {
+      Name: nameValue,
+      Skill: skillValue,
+      Province: provinceValue,
+      City: cityValue,
+      Description: descriptionValue,
+      Phone: phoneValue,
+      Picture1: { filename: pic1.name, ...splitDataUrl(p1) },
+      Picture2: { filename: pic2.name, ...splitDataUrl(p2) },
+      Video: { filename: video.name, ...splitDataUrl(v) }
+    };
+
+    const res = await fetch(WEB_APP_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    const json = await res.json();
+
+    if (json.status === "success") {
+      successPopup.classList.add("show");
+      setTimeout(() => successPopup.classList.remove("show"), 3000);
+      form.reset();
+      thumbPic1.innerHTML = "Picture 1 preview";
+      thumbPic2.innerHTML = "Picture 2 preview";
+      setTimeout(() => {
+        window.location.href = `profile.html?id=${json.id}`;
+      }, 1200);
+    } else {
+      alert("Server Error: " + json.message);
     }
 
-    const pic1 = pic1Input.files[0];
-    const pic2 = pic2Input.files[0];
-    const video = videoInput.files[0];
+  } catch (err) {
+    alert("Upload failed: " + err);
+  }
 
-    if (!pic1 || !pic2 || !video) {
-        alert("Please upload all media files.");
-        return;
-    }
-
-    submitBtn.disabled = true;
-    submitBtn.textContent = "Uploading…";
-    setUploading(true);
-
-    try {
-        const [p1, p2, v] = await Promise.all([
-            readAsDataURL(pic1),
-            readAsDataURL(pic2),
-            readAsDataURL(video)
-        ]);
-
-        const payload = {
-            Name: name,
-            Skill: skill,
-            Province: province,
-            City: city,
-            Description: description,
-            Phone: phone,
-            Picture1: { filename: pic1.name, ...splitDataUrl(p1) },
-            Picture2: { filename: pic2.name, ...splitDataUrl(p2) },
-            Video: { filename: video.name, ...splitDataUrl(v) }
-        };
-
-        const res = await fetch(WEB_APP_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
-        });
-
-        const json = await res.json();
-
-        if (json.status === "success") {
-            successPopup.classList.add("show");
-            setTimeout(() => successPopup.classList.remove("show"), 3000);
-            form.reset();
-            thumbPic1.innerHTML = "Picture 1 preview";
-            thumbPic2.innerHTML = "Picture 2 preview";
-            setTimeout(() => { window.location.href = `profile.html?id=${json.id}`; }, 1200);
-        } else {
-            alert("Server Error: " + json.message);
-        }
-
-    } catch (err) {
-        alert("Upload failed: " + err);
-    }
-
-    submitBtn.disabled = false;
-    submitBtn.textContent = "Submit Hustle";
-    setUploading(false);
+  submitBtn.disabled = false;
+  submitBtn.textContent = "Submit Hustle";
+  setUploading(false);
 });
 </script>
 </body>
-  </html>
+    </html>
