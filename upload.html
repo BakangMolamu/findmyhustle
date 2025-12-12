@@ -23,7 +23,6 @@ body {
   background: linear-gradient(135deg, var(--purple1), var(--purple2));
   color: #fff;
 }
-
 .card {
   width:100%;
   max-width:720px;
@@ -33,10 +32,8 @@ body {
   box-shadow: 0 12px 30px rgba(0,0,0,0.35);
   backdrop-filter: blur(6px);
 }
-
 h1 { margin:0 0 6px 0; font-size:22px; text-align:center; }
 p.lead { margin:0 0 18px 0; text-align:center; color: rgba(255,255,255,0.9); }
-
 label { display:block; font-weight:600; margin-top:12px; font-size:13px; color: #f3f6ff; }
 input[type="text"], input[type="tel"], input[type="email"], select, textarea {
   width:100%;
@@ -45,11 +42,9 @@ input[type="text"], input[type="tel"], input[type="email"], select, textarea {
   border-radius:10px;
   border: none;
   font-size:14px;
-  outline:none;
+  outline: none;
 }
-
 textarea { min-height:90px; resize: vertical; }
-
 .media-row { display:flex; gap:12px; margin-top:10px; flex-wrap:wrap; }
 .thumb {
   width: calc(50% - 6px);
@@ -62,12 +57,9 @@ textarea { min-height:90px; resize: vertical; }
   justify-content:center;
 }
 .thumb img, .thumb video { width:100%; height:100%; object-fit:cover; display:block; }
-
 .note { font-size:13px; color: rgba(255,255,255,0.85); margin-top:8px; }
-
 .row { display:flex; gap:12px; margin-top:12px; }
 .row .col { flex:1; }
-
 button.primary {
   margin-top:18px;
   width:100%;
@@ -113,12 +105,9 @@ button.primary:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
 #overlay.show { display:flex; }
 .overlay-box { background: rgba(255,255,255,0.06); padding:14px 18px; border-radius:10px; color:white; font-weight:700; }
 
-@media (max-width:520px) {
-  .thumb { width:100%; }
-}
+@media (max-width:520px) { .thumb { width:100%; } }
 </style>
 </head>
-
 <body>
 <div id="successPopup">✅ Submission successful — we'll contact you for verification.</div>
 <div id="overlay"><div class="overlay-box">Uploading — please wait…</div></div>
@@ -179,6 +168,7 @@ const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzPv4jMATIkjJma6j5Q
       <option>Other</option>
     </select>
   </div>
+
   <div class="col">
     <label for="province">Province</label>
     <select id="province" name="province" required>
@@ -225,8 +215,8 @@ const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzPv4jMATIkjJma6j5Q
 </main>
 
 <script>
-const MAX_IMAGE = 6 * 1024 * 1024; // 6MB
-const MAX_VIDEO = 50 * 1024 * 1024; // 50MB
+const MAX_IMAGE = 6 * 1024 * 1024;
+const MAX_VIDEO = 50 * 1024 * 1024;
 
 const form = document.getElementById('uploadForm');
 const pic1Input = document.getElementById('pic1');
@@ -269,6 +259,7 @@ pic1Input.addEventListener('change', () => {
   const f = pic1Input.files[0];
   if (f && f.size <= MAX_IMAGE) showImagePreview(f, thumbPic1);
 });
+
 pic2Input.addEventListener('change', () => {
   const f = pic2Input.files[0];
   if (f && f.size <= MAX_IMAGE) showImagePreview(f, thumbPic2);
@@ -277,15 +268,14 @@ pic2Input.addEventListener('change', () => {
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  // FIXED: get values from elements
-  const nameValue = document.getElementById('name').value.trim();
-  const skillValue = document.getElementById('skill').value.trim();
-  const provinceValue = document.getElementById('province').value.trim();
-  const cityValue = document.getElementById('city').value.trim();
-  const descriptionValue = document.getElementById('description').value.trim();
-  const phoneValue = document.getElementById('phone').value.trim();
+  const nameVal = document.getElementById('name').value.trim();
+  const skillVal = document.getElementById('skill').value.trim();
+  const provinceVal = document.getElementById('province').value.trim();
+  const cityVal = document.getElementById('city').value.trim();
+  const descVal = document.getElementById('description').value.trim();
+  const phoneVal = document.getElementById('phone').value.trim();
 
-  if (!nameValue || !skillValue || !provinceValue || !cityValue || !descriptionValue || !phoneValue) {
+  if (!nameVal || !skillVal || !provinceVal || !cityVal || !descVal || !phoneVal) {
     alert("Please fill all fields.");
     return;
   }
@@ -296,6 +286,16 @@ form.addEventListener('submit', async (e) => {
 
   if (!pic1 || !pic2 || !video) {
     alert("Please upload all media files.");
+    return;
+  }
+
+  // New: size checks
+  if (pic1.size > MAX_IMAGE || pic2.size > MAX_IMAGE) {
+    alert("Each picture must be under 6MB.");
+    return;
+  }
+  if (video.size > MAX_VIDEO) {
+    alert("Video must be under 50MB.");
     return;
   }
 
@@ -311,12 +311,12 @@ form.addEventListener('submit', async (e) => {
     ]);
 
     const payload = {
-      Name: nameValue,
-      Skill: skillValue,
-      Province: provinceValue,
-      City: cityValue,
-      Description: descriptionValue,
-      Phone: phoneValue,
+      Name: nameVal,
+      Skill: skillVal,
+      Province: provinceVal,
+      City: cityVal,
+      Description: descVal,
+      Phone: phoneVal,
       Picture1: { filename: pic1.name, ...splitDataUrl(p1) },
       Picture2: { filename: pic2.name, ...splitDataUrl(p2) },
       Video: { filename: video.name, ...splitDataUrl(v) }
@@ -342,9 +342,9 @@ form.addEventListener('submit', async (e) => {
     } else {
       alert("Server Error: " + json.message);
     }
-
   } catch (err) {
-    alert("Upload failed: " + err);
+    console.error(err);
+    alert("Upload failed: " + (err.message || err));
   }
 
   submitBtn.disabled = false;
@@ -353,4 +353,4 @@ form.addEventListener('submit', async (e) => {
 });
 </script>
 </body>
-    </html>
+  </html>
