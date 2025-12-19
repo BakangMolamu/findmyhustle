@@ -4,174 +4,146 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Upload Your Hustle — FindMyHustle</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
 <style>
-:root {
-  --purple1: #3b0a57;
-  --purple2: #0d1a5e;
-  --card-bg: rgba(255,255,255,0.06);
-  --accent1: #7b3fe4;
-  --accent2: #4bc0ff;
-}
-html,body { height:100%; margin:0; font-family:'Poppins',system-ui,Arial,sans-serif; }
-body {
-  display:flex;
-  align-items:flex-start;
-  justify-content:center;
-  padding:28px;
-  min-height:100%;
-  background: linear-gradient(135deg, var(--purple1), var(--purple2));
-  color: #fff;
-}
-.card {
-  width:100%;
-  max-width:720px;
-  background: var(--card-bg);
-  border-radius:14px;
-  padding:22px;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.35);
-  backdrop-filter: blur(6px);
-}
-h1 { margin:0 0 6px 0; font-size:22px; text-align:center; }
-p.lead { margin:0 0 18px 0; text-align:center; color: rgba(255,255,255,0.9); }
-label { display:block; font-weight:600; margin-top:12px; font-size:13px; color: #f3f6ff; }
-input[type="text"], input[type="tel"], input[type="email"], select, textarea {
-  width:100%;
-  padding:10px 12px;
-  margin-top:6px;
-  border-radius:10px;
-  border: none;
-  font-size:14px;
-  outline: none;
-}
-textarea { min-height:90px; resize: vertical; }
-.media-row { display:flex; gap:12px; margin-top:10px; flex-wrap:wrap; }
-.thumb {
-  width: calc(50% - 6px);
-  min-height:120px;
-  background: rgba(0,0,0,0.12);
-  border-radius:10px;
-  overflow:hidden;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.thumb img, .thumb video { width:100%; height:100%; object-fit:cover; display:block; }
-.note { font-size:13px; color: rgba(255,255,255,0.85); margin-top:8px; }
-.row { display:flex; gap:12px; margin-top:12px; }
-.row .col { flex:1; }
-button.primary {
-  margin-top:18px;
-  width:100%;
-  padding:13px 14px;
-  border-radius:10px;
-  border: none;
-  font-weight:800;
-  font-size:16px;
-  background: linear-gradient(90deg,var(--accent1),var(--accent2));
-  color:white;
-  cursor:pointer;
-}
-button.primary:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
+  :root {
+    --purple1: #3b0a57;
+    --purple2: #0d1a5e;
+    --card-bg: rgba(255,255,255,0.06);
+    --accent1: #7b3fe4;
+    --accent2: #4bc0ff;
+  }
 
-/* success popup */
-#successPopup {
-  position:fixed;
-  left:50%;
-  top:-160px;
-  transform:translateX(-50%);
-  background: linear-gradient(135deg,#4cd964,#38f9d7);
-  color:#002;
-  padding:14px 18px;
-  border-radius:12px;
-  font-weight:700;
-  box-shadow:0 8px 30px rgba(0,0,0,0.35);
-  z-index:9999;
-  opacity:0;
-  transition: all 0.6s cubic-bezier(.2,.9,.2,1);
-}
-#successPopup.show { top:20px; opacity:1; }
+  html,body { height:100%; margin:0; font-family:'Poppins',system-ui,Arial,sans-serif; }
+  body {
+    display:flex;
+    justify-content:center;
+    padding:28px;
+    background: linear-gradient(135deg, var(--purple1), var(--purple2));
+    color:#fff;
+  }
 
-/* overlay during upload */
-#overlay {
-  display:none;
-  position:fixed;
-  inset:0;
-  background: rgba(0,0,0,0.45);
-  align-items:center;
-  justify-content:center;
-  z-index:9998;
-}
-#overlay.show { display:flex; }
-.overlay-box { background: rgba(255,255,255,0.06); padding:14px 18px; border-radius:10px; color:white; font-weight:700; }
+  .card {
+    width:100%;
+    max-width:720px;
+    background:var(--card-bg);
+    border-radius:14px;
+    padding:22px;
+    box-shadow:0 12px 30px rgba(0,0,0,0.35);
+    backdrop-filter:blur(6px);
+  }
 
-@media (max-width:520px) { .thumb { width:100%; } }
+  h1 { text-align:center; margin-bottom:6px; }
+  p.lead { text-align:center; margin-bottom:18px; }
+
+  label { display:block; margin-top:12px; font-weight:600; font-size:13px; }
+  input, select, textarea {
+    width:100%;
+    padding:10px;
+    margin-top:6px;
+    border-radius:10px;
+    border:none;
+    font-size:14px;
+  }
+
+  textarea { min-height:90px; }
+
+  .row { display:flex; gap:12px; }
+  .row .col { flex:1; }
+
+  .media-row { display:flex; gap:12px; margin-top:10px; }
+  .thumb {
+    flex:1;
+    min-height:120px;
+    background:rgba(0,0,0,0.2);
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .thumb img { width:100%; height:100%; object-fit:cover; }
+
+  button {
+    width:100%;
+    margin-top:20px;
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:800;
+    background:linear-gradient(90deg,var(--accent1),var(--accent2));
+    color:white;
+    cursor:pointer;
+  }
+
+  #overlay {
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.5);
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+  }
+
+  #overlay.show { display:flex; }
+
+  #successPopup {
+    position:fixed;
+    top:-100px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#4cd964;
+    color:#002;
+    padding:14px 18px;
+    border-radius:12px;
+    font-weight:700;
+    transition:0.5s;
+  }
+
+  #successPopup.show { top:20px; }
 </style>
 </head>
 <body>
-<div id="successPopup">✅ Submission successful — we'll contact you for verification.</div>
-<div id="overlay"><div class="overlay-box">Uploading — please wait…</div></div>
 
-<main class="card" role="main">
-  <h1>Upload Your Hustle</h1>
-  <p class="lead">Showcase your skill with 2 pictures and one short video. Profiles appear on Browse only after verification.</p>
+<div id="overlay">Uploading… please wait</div>
+<div id="successPopup">✅ Submission successful — we’ll contact you for verification.</div>
+
+<main class="card">
+<h1>Upload Your Hustle</h1>
+<p class="lead">Profiles appear on Browse only after verification.</p>
 
 <script>
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzPv4jMATIkjJma6j5Q2CnYL1UU9j6ANrBo7Sj3BFBcnkXkWae-fkGk6kesNJcjKsU2/exec";
 </script>
 
-<form id="uploadForm" novalidate>
-<label for="name">Full Name</label>
-<input id="name" name="name" type="text" placeholder="Your full name" required>
+<form id="uploadForm">
+
+<label>Full Name</label>
+<input id="name" required>
 
 <div class="row">
   <div class="col">
-    <label for="skill">Skill Category</label>
-    <select id="skill" name="skill" required>
+    <label>Skill</label>
+    <select id="skill" required>
       <option value="">Select skill</option>
       <option>Barber</option>
-      <option>Hairdresser / Braids</option>
-      <option>Nail Technician</option>
-      <option>Makeup Artist</option>
+      <option>Hairdresser</option>
       <option>Photographer</option>
       <option>Videographer</option>
-      <option>Graphic Designer</option>
-      <option>Social Media Manager</option>
-      <option>DJ</option>
-      <option>Musician / Singer</option>
-      <option>MC / Host</option>
-      <option>Dancer</option>
-      <option>Chef / Caterer</option>
-      <option>Baker</option>
-      <option>Seamstress / Tailor</option>
-      <option>Fashion Designer</option>
-      <option>Carpenter</option>
-      <option>Furniture Maker</option>
-      <option>Painter</option>
-      <option>Tiler</option>
-      <option>Bricklayer</option>
-      <option>Welder</option>
-      <option>Mechanic</option>
       <option>Electrician</option>
       <option>Plumber</option>
-      <option>Gardener / Landscaper</option>
-      <option>House Cleaning</option>
-      <option>Car Wash</option>
-      <option>Courier / Delivery</option>
-      <option>Tech Repair (Phones / Laptops)</option>
-      <option>Tutor</option>
-      <option>Personal Trainer</option>
-      <option>Massage Therapist</option>
-      <option>Tattoo Artist</option>
-      <option>Shoe Repair</option>
-      <option>Event Decorator</option>
+      <option>Graphic Designer</option>
       <option>Other</option>
     </select>
   </div>
 
   <div class="col">
-    <label for="province">Province</label>
-    <select id="province" name="province" required>
+    <label>Province</label>
+    <select id="province" required>
       <option value="">Select province</option>
       <option>Eastern Cape</option>
       <option>Free State</option>
@@ -179,178 +151,101 @@ const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzPv4jMATIkjJma6j5Q
       <option>KwaZulu-Natal</option>
       <option>Limpopo</option>
       <option>Mpumalanga</option>
-      <option>Northern Cape</option>
       <option>North West</option>
       <option>Western Cape</option>
     </select>
   </div>
 </div>
 
-<label for="city">City / Town</label>
-<input id="city" name="city" type="text" placeholder="e.g. Mahikeng" required>
+<label>City</label>
+<input id="city" required>
 
-<label for="description">Short Description (what you offer)</label>
-<textarea id="description" name="description" placeholder="Write a short description for customers..." required></textarea>
+<label>Description</label>
+<textarea id="description" required></textarea>
 
-<label for="phone">WhatsApp / Phone (with country code)</label>
-<input id="phone" name="phone" type="tel" placeholder="+27..." required>
+<label>Phone</label>
+<input id="phone" required>
 
-<label>Upload Video (MP4/WebM) — max 50MB</label>
+<label>Video</label>
 <input id="video" type="file" accept="video/*" required>
 
 <div class="media-row">
-  <div class="thumb" id="thumbPic1">Picture 1 preview</div>
-  <div class="thumb" id="thumbPic2">Picture 2 preview</div>
+  <div class="thumb" id="thumb1">Picture 1</div>
+  <div class="thumb" id="thumb2">Picture 2</div>
 </div>
 
-<label>Upload Picture 1 (JPG/PNG) — max 6MB</label>
+<label>Picture 1</label>
 <input id="pic1" type="file" accept="image/*" required>
 
-<label>Upload Picture 2 (JPG/PNG) — max 6MB</label>
+<label>Picture 2</label>
 <input id="pic2" type="file" accept="image/*" required>
 
-<p class="note">By submitting you confirm you own the media and agree to be contacted for verification. New profiles are hidden from Browse until verified.</p>
-<button id="submitBtn" class="primary" type="submit">Submit Hustle</button>
+<button type="submit">Submit Hustle</button>
 </form>
 </main>
 
 <script>
-const MAX_IMAGE = 6 * 1024 * 1024;
-const MAX_VIDEO = 50 * 1024 * 1024;
+const form = document.getElementById("uploadForm");
+const overlay = document.getElementById("overlay");
+const successPopup = document.getElementById("successPopup");
 
-const form = document.getElementById('uploadForm');
-const pic1Input = document.getElementById('pic1');
-const pic2Input = document.getElementById('pic2');
-const videoInput = document.getElementById('video');
-const thumbPic1 = document.getElementById('thumbPic1');
-const thumbPic2 = document.getElementById('thumbPic2');
-const successPopup = document.getElementById('successPopup');
-const overlay = document.getElementById('overlay');
-const submitBtn = document.getElementById('submitBtn');
+const nameInput = document.getElementById("name");
+const skillInput = document.getElementById("skill");
+const provinceInput = document.getElementById("province");
+const cityInput = document.getElementById("city");
+const descriptionInput = document.getElementById("description");
+const phoneInput = document.getElementById("phone");
 
-function showImagePreview(file, container) {
-  container.innerHTML = '';
-  const img = document.createElement('img');
-  const reader = new FileReader();
-  reader.onload = e => img.src = e.target.result;
-  reader.readAsDataURL(file);
-  container.appendChild(img);
-}
+const pic1Input = document.getElementById("pic1");
+const pic2Input = document.getElementById("pic2");
+const videoInput = document.getElementById("video");
 
-function readAsDataURL(file) {
-  return new Promise((resolve, reject) => {
-    const fr = new FileReader();
-    fr.onload = () => resolve(fr.result);
-    fr.onerror = reject;
-    fr.readAsDataURL(file);
+function readFile(file) {
+  return new Promise(res => {
+    const r = new FileReader();
+    r.onload = () => res(r.result);
+    r.readAsDataURL(file);
   });
 }
 
-function splitDataUrl(dataUrl) {
-  const m = dataUrl.match(/^data:(.+);base64,(.*)$/);
-  return m ? { mime: m[1], base64: m[2] } : null;
+function split(d) {
+  const m = d.match(/^data:(.+);base64,(.*)$/);
+  return { mime:m[1], base64:m[2] };
 }
 
-function setUploading(flag) {
-  overlay.classList.toggle('show', flag);
-}
-
-pic1Input.addEventListener('change', () => {
-  const f = pic1Input.files[0];
-  if (f && f.size <= MAX_IMAGE) showImagePreview(f, thumbPic1);
-});
-
-pic2Input.addEventListener('change', () => {
-  const f = pic2Input.files[0];
-  if (f && f.size <= MAX_IMAGE) showImagePreview(f, thumbPic2);
-});
-
-form.addEventListener('submit', async (e) => {
+form.addEventListener("submit", async e => {
   e.preventDefault();
+  overlay.classList.add("show");
 
-  const nameVal = document.getElementById('name').value.trim();
-  const skillVal = document.getElementById('skill').value.trim();
-  const provinceVal = document.getElementById('province').value.trim();
-  const cityVal = document.getElementById('city').value.trim();
-  const descVal = document.getElementById('description').value.trim();
-  const phoneVal = document.getElementById('phone').value.trim();
+  const payload = {
+    Name: nameInput.value,
+    Skill: skillInput.value,
+    Province: provinceInput.value,
+    City: cityInput.value,
+    Description: descriptionInput.value,
+    Phone: phoneInput.value,
+    Picture1: { filename: pic1Input.files[0].name, ...split(await readFile(pic1Input.files[0])) },
+    Picture2: { filename: pic2Input.files[0].name, ...split(await readFile(pic2Input.files[0])) },
+    Video: { filename: videoInput.files[0].name, ...split(await readFile(videoInput.files[0])) }
+  };
 
-  if (!nameVal || !skillVal || !provinceVal || !cityVal || !descVal || !phoneVal) {
-    alert("Please fill all fields.");
-    return;
+  const r = await fetch(WEB_APP_URL,{
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body:JSON.stringify(payload)
+  });
+
+  const j = await r.json();
+
+  overlay.classList.remove("show");
+
+  if(j.status==="success"){
+    successPopup.classList.add("show");
+    setTimeout(()=>location.href=`profile.html?id=${j.id}`,1200);
+  } else {
+    alert("Upload failed");
   }
-
-  const pic1 = pic1Input.files[0];
-  const pic2 = pic2Input.files[0];
-  const video = videoInput.files[0];
-
-  if (!pic1 || !pic2 || !video) {
-    alert("Please upload all media files.");
-    return;
-  }
-
-  // New: size checks
-  if (pic1.size > MAX_IMAGE || pic2.size > MAX_IMAGE) {
-    alert("Each picture must be under 6MB.");
-    return;
-  }
-  if (video.size > MAX_VIDEO) {
-    alert("Video must be under 50MB.");
-    return;
-  }
-
-  submitBtn.disabled = true;
-  submitBtn.textContent = "Uploading…";
-  setUploading(true);
-
-  try {
-    const [p1, p2, v] = await Promise.all([
-      readAsDataURL(pic1),
-      readAsDataURL(pic2),
-      readAsDataURL(video),
-    ]);
-
-    const payload = {
-      Name: nameVal,
-      Skill: skillVal,
-      Province: provinceVal,
-      City: cityVal,
-      Description: descVal,
-      Phone: phoneVal,
-      Picture1: { filename: pic1.name, ...splitDataUrl(p1) },
-      Picture2: { filename: pic2.name, ...splitDataUrl(p2) },
-      Video: { filename: video.name, ...splitDataUrl(v) }
-    };
-
-    const res = await fetch(WEB_APP_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
-
-    const json = await res.json();
-
-    if (json.status === "success") {
-      successPopup.classList.add("show");
-      setTimeout(() => successPopup.classList.remove("show"), 3000);
-      form.reset();
-      thumbPic1.innerHTML = "Picture 1 preview";
-      thumbPic2.innerHTML = "Picture 2 preview";
-      setTimeout(() => {
-        window.location.href = `profile.html?id=${json.id}`;
-      }, 1200);
-    } else {
-      alert("Server Error: " + json.message);
-    }
-  } catch (err) {
-    console.error(err);
-    alert("Upload failed: " + (err.message || err));
-  }
-
-  submitBtn.disabled = false;
-  submitBtn.textContent = "Submit Hustle";
-  setUploading(false);
 });
 </script>
 </body>
-        </html>
+    </html>
