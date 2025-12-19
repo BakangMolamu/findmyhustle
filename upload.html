@@ -229,13 +229,24 @@ form.addEventListener("submit", async e => {
     Video: { filename: videoInput.files[0].name, ...split(await readFile(videoInput.files[0])) }
   };
 
-  const r = await fetch(WEB_APP_URL,{
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body:JSON.stringify(payload)
+  
+
+  let j;
+try {
+  const r = await fetch(WEB_APP_URL, {
+    method: "POST",
+    body: JSON.stringify(payload)
   });
 
-  const j = await r.json();
+  const t = await r.text();
+  j = JSON.parse(t);
+
+} catch (err) {
+  overlay.classList.remove("show");
+  alert("Submission failed. Please try again.");
+  console.error(err);
+  return;
+}
 
   overlay.classList.remove("show");
 
