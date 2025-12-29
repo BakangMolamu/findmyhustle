@@ -6,10 +6,10 @@
 <title>Upload Your Hustle — FindMyHustle</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
-  :root{--p1:#3b0a57;--p2:#0d1a5e;--card:rgba(255,255,255,0.06);--accent1:#7b3fe4;--accent2:#4bc0ff;}
+  :root{--p1:#3b0a57;--p2:#0d1a5e;--card:rgba(255,255,255,0.06);--accent1:#7b3fe4;--accent2:#4bc0ff}
   *{box-sizing:border-box}
   body{margin:0;min-height:100vh;font-family:'Poppins',system-ui,Arial,sans-serif;background:linear-gradient(135deg,var(--p1),var(--p2));color:#fff;display:flex;align-items:flex-start;justify-content:center;padding:28px;}
-  .card{width:100%;max-width:760px;background:var(--card);padding:22px;border-radius:14px;box-shadow:0 12px 30px rgba(0,0,0,.35);backdrop-filter:blur(6px);}
+  .card{width:100%;max-width:760px;background:var(--card);padding:22px;border-radius:14px;box-shadow:0 12px 30px rgba(0,0,0,.35);backdrop-filter:blur(6px)}
   h1{margin:0 0 8px;font-size:22px;text-align:center}
   .lead{margin:0 0 18px;text-align:center;color:rgba(255,255,255,.9)}
   label{display:block;margin-top:12px;font-weight:600;font-size:13px;color:#f3f6ff}
@@ -19,7 +19,7 @@
   .row .col{flex:1}
   .media-row{display:flex;gap:12px;margin-top:10px;flex-wrap:wrap}
   .thumb{flex:1;min-height:120px;background:rgba(0,0,0,0.18);border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden}
-  .thumb img,.thumb video{width:100%;height:100%;object-fit:cover;display:block}
+  .thumb img{width:100%;height:100%;object-fit:cover}
   .note{font-size:13px;color:rgba(255,255,255,.85);margin-top:8px}
   button.primary{margin-top:18px;width:100%;padding:13px 14px;border-radius:10px;border:none;font-weight:800;font-size:16px;background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#fff;cursor:pointer}
   button.primary:disabled{opacity:.6;cursor:default}
@@ -38,13 +38,11 @@
 
 <main class="card" role="main" aria-labelledby="pageTitle">
   <h1 id="pageTitle">Upload Your Hustle</h1>
-  <p class="lead">Showcase your skill with 2 pictures and one short video. Profiles appear on Browse only after verification.</p>
+  <p class="lead">Two pictures only. Profiles show on Browse after verification.</p>
 
-  <!-- Put your deployed Web App URL here (replace the placeholder) -->
   <script>
     // ---------- PASTE YOUR WEB APP URL HERE ----------
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby-40Q2LWqKvgsxROxlGY3ppzDOYh9zZ8CbIquqVZQ_nE0bPl23hUdhOa-xHcsn94o/exec";
-    // Example: const WEB_APP_URL = "https://script.google.com/macros/s/AKfycb.../exec";
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyhFS43VudgMWx8WDodYKfTRhlBPFIk7sBo6r62idH1mI5DGFTUl_q4NMGdYQSlImB6Kg/exec";
     // ------------------------------------------------
   </script>
 
@@ -54,45 +52,18 @@
 
     <div class="row">
       <div class="col">
-        <label for="skill">Skill Category</label>
+        <label for="skill">Skill</label>
         <select id="skill" name="skill" required>
           <option value="">Select skill</option>
           <option>Barber</option>
           <option>Hairdresser / Braids</option>
           <option>Nail Technician</option>
-          <option>Makeup Artist</option>
           <option>Photographer</option>
           <option>Videographer</option>
-          <option>Graphic Designer</option>
-          <option>Social Media Manager</option>
-          <option>DJ</option>
-          <option>Musician / Singer</option>
-          <option>MC / Host</option>
-          <option>Dancer</option>
-          <option>Chef / Caterer</option>
-          <option>Baker</option>
-          <option>Seamstress / Tailor</option>
-          <option>Fashion Designer</option>
-          <option>Carpenter</option>
-          <option>Furniture Maker</option>
-          <option>Painter</option>
-          <option>Tiler</option>
-          <option>Bricklayer</option>
-          <option>Welder</option>
-          <option>Mechanic</option>
-          <option>Electrician</option>
           <option>Plumber</option>
-          <option>Gardener / Landscaper</option>
-          <option>House Cleaning</option>
-          <option>Car Wash</option>
-          <option>Courier / Delivery</option>
-          <option>Tech Repair (Phones / Laptops)</option>
-          <option>Tutor</option>
-          <option>Personal Trainer</option>
-          <option>Massage Therapist</option>
-          <option>Tattoo Artist</option>
-          <option>Shoemaker</option>
-          <option>Event Decorator</option>
+          <option>Electrician</option>
+          <option>Chef</option>
+          <option>Tailor</option>
           <option>Other</option>
         </select>
       </div>
@@ -117,14 +88,11 @@
     <label for="city">City / Town</label>
     <input id="city" name="city" type="text" placeholder="e.g. Mahikeng" required>
 
-    <label for="description">Short Description (what you offer)</label>
-    <textarea id="description" name="description" placeholder="Write a short description for customers..." required></textarea>
+    <label for="description">Short description</label>
+    <textarea id="description" name="description" placeholder="What you offer..." required></textarea>
 
-    <label for="phone">WhatsApp / Phone (with country code)</label>
+    <label for="phone">WhatsApp / Phone</label>
     <input id="phone" name="phone" type="tel" placeholder="+27..." required>
-
-    <label>Upload Video (MP4/WebM) — max 50MB</label>
-    <input id="video" type="file" accept="video/*" required>
 
     <div class="media-row" aria-hidden="true">
       <div class="thumb" id="thumbPic1">Picture 1 preview</div>
@@ -137,18 +105,17 @@
     <label>Upload Picture 2 (JPG/PNG) — max 6MB</label>
     <input id="pic2" type="file" accept="image/*" required>
 
-    <p class="note">By submitting you confirm you own the media and agree to be contacted for verification. New profiles are hidden from Browse until verified.</p>
+    <p class="note">By submitting you confirm you own the media. New profiles are Pending Verification.</p>
 
     <button id="submitBtn" class="primary" type="submit">Submit Hustle</button>
   </form>
 </main>
 
 <script>
-/* ---------- CONFIG ---------- */
-const MAX_IMAGE = 6 * 1024 * 1024;   // 6MB
-const MAX_VIDEO = 20 * 1024 * 1024; // 20MB SAFE for Apps Script;
+/* CONFIG */
+const MAX_IMAGE = 6 * 1024 * 1024; // 6MB
 
-/* ---------- ELEMENTS ---------- */
+/* ELEMENTS */
 const form = document.getElementById('uploadForm');
 const submitBtn = document.getElementById('submitBtn');
 const overlay = document.getElementById('overlay');
@@ -163,12 +130,9 @@ const phoneInput = document.getElementById('phone');
 
 const pic1Input = document.getElementById('pic1');
 const pic2Input = document.getElementById('pic2');
-const videoInput = document.getElementById('video');
-
 const thumbPic1 = document.getElementById('thumbPic1');
 const thumbPic2 = document.getElementById('thumbPic2');
 
-/* ---------- PREVIEW HELPERS ---------- */
 function showImagePreview(file, container) {
   container.innerHTML = '';
   const img = document.createElement('img');
@@ -181,93 +145,57 @@ function showImagePreview(file, container) {
 
 pic1Input.addEventListener('change', () => {
   const f = pic1Input.files[0];
-  if (f) {
-    if (f.size > MAX_IMAGE) { alert('Picture 1 too large (max 6MB).'); pic1Input.value = ''; return; }
-    showImagePreview(f, thumbPic1);
-  } else thumbPic1.innerHTML = 'Picture 1 preview';
+  if (f) { if (f.size > MAX_IMAGE) { alert('Picture 1 too large (max 6MB).'); pic1Input.value = ''; return; } showImagePreview(f, thumbPic1);} else thumbPic1.innerHTML='Picture 1 preview';
 });
 pic2Input.addEventListener('change', () => {
   const f = pic2Input.files[0];
-  if (f) {
-    if (f.size > MAX_IMAGE) { alert('Picture 2 too large (max 6MB).'); pic2Input.value = ''; return; }
-    showImagePreview(f, thumbPic2);
-  } else thumbPic2.innerHTML = 'Picture 2 preview';
+  if (f) { if (f.size > MAX_IMAGE) { alert('Picture 2 too large (max 6MB).'); pic2Input.value = ''; return; } showImagePreview(f, thumbPic2);} else thumbPic2.innerHTML='Picture 2 preview';
 });
 
-/* ---------- FILE TO DATA URL ---------- */
 function readFileAsDataURL(file) {
-  return new Promise((resolve, reject) => {
+  return new Promise((res, rej) => {
     const fr = new FileReader();
-    fr.onload = () => resolve(fr.result);
-    fr.onerror = reject;
+    fr.onload = () => res(fr.result);
+    fr.onerror = rej;
     fr.readAsDataURL(file);
   });
 }
 
 function splitDataUrl(dataUrl) {
   const m = dataUrl.match(/^data:(.+);base64,(.*)$/);
-  if (!m) return null;
-  return { mime: m[1], base64: m[2] };
+  return m ? { mime: m[1], base64: m[2] } : null;
 }
 
-/* ---------- UI helpers ---------- */
 function setUploading(flag) {
   overlay.classList.toggle('show', flag);
   submitBtn.disabled = flag;
 }
 
-/* ---------- SUBMIT ---------- */
-form.addEventListener('submit', async (evt) => {
-  evt.preventDefault();
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
 
-  // basic validation
+  // validation
   const name = nameInput.value.trim();
   const skill = skillInput.value.trim();
   const province = provinceInput.value.trim();
   const city = cityInput.value.trim();
   const description = descriptionInput.value.trim();
   const phone = phoneInput.value.trim();
-
-  if (!name || !skill || !province || !city || !description || !phone) {
-    alert('Please fill all required fields.');
-    return;
-  }
+  if (!name || !skill || !province || !city || !description || !phone) { alert('Please fill all required fields.'); return; }
 
   const pic1 = pic1Input.files[0];
   const pic2 = pic2Input.files[0];
-  const video = videoInput.files[0];
+  if (!pic1 || !pic2) { alert('Please select two pictures.'); return; }
+  if (pic1.size > MAX_IMAGE || pic2.size > MAX_IMAGE) { alert('One image is too large (max 6MB).'); return; }
 
-  if (!pic1 || !pic2 || !video) {
-    alert('Please select two pictures and one video.');
-    return;
-  }
-  if (pic1.size > MAX_IMAGE || pic2.size > MAX_IMAGE) {
-    alert('One of the images is too large (max 6MB).');
-    return;
-  }
-  if (video.size > MAX_VIDEO) {
-    alert('Video is too large (max 50MB).');
-    return;
-  }
-
-  // start UI
   setUploading(true);
 
   try {
-    // convert files to base64 data URLs
-    const [pic1DataUrl, pic2DataUrl, videoDataUrl] = await Promise.all([
-      readFileAsDataURL(pic1),
-      readFileAsDataURL(pic2),
-      readFileAsDataURL(video)
-    ]);
+    const [pic1DataUrl, pic2DataUrl] = await Promise.all([readFileAsDataURL(pic1), readFileAsDataURL(pic2)]);
+    const p1 = splitDataUrl(pic1DataUrl);
+    const p2 = splitDataUrl(pic2DataUrl);
+    if (!p1 || !p2) throw new Error('Failed to read images.');
 
-    const pic1Parts = splitDataUrl(pic1DataUrl);
-    const pic2Parts = splitDataUrl(pic2DataUrl);
-    const videoParts = splitDataUrl(videoDataUrl);
-
-    if (!pic1Parts || !pic2Parts || !videoParts) throw new Error('Failed to read files.');
-
-    // build payload exactly as Apps Script expects
     const payload = {
       Name: name,
       Skill: skill,
@@ -275,57 +203,37 @@ form.addEventListener('submit', async (evt) => {
       City: city,
       Description: description,
       Phone: phone,
-      Picture1: { base64: pic1Parts.base64, mime: pic1Parts.mime, filename: pic1.name },
-      Picture2: { base64: pic2Parts.base64, mime: pic2Parts.mime, filename: pic2.name },
-      Video: { base64: videoParts.base64, mime: videoParts.mime, filename: video.name }
+      Picture1: { base64: p1.base64, mime: p1.mime, filename: pic1.name },
+      Picture2: { base64: p2.base64, mime: p2.mime, filename: pic2.name }
     };
 
-    // send to your Apps Script (don't force Content-Type — Apps Script reads body either way)
-    const resp = await fetch(WEB_APP_URL, {
-      method: 'POST',
-      body: JSON.stringify(payload)
-    });
-
-    // parse safely
+    const resp = await fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify(payload) });
     const text = await resp.text();
     let result;
-    try { result = JSON.parse(text); } catch (e) { throw new Error('Server returned unexpected response'); }
+    try { result = JSON.parse(text); } catch (err) { throw new Error('Server returned unexpected response'); }
 
-    // done
     if (result && result.status === 'success') {
       successPopup.classList.add('show');
-      setTimeout(() => successPopup.classList.remove('show'), 3500);
-
+      setTimeout(() => successPopup.classList.remove('show'), 3000);
       form.reset();
       thumbPic1.innerHTML = 'Picture 1 preview';
       thumbPic2.innerHTML = 'Picture 2 preview';
-
-      // redirect to profile (profile will show pending verification)
+      // redirect to profile page (shows pending)
       const id = encodeURIComponent(result.id);
       setTimeout(() => window.location.href = `profile.html?id=${id}`, 1200);
     } else {
-      const message = result && result.message ? result.message : 'Upload failed';
-      alert(message);
+      throw new Error(result && result.message ? result.message : 'Upload failed');
     }
-
-  
   } catch (err) {
-  console.error(err);
-
-  let msg = "Upload failed. Please try again.";
-
-  // Network / Apps Script unreachable
-  if (err instanceof ProgressEvent) {
-    msg = "Upload failed. File too large or server not reachable. Try a smaller video.";
-  } else if (err && err.message) {
-    msg = err.message;
-  }
-
-  alert(msg);
-  }finally {
+    console.error(err);
+    let message = 'Upload failed. Try again.';
+    if (err instanceof ProgressEvent) message = 'Upload failed: server not reachable or file too large.';
+    else if (err.message) message = err.message;
+    alert(message);
+  } finally {
     setUploading(false);
   }
 });
 </script>
 </body>
-</html>
+      </html>
