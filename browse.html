@@ -51,25 +51,39 @@
   let data = [];
 
   function renderCards(items) {
-    grid.innerHTML = '';
-    if (!items.length) { empty.style.display = 'block'; return; }
-    empty.style.display = 'none';
-    items.forEach(item => {
-      const div = document.createElement('div');
-      div.className = 'card';
-      div.innerHTML = `
-        <div class="media">
-          <img src="${item.Picture1_URL || ''}" alt="pic1" onerror="this.src=''; this.style.background='#eee'">
-          <img src="${item.Picture2_URL || ''}" alt="pic2" onerror="this.src=''; this.style.background='#eee'">
-        </div>
-        <div class="meta">
-          <h3>${escapeHtml(item.Name || '')}</h3>
-          <p>${escapeHtml(item.Skill || '')} • ${escapeHtml(item.Province || '')} • ${escapeHtml(item.City || '')}</p>
-          <p>${escapeHtml(item.Description || '').slice(0,120)}</p>
-          <a class="viewBtn" href="profile.html?id=${encodeURIComponent(item.ID)}">View profile</a>
-        </div>`;
-      grid.appendChild(div);
-    });
+  grid.innerHTML = '';
+  if (!items.length) {
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  items.forEach(item => {
+
+    const img1 = item.Picture1URL
+      ? `<img src="${item.Picture1URL}" alt="pic1">`
+      : '';
+
+    const img2 = item.Picture2URL
+      ? `<img src="${item.Picture2URL}" alt="pic2">`
+      : '';
+
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.innerHTML = `
+      <div class="media">
+        ${img1}
+        ${img2}
+      </div>
+      <div class="meta">
+        <h3>${escapeHtml(item.Name || '')}</h3>
+        <p>${escapeHtml(item.Skill || '')} • ${escapeHtml(item.Province || '')} • ${escapeHtml(item.City || '')}</p>
+        <p>${escapeHtml(item.Description || '').slice(0,120)}</p>
+        <a class="viewBtn" href="profile.html?id=${encodeURIComponent(item.ID)}">View profile</a>
+      </div>
+    `;
+    grid.appendChild(div);
+  });
   }
 
   function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
