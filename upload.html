@@ -2,42 +2,88 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Upload Hustle — FindMyHustle</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Upload Your Hustle — FindMyHustle</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
-    :root{--bg:#f9f9f9;--card:#fff;--accent1:#3b0a57;--accent2:#0d1a5e}
-    body{margin:0;font-family:Arial,system-ui,sans-serif;background:var(--bg);padding:12px;color:#111}
-    .wrap{max-width:920px;margin:0 auto}
-    h1{margin:12px 0 8px}
-    .card{background:var(--card);padding:14px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
-    label{display:block;margin-top:10px;font-weight:600}
-    input[type=text], input[type=url], input[type=email], input[type=tel], select, textarea {
-      width:100%;padding:10px;margin-top:6px;border-radius:8px;border:1px solid #e6e6e6;font-size:14px;
+    :root{
+      --bg1: #f5f7fb;
+      --card: #ffffff;
+      --accentA: #3b0a57;
+      --accentB: #0d1a5e;
+      --accentG: #7b3fe4;
+      --accentL: #4bc0ff;
     }
-    textarea{min-height:80px;resize:vertical}
-    .row{display:flex;gap:12px;margin-top:6px}
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:'Poppins',system-ui,Arial,sans-serif;
+      background: linear-gradient(135deg,var(--accentA),var(--accentB));
+      color:#0f1724;
+      padding:20px;
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+    }
+    .wrap{width:100%;max-width:920px}
+    .card{
+      background: rgba(255,255,255,0.96);
+      padding:22px;
+      border-radius:14px;
+      box-shadow:0 18px 50px rgba(2,6,23,0.35);
+    }
+    h1{margin:0 0 8px;font-size:22px;color:var(--accentB)}
+    p.lead{margin:0 0 14px;color:#374151}
+    label{display:block;margin-top:12px;font-weight:600;color:#102a43}
+    input[type="text"], input[type="email"], input[type="tel"], input[type="url"], select, textarea {
+      width:100%;
+      padding:10px 12px;
+      margin-top:6px;
+      border-radius:10px;
+      border:1px solid #e6eef6;
+      font-size:14px;
+      background:#fff;
+      color:#0b1a2b;
+    }
+    textarea{min-height:90px;resize:vertical}
+    .row{display:flex;gap:12px}
     .row .col{flex:1}
-    .thumbs{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
-    .thumb{flex:1;min-height:140px;background:#fafafa;border:1px dashed #ddd;border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .thumbs{display:flex;gap:12px;margin-top:10px;flex-wrap:wrap}
+    .thumb{flex:1;min-height:140px;border-radius:10px;background:#f3f7fb;border:1px dashed #e2e8f0;display:flex;align-items:center;justify-content:center;overflow:hidden;color:#64748b}
     .thumb img{width:100%;height:100%;object-fit:cover;display:block}
-    .note{font-size:13px;color:#666;margin-top:8px}
-    button.primary{margin-top:14px;padding:12px;border-radius:8px;border:none;background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#fff;font-weight:700;cursor:pointer;width:100%}
-    button.primary:disabled{opacity:.6;cursor:default}
-    .small{font-size:13px;color:#444}
-    #overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);align-items:center;justify-content:center;z-index:999}
+    .note{font-size:13px;color:#6b7280;margin-top:8px}
+    .tips{font-size:13px;color:#475569;background:#f8fafc;padding:10px;border-radius:8px;margin-top:10px}
+    button.primary{
+      margin-top:16px;
+      width:100%;
+      padding:12px 14px;
+      border-radius:10px;
+      border:none;
+      font-weight:800;
+      color:#fff;
+      background: linear-gradient(90deg,var(--accentG),var(--accentL));
+      cursor:pointer;
+      font-size:16px;
+    }
+    button.primary:disabled{opacity:0.6;cursor:default}
+    #overlay{display:none;position:fixed;inset:0;background:rgba(2,6,23,0.55);align-items:center;justify-content:center;z-index:9999}
     #overlay.show{display:flex}
-    .overlay-box{background:#fff;padding:12px 16px;border-radius:8px;font-weight:700;color:#111}
-    #success{position:fixed;left:50%;top:-120px;transform:translateX(-50%);background:#4cd964;color:#002;padding:12px 16px;border-radius:12px;font-weight:700;z-index:1000;transition:all .45s;opacity:0}
-    #success.show{top:24px;opacity:1}
-    @media(min-width:900px){ .thumb{min-height:160px} }
+    .overlay-box{background:#fff;padding:14px 18px;border-radius:10px;font-weight:700;color:#06121a}
+    #success{position:fixed;left:50%;transform:translateX(-50%);top:-120px;background:linear-gradient(135deg,#4cd964,#38f9d7);color:#002;padding:12px 16px;border-radius:12px;font-weight:800;box-shadow:0 12px 30px rgba(2,6,23,0.35);z-index:10000;transition:all .45s;opacity:0}
+    #success.show{top:28px;opacity:1}
+    @media(max-width:720px){ .row{flex-direction:column} .thumb{min-height:120px} }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <h1>Upload Your Hustle</h1>
-    <p class="small">Paste two direct image links (Imgur/ImgBB recommended). Optional video link (YouTube/Vimeo). Your listing will be pending verification.</p>
+  <div id="success">✅ Submission successful — we will contact you for verification.</div>
+  <div id="overlay"><div class="overlay-box">Submitting — please wait…</div></div>
 
-    <div class="card">
+  <div class="wrap">
+    <main class="card" role="main" aria-labelledby="title">
+      <h1 id="title">Upload Your Hustle</h1>
+      <p class="lead">Paste two direct image links (Imgur / i.ibb.co recommended). Optional video link (YouTube/Vimeo). Your listing will remain pending until verified.</p>
+
       <form id="uploadForm" novalidate>
         <label for="name">Full name</label>
         <input id="name" name="Name" type="text" placeholder="Your full name" required>
@@ -98,7 +144,11 @@
         <input id="email" name="Email" type="email" placeholder="you@example.com">
 
         <label for="description">Short description</label>
-        <textarea id="description" name="Description" placeholder="What do you offer?"></textarea>
+        <textarea id="description" name="Description" placeholder="What services do you offer?"></textarea>
+
+        <div class="tips">
+          <strong>Tip:</strong> If you want to show multiple works combine them into one collage image (one image can contain multiple items). Use Imgur or ImgBB to get a direct image link that ends with .jpg/.png/.webp.
+        </div>
 
         <div class="thumbs" aria-hidden="true">
           <div class="thumb" id="thumb1">Picture 1 preview</div>
@@ -114,25 +164,23 @@
         <label for="video">Video link (optional)</label>
         <input id="video" name="VideoURL" type="url" placeholder="https://www.youtube.com/watch?v=...">
 
-        <p class="note">Tip: combine multiple works into a single collage image if you want to show more items in one card.</p>
+        <p class="note">By submitting you confirm you own or have permission to use the media. Verified listings only appear on Browse.</p>
 
         <button id="submitBtn" class="primary" type="submit">Submit Hustle</button>
       </form>
-    </div>
+    </main>
   </div>
 
-  <div id="overlay"><div class="overlay-box">Submitting — please wait…</div></div>
-  <div id="success">✅ Submitted — we'll contact you after verification.</div>
-
 <script>
-/* ---------- CONFIG: your deployed web app URL ---------- */
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwj9XHnyQX8pnrZrIqgQbe4JvWxChHq8hKTVo3MHQriHY1B5gQhPTGAFa4IcaxbxWzJNg/exec";
-/* ------------------------------------------------------ */
+/* ---------- CONFIG: your deployed Apps Script Web App URL ---------- */
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyPkK1BeaHTfktxPRyRX2SgcHfw6WMIMQaXIfpMhlOD4uX_9zpFG9bn_cWVy9VpWpf3/exec";
+/* --------------------------------------------------------------- */
 
 const form = document.getElementById('uploadForm');
 const submitBtn = document.getElementById('submitBtn');
 const overlay = document.getElementById('overlay');
 const success = document.getElementById('success');
+
 const pic1 = document.getElementById('pic1');
 const pic2 = document.getElementById('pic2');
 const thumb1 = document.getElementById('thumb1');
@@ -142,6 +190,7 @@ function showPreview(url, container){
   container.innerHTML = '';
   if (!url) { container.textContent = 'Preview unavailable'; return; }
   const img = document.createElement('img');
+  img.alt = 'preview';
   img.onload = () => {};
   img.onerror = () => { container.textContent = 'Preview unavailable — check the URL'; };
   img.src = url;
@@ -167,7 +216,7 @@ form.addEventListener('submit', async function(e){
   e.preventDefault();
 
   if (!WEB_APP_URL || WEB_APP_URL.includes('PASTE_YOUR')) {
-    alert('Web app URL missing. Paste your deployed web app URL in this file.');
+    alert('Web app URL is missing. Please paste it in the code.');
     return;
   }
 
@@ -179,12 +228,12 @@ form.addEventListener('submit', async function(e){
     City: (document.getElementById('city').value || '').trim(),
     Description: (document.getElementById('description').value || '').trim(),
     Phone: (document.getElementById('phone').value || '').trim(),
-    Picture1URL: (pic1.value || '').trim(),
-    Picture2URL: (pic2.value || '').trim(),
+    Picture1URL: (document.getElementById('pic1').value || '').trim(),
+    Picture2URL: (document.getElementById('pic2').value || '').trim(),
     VideoURL: (document.getElementById('video').value || '').trim()
   };
 
-  // minimal validation
+  // required checks
   if (!payload.Name || !payload.Skill || !payload.Province) {
     alert('Please fill Name, Skill and Province.');
     return;
@@ -194,43 +243,45 @@ form.addEventListener('submit', async function(e){
     return;
   }
 
-  // optional: check looks like image
+  // optional image heuristics
   if (!looksLikeImage(payload.Picture1URL) || !looksLikeImage(payload.Picture2URL)) {
-    if (!confirm('One or both image links may not be direct image URLs. Continue anyway?')) return;
+    if (!confirm('One or both image URLs do not look like direct image links. Continue anyway?')) return;
   }
 
   setLoading(true);
 
   try {
-    const resp = await fetch(WEB_APP_URL, {
+    const res = await fetch(WEB_APP_URL, {
       method: 'POST',
-      headers: {'Content-Type':'application/json'},
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
 
-    const text = await resp.text();
-    let res;
-    try { res = JSON.parse(text); } catch (err) { res = { status:'error', message:'Unexpected server response' }; }
+    const text = await res.text();
+    let jsonRes;
+    try { jsonRes = JSON.parse(text); } catch (err) { jsonRes = { status: 'error', message: 'Unexpected server response' }; }
 
-    if (res.status === 'success') {
+    if (jsonRes.status && jsonRes.status === 'success') {
       success.classList.add('show');
       setTimeout(()=> success.classList.remove('show'), 3200);
       form.reset();
       thumb1.innerHTML = 'Picture 1 preview';
       thumb2.innerHTML = 'Picture 2 preview';
-      // redirect to profile (pending)
-      if (res.id) setTimeout(()=> window.location.href = `profile.html?id=${encodeURIComponent(res.id)}`, 1200);
+      // redirect to profile page (pending)
+      if (jsonRes.id) {
+        setTimeout(()=> window.location.href = `profile.html?id=${encodeURIComponent(jsonRes.id)}`, 1100);
+      }
     } else {
-      alert('Submission failed: ' + (res.message || 'Server error'));
+      alert('Submission failed: ' + (jsonRes.message || 'Server error'));
     }
 
   } catch (err) {
-    console.error(err);
-    alert('Submission failed — check your internet and the web app URL.');
+    console.error('Upload error', err);
+    alert('Submission failed — check your internet connection and the web app URL.');
   } finally {
     setLoading(false);
   }
 });
 </script>
 </body>
-  </html>
+          </html>
