@@ -6,65 +6,52 @@
 <title>Upload Your Hustle — FindMyHustle</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --purple1:#3b0a57; --purple2:#0d1a5e;
-    --card-bg: rgba(255,255,255,0.06);
-    --accent1:#7b3fe4; --accent2:#4bc0ff;
-  }
+  :root{--p1:#3b0a57;--p2:#0d1a5e;--card-bg:rgba(255,255,255,0.06);--accent1:#7b3fe4;--accent2:#4bc0ff}
   *{box-sizing:border-box}
-  html,body{height:100%;margin:0;font-family:'Poppins',system-ui,Arial,sans-serif;background:linear-gradient(135deg,var(--purple1),var(--purple2));color:#fff}
-  .wrap{max-width:820px;margin:20px auto;padding:20px}
-  .card{background:var(--card-bg);padding:22px;border-radius:14px;box-shadow:0 12px 30px rgba(0,0,0,.35);backdrop-filter:blur(6px)}
-  h1{text-align:center;margin:0 0 6px;font-size:22px}
-  .lead{text-align:center;color:rgba(255,255,255,0.9);margin:0 0 16px}
-  label{display:block;margin-top:12px;font-weight:600;font-size:13px;color:#f3f6ff}
-  input[type=text], input[type=email], input[type=tel], input[type=url], select, textarea {
-    width:100%;padding:10px;border-radius:10px;border:none;margin-top:6px;font-size:14px;
-  }
-  textarea{min-height:90px;resize:vertical}
+  body{margin:0;font-family:'Poppins',sans-serif;background:linear-gradient(135deg,var(--p1),var(--p2));color:#fff;padding:18px}
+  .wrap{max-width:820px;margin:18px auto}
+  .card{background:var(--card-bg);padding:20px;border-radius:14px;box-shadow:0 12px 30px rgba(0,0,0,0.35)}
+  h1{text-align:center;margin:0 0 8px}
+  label{display:block;margin-top:12px;font-weight:600}
+  input,select,textarea{width:100%;padding:10px;border-radius:10px;border:none;margin-top:6px;font-size:14px}
   .row{display:flex;gap:12px}
   .row .col{flex:1}
-  .media-row{display:flex;gap:12px;margin-top:10px;flex-wrap:wrap}
-  .thumb{flex:1;min-height:140px;background:rgba(0,0,0,0.12);border-radius:10px;overflow:hidden;display:flex;align-items:center;justify-content:center;color:#ddd;padding:6px}
-  .thumb img{width:100%;height:100%;object-fit:cover;display:block}
-  .note{font-size:13px;color:rgba(255,255,255,0.85);margin-top:8px}
-  .tutorial{margin-top:14px;background:rgba(0,0,0,0.08);padding:10px;border-radius:10px;color:#eef;font-size:13px}
-  .tutorial a{color:#fff;text-decoration:underline}
-  button.primary{margin-top:18px;width:100%;padding:13px;border-radius:10px;border:none;font-weight:800;font-size:16px;background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#fff;cursor:pointer}
-  button.primary:disabled{opacity:.6;cursor:default}
+  .thumbs{display:flex;gap:12px;margin-top:10px}
+  .thumb{flex:1;min-height:140px;background:rgba(0,0,0,0.12);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#ddd;overflow:hidden}
+  .thumb img{width:100%;height:100%;object-fit:cover;}
+  .note{font-size:13px;color:rgba(255,255,255,0.85)}
+  button{margin-top:16px;padding:12px;border-radius:10px;border:none;width:100%;font-weight:800;background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#fff;cursor:pointer}
   #overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);align-items:center;justify-content:center;z-index:9998}
   #overlay.show{display:flex}
-  .overlay-box{background:rgba(255,255,255,0.06);padding:14px 18px;border-radius:10px;color:white;font-weight:700}
-  #successPopup{position:fixed;left:50%;top:-140px;transform:translateX(-50%);background:linear-gradient(135deg,#4cd964,#38f9d7);color:#002;padding:14px 18px;border-radius:12px;font-weight:700;box-shadow:0 8px 30px rgba(0,0,0,.35);z-index:9999;opacity:0;transition:all .6s cubic-bezier(.2,.9,.2,1)}
-  #successPopup.show{top:20px;opacity:1}
-  @media(max-width:620px){.row{flex-direction:column}.thumb{min-height:120px}}
+  .overlay-box{background:rgba(255,255,255,0.06);padding:14px;border-radius:10px}
+  #success{position:fixed;left:50%;top:-120px;transform:translateX(-50%);background:#4cd964;color:#002;padding:12px 16px;border-radius:12px;font-weight:700;z-index:9999;transition:0.5s;opacity:0}
+  #success.show{top:20px;opacity:1}
+  @media(max-width:620px){.row{flex-direction:column}}
 </style>
 </head>
 <body>
-<div id="successPopup">✅ Submission saved — we'll contact you for verification.</div>
+<div id="success">✅ Submitted — we'll contact you after verification.</div>
 <div id="overlay"><div class="overlay-box">Submitting — please wait…</div></div>
 
 <div class="wrap">
-  <main class="card" role="main" aria-labelledby="upload-title">
-    <h1 id="upload-title">Upload Your Hustle</h1>
-    <p class="lead">Paste two public image links (Imgur recommended). Optionally add a video link (YouTube/Vimeo). We will contact you to verify the listing.</p>
+  <main class="card">
+    <h1>Upload Your Hustle</h1>
+    <p class="note">Paste two *direct* image links (Imgur/ImgBB recommended). Optional video link (YouTube/Vimeo).</p>
 
-    <form id="uploadForm" novalidate>
-
-      <label for="name">Full Name</label>
-      <input id="name" name="Name" type="text" placeholder="Your full name" required>
+    <form id="form" novalidate>
+      <label>Full Name</label>
+      <input id="name" name="Name" type="text" required>
 
       <div class="row">
         <div class="col">
-          <label for="skill">Skill</label>
+          <label>Skill</label>
           <select id="skill" name="Skill" required>
             <option value="">Select skill</option>
             <option>Barber</option><option>Hairdresser</option><option>Nail Technician</option><option>Photographer</option><option>Videographer</option><option>Plumber</option><option>Electrician</option><option>Chef</option><option>Tailor</option><option>Other</option>
           </select>
         </div>
-
         <div class="col">
-          <label for="province">Province</label>
+          <label>Province</label>
           <select id="province" name="Province" required>
             <option value="">Select province</option>
             <option>Eastern Cape</option><option>Free State</option><option>Gauteng</option><option>KwaZulu-Natal</option><option>Limpopo</option><option>Mpumalanga</option><option>Northern Cape</option><option>North West</option><option>Western Cape</option>
@@ -72,176 +59,125 @@
         </div>
       </div>
 
-      <label for="city">City / Town</label>
-      <input id="city" name="City" type="text" placeholder="e.g. Mahikeng" required>
+      <label>City / Town</label>
+      <input id="city" name="City" type="text" required>
 
-      <label for="email">Email (required — for confirmation)</label>
-      <input id="email" name="Email" type="email" placeholder="you@example.com" required>
+      <label>Email (optional)</label>
+      <input id="email" name="Email" type="email" placeholder="you@example.com">
 
-      <label for="phone">WhatsApp / Phone (with country code)</label>
+      <label>Phone / WhatsApp</label>
       <input id="phone" name="Phone" type="tel" placeholder="+27..." required>
 
-      <label for="description">Short description</label>
-      <textarea id="description" name="Description" placeholder="Describe your service, rates, or specialties..." required></textarea>
+      <label>Short description</label>
+      <textarea id="description" name="Description"></textarea>
 
-      <div class="tutorial" aria-hidden="false">
-        <strong>Quick image link guide (Imgur recommended)</strong>
-        <ol style="margin:8px 0 0 18px;padding:0;color:#eef">
-          <li>Go to <a href="https://imgur.com/upload" target="_blank" rel="noopener">imgur.com/upload</a> or <a href="https://imgbb.com/" target="_blank" rel="noopener">imgbb.com</a>.</li>
-          <li>Upload your photo and copy the <em>direct image URL</em> (it should end with .jpg, .png, .webp).</li>
-          <li>Paste that URL into Picture 1 and Picture 2. Make a collage image if you want to show more work in one image.</li>
-        </ol>
-        <p style="margin-top:6px" class="note">Need a video tutorial? Try: <a href="https://www.youtube.com/results?search_query=how+to+upload+image+imgur+and+get+direct+link" target="_blank" rel="noopener">YouTube: Upload to Imgur</a></p>
+      <div class="thumbs" aria-hidden="true">
+        <div class="thumb" id="thumb1">Picture 1 preview</div>
+        <div class="thumb" id="thumb2">Picture 2 preview</div>
       </div>
 
-      <div class="media-row" aria-hidden="true">
-        <div class="thumb" id="thumbPic1">Picture 1 preview</div>
-        <div class="thumb" id="thumbPic2">Picture 2 preview</div>
-      </div>
+      <label>Picture 1 URL (direct image link)</label>
+      <input id="pic1" name="Picture1URL" type="url" placeholder="https://i.imgur.com/abc123.jpg" required>
 
-      <label for="pic1url">Picture 1 URL (direct link, required)</label>
-      <input id="pic1url" name="Picture1URL" type="url" placeholder="https://i.imgur.com/abc123.jpg" required>
+      <label>Picture 2 URL (direct image link)</label>
+      <input id="pic2" name="Picture2URL" type="url" placeholder="https://i.imgur.com/xyz456.png" required>
 
-      <label for="pic2url">Picture 2 URL (direct link, required)</label>
-      <input id="pic2url" name="Picture2URL" type="url" placeholder="https://i.imgur.com/xyz456.png" required>
+      <label>Video link (optional)</label>
+      <input id="video" name="VideoURL" type="url" placeholder="https://www.youtube.com/watch?v=...">
 
-      <label for="videourl">Video link (optional)</label>
-      <input id="videourl" name="VideoURL" type="url" placeholder="https://www.youtube.com/watch?v=..." />
+      <p class="note">New listings are hidden until verified by the admin.</p>
 
-      <p class="note">By submitting you confirm you own the media or have permission. New listings are hidden until verified by the admin.</p>
-
-      <button id="submitBtn" class="primary" type="submit">Submit Hustle</button>
+      <button id="submit">Submit Hustle</button>
     </form>
   </main>
 </div>
 
 <script>
-/* ---------- CONFIG: your Apps Script Web App URL ---------- */
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwq1I677UX0aBeZZ9J26Zeh_SMealdvjPqOkev5bmkTBLhfiaTuH3zj5CvVUXltIRZO/exec";
-/* -------------------------------------------------------- */
+/* PASTE YOUR WEB APP URL HERE */
+const WEB_APP_URL = "PASTE_YOUR_WEB_APP_URL_HERE"; // <-- set this to your deployed web app URL
 
-const form = document.getElementById('uploadForm');
-const pic1Input = document.getElementById('pic1url');
-const pic2Input = document.getElementById('pic2url');
-const thumbPic1 = document.getElementById('thumbPic1');
-const thumbPic2 = document.getElementById('thumbPic2');
-const videourlInput = document.getElementById('videourl');
+const form = document.getElementById('form');
 const overlay = document.getElementById('overlay');
-const successPopup = document.getElementById('successPopup');
-const submitBtn = document.getElementById('submitBtn');
+const success = document.getElementById('success');
+const pic1 = document.getElementById('pic1');
+const pic2 = document.getElementById('pic2');
+const thumb1 = document.getElementById('thumb1');
+const thumb2 = document.getElementById('thumb2');
 
-function showPreview(url, container) {
+function showPreview(url, container){
   container.innerHTML = '';
-  if (!url) { container.textContent = container.id === 'thumbPic1' ? 'Picture 1 preview' : 'Picture 2 preview'; return; }
+  if (!url) { container.textContent = 'Preview unavailable'; return; }
   const img = document.createElement('img');
-  img.alt = 'preview';
-  img.onload = () => {};
-  img.onerror = () => { container.textContent = 'Preview unavailable — check the URL'; };
   img.src = url;
+  img.alt = 'preview';
+  img.onerror = () => { container.textContent = 'Preview unavailable — check link'; };
   container.appendChild(img);
 }
 
-function looksLikeImageUrl(u) {
-  if (!u) return false;
-  try { new URL(u); } catch(e) { return false; }
-  const lower = u.toLowerCase();
-  return /\.(jpe?g|png|webp|gif|bmp|svg)(\?|$)/.test(lower) || lower.includes('imgur.com') || lower.includes('i.ibb.co') || lower.includes('images.unsplash.com');
-}
+pic1.addEventListener('input', () => showPreview(pic1.value.trim(), thumb1));
+pic2.addEventListener('input', () => showPreview(pic2.value.trim(), thumb2));
 
-function looksLikeVideoUrl(u) {
-  if (!u) return false;
-  try { new URL(u); } catch(e) { return false; }
-  return u.includes('youtube.com') || u.includes('youtu.be') || u.includes('vimeo.com');
-}
-
-pic1Input.addEventListener('input', () => showPreview(pic1Input.value.trim(), thumbPic1));
-pic2Input.addEventListener('input', () => showPreview(pic2Input.value.trim(), thumbPic2));
-
-function setLoading(flag) {
+function setLoading(flag){
   overlay.classList.toggle('show', flag);
-  submitBtn.disabled = flag;
+  document.getElementById('submit').disabled = flag;
 }
 
 form.addEventListener('submit', async function(e){
   e.preventDefault();
-
-  if (!WEB_APP_URL || WEB_APP_URL.includes('PASTE_YOUR')) {
-    alert('Web app URL missing. Please paste the Apps Script Web App URL in the top of this file.');
+  if (!WEB_APP_URL || WEB_APP_URL.includes('https://script.google.com/macros/s/AKfycbwYvYvaM2OtceIjmDcK4K6_OQV30uNcJV4sgiq7OdMWI-rBLP77tWSHnMFlVbetN0ey7g/exec')) {
+    alert('Paste your deployed Apps Script web app URL into this file before submitting.');
     return;
   }
 
-  const name = (document.getElementById('name').value || '').trim();
-  const email = (document.getElementById('email').value || '').trim();
-  const skill = (document.getElementById('skill').value || '').trim();
-  const province = (document.getElementById('province').value || '').trim();
-  const city = (document.getElementById('city').value || '').trim();
-  const description = (document.getElementById('description').value || '').trim();
-  const phone = (document.getElementById('phone').value || '').trim();
-  const pic1 = pic1Input.value.trim();
-  const pic2 = pic2Input.value.trim();
-  const video = videourlInput.value.trim();
+  const payload = {
+    Name: document.getElementById('name').value.trim(),
+    Email: document.getElementById('email').value.trim(),
+    Skill: document.getElementById('skill').value,
+    Province: document.getElementById('province').value,
+    City: document.getElementById('city').value.trim(),
+    Description: document.getElementById('description').value.trim(),
+    Phone: document.getElementById('phone').value.trim(),
+    Picture1URL: pic1.value.trim(),
+    Picture2URL: pic2.value.trim(),
+    VideoURL: document.getElementById('video').value.trim() || ""
+  };
 
-  // Validate required
-  if (!name || !email || !skill) { alert('Please fill in Name, Email and Skill.'); return; }
-  if (!pic1 || !pic2) { alert('Please paste two image URLs.'); return; }
-
-  if (!looksLikeImageUrl(pic1) || !looksLikeImageUrl(pic2)) {
-    if (!confirm('One or both image URLs do not look like direct image links. Continue anyway?')) return;
-  }
-  if (video && !looksLikeVideoUrl(video)) {
-    if (!confirm('Video link does not look like YouTube/Vimeo. Continue anyway?')) return;
+  if (!payload.Name || !payload.Skill || !payload.Picture1URL || !payload.Picture2URL) {
+    alert('Please fill Name, Skill and both image URLs.');
+    return;
   }
 
   setLoading(true);
 
-  const payload = {
-    Name: name,
-    Email: email,
-    Skill: skill,
-    Province: province,
-    City: city,
-    Description: description,
-    Phone: phone,
-    Picture1URL: pic1,
-    Picture2URL: pic2,
-    VideoURL: video || ""
-  };
-
   try {
-    const resp = await fetch(WEB_APP_URL, {
+    const r = await fetch(WEB_APP_URL, {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify(payload)
     });
+    const text = await r.text();
+    let res;
+    try { res = JSON.parse(text); } catch (e) { res = { status:'error', message:'Unexpected server response' }; }
 
-    const text = await resp.text();
-    let result;
-    try { result = JSON.parse(text); } catch(e) { result = { status:'error', message:'Unexpected server response' }; }
-
-    if (result.status === 'success') {
-      successPopup.classList.add('show');
-      setTimeout(()=> successPopup.classList.remove('show'), 3200);
-
+    if (res.status === 'success') {
+      success.classList.add('show');
+      setTimeout(()=> success.classList.remove('show'), 3200);
       form.reset();
-      thumbPic1.innerHTML = 'Picture 1 preview';
-      thumbPic2.innerHTML = 'Picture 2 preview';
-
-      // Redirect to profile (profile will show Pending)
-      if (result.id) {
-        setTimeout(()=> {
-          window.location.href = `profile.html?id=${encodeURIComponent(result.id)}`;
-        }, 1200);
-      }
+      thumb1.innerHTML = 'Picture 1 preview';
+      thumb2.innerHTML = 'Picture 2 preview';
+      // redirect to profile page (pending)
+      if (res.id) setTimeout(()=> window.location.href = `profile.html?id=${encodeURIComponent(res.id)}`, 1200);
     } else {
-      alert('Submission failed: ' + (result.message || 'Server error'));
+      alert('Submission failed: ' + (res.message || 'Server error'));
     }
+
   } catch (err) {
     console.error(err);
-    alert('Submission failed — check your internet connection and that the web app URL is correct.');
+    alert('Submission failed — check your internet and web app URL.');
   } finally {
     setLoading(false);
   }
 });
 </script>
 </body>
-</html>
+  </html>
