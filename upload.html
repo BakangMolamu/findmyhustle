@@ -9,18 +9,19 @@
   :root{--p1:#3b0a57;--p2:#0d1a5e;--card:rgba(255,255,255,0.06);--accent1:#7b3fe4;--accent2:#4bc0ff}
   *{box-sizing:border-box}
   body{margin:0;min-height:100vh;font-family:'Poppins',system-ui,Arial,sans-serif;background:linear-gradient(135deg,var(--p1),var(--p2));color:#fff;display:flex;align-items:flex-start;justify-content:center;padding:28px;}
-  .card{width:100%;max-width:760px;background:var(--card);padding:22px;border-radius:14px;box-shadow:0 12px 30px rgba(0,0,0,.35);backdrop-filter:blur(6px)}
+  .card{width:100%;max-width:820px;background:var(--card);padding:22px;border-radius:14px;box-shadow:0 12px 30px rgba(0,0,0,.35);backdrop-filter:blur(6px)}
   h1{margin:0 0 8px;font-size:22px;text-align:center}
   .lead{margin:0 0 18px;text-align:center;color:rgba(255,255,255,.9)}
   label{display:block;margin-top:12px;font-weight:600;font-size:13px;color:#f3f6ff}
-  input[type=text],input[type=tel],select,textarea{width:100%;padding:10px;border-radius:10px;border:none;margin-top:6px;font-size:14px}
+  input[type=text],input[type=url],input[type=tel],select,textarea{width:100%;padding:10px;border-radius:10px;border:none;margin-top:6px;font-size:14px}
   textarea{min-height:90px;resize:vertical}
   .row{display:flex;gap:12px}
   .row .col{flex:1}
   .media-row{display:flex;gap:12px;margin-top:10px;flex-wrap:wrap}
-  .thumb{flex:1;min-height:120px;background:rgba(0,0,0,0.18);border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden}
-  .thumb img{width:100%;height:100%;object-fit:cover}
+  .thumb{flex:1;min-height:140px;background:rgba(0,0,0,0.18);border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden;color:#ddd;padding:6px}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block}
   .note{font-size:13px;color:rgba(255,255,255,.85);margin-top:8px}
+  .hint{font-size:13px;color:rgba(255,255,255,.75);margin-top:6px}
   button.primary{margin-top:18px;width:100%;padding:13px 14px;border-radius:10px;border:none;font-weight:800;font-size:16px;background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#fff;cursor:pointer}
   button.primary:disabled{opacity:.6;cursor:default}
   #overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);align-items:center;justify-content:center;z-index:9998}
@@ -28,25 +29,23 @@
   .overlay-box{background:rgba(255,255,255,0.06);padding:14px 18px;border-radius:10px;color:white;font-weight:700}
   #successPopup{position:fixed;left:50%;top:-160px;transform:translateX(-50%);background:linear-gradient(135deg,#4cd964,#38f9d7);color:#002;padding:14px 18px;border-radius:12px;font-weight:700;box-shadow:0 8px 30px rgba(0,0,0,.35);z-index:9999;opacity:0;transition:all .6s cubic-bezier(.2,.9,.2,1)}
   #successPopup.show{top:20px;opacity:1}
-  @media(max-width:520px){.row{flex-direction:column}.thumb{width:100%}}
+  .tutorial { margin-top:14px; background: rgba(0,0,0,0.08); padding:10px; border-radius:10px; color: #eef; font-size:13px; }
+  .tutorial a { color: #fff; text-decoration:underline; }
+  .video-btn { display:inline-block; margin-top:10px; padding:8px 12px; background: linear-gradient(90deg,#ff5f6d,#ffc371); color:#fff; border-radius:10px; text-decoration:none; font-weight:700; }
+  @media(max-width:560px){ .row{flex-direction:column} .thumb{min-height:120px} }
 </style>
 </head>
 <body>
 
-<div id="successPopup">✅ Submission successful — we'll contact you for verification.</div>
-<div id="overlay"><div class="overlay-box">Uploading — please wait…</div></div>
+<div id="successPopup">✅ Listing saved — we will contact you for verification.</div>
+<div id="overlay"><div class="overlay-box">Submitting — please wait…</div></div>
 
-<main class="card" role="main" aria-labelledby="pageTitle">
-  <h1 id="pageTitle">Upload Your Hustle</h1>
-  <p class="lead">Two pictures only. Profiles show on Browse after verification.</p>
-
-  <script>
-    // ---------- PASTE YOUR WEB APP URL HERE ----------
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw-jpUAzD76hG25-TgKuKOXSltCCnmG7AqI0Q-gT0-ZqTbf17AyLzTYCaXUVzNnIkHzXQ/exec";
-    // ------------------------------------------------
-  </script>
+<main class="card" role="main" aria-labelledby="title">
+  <h1 id="title">Upload Your Hustle</h1>
+  <p class="lead">Paste two public image links (e.g. Imgur) so your work can appear in Browse. Optional: add a video link (YouTube or other) — a <strong>Video</strong> button will show on your profile.</p>
 
   <form id="uploadForm" novalidate>
+
     <label for="name">Full Name</label>
     <input id="name" name="name" type="text" placeholder="Your full name" required>
 
@@ -55,32 +54,14 @@
         <label for="skill">Skill</label>
         <select id="skill" name="skill" required>
           <option value="">Select skill</option>
-          <option>Barber</option>
-          <option>Hairdresser / Braids</option>
-          <option>Nail Technician</option>
-          <option>Photographer</option>
-          <option>Videographer</option>
-          <option>Plumber</option>
-          <option>Electrician</option>
-          <option>Chef</option>
-          <option>Tailor</option>
-          <option>Other</option>
+          <option>Barber</option><option>Hairdresser</option><option>Nail Technician</option><option>Photographer</option><option>Videographer</option><option>Plumber</option><option>Electrician</option><option>Chef</option><option>Tailor</option><option>Other</option>
         </select>
       </div>
-
       <div class="col">
         <label for="province">Province</label>
         <select id="province" name="province" required>
           <option value="">Select province</option>
-          <option>Eastern Cape</option>
-          <option>Free State</option>
-          <option>Gauteng</option>
-          <option>KwaZulu-Natal</option>
-          <option>Limpopo</option>
-          <option>Mpumalanga</option>
-          <option>Northern Cape</option>
-          <option>North West</option>
-          <option>Western Cape</option>
+          <option>Eastern Cape</option><option>Free State</option><option>Gauteng</option><option>KwaZulu-Natal</option><option>Limpopo</option><option>Mpumalanga</option><option>Northern Cape</option><option>North West</option><option>Western Cape</option>
         </select>
       </div>
     </div>
@@ -91,82 +72,95 @@
     <label for="description">Short description</label>
     <textarea id="description" name="description" placeholder="What you offer..." required></textarea>
 
-    <label for="phone">WhatsApp / Phone</label>
+    <label for="phone">WhatsApp / Phone (with country code)</label>
     <input id="phone" name="phone" type="tel" placeholder="+27..." required>
 
-    <div class="media-row" aria-hidden="true">
-      <div class="thumb" id="thumbPic1">Picture 1 preview</div>
-      <div class="thumb" id="thumbPic2">Picture 2 preview</div>
+    <div class="tutorial">
+      <strong>Quick guide — how to get an image link (preferred: Imgur)</strong>
+      <ol style="margin:8px 0 0 18px; padding:0; color:#eef;">
+        <li>Go to <a href="https://imgbb.com/" target="_blank" rel="noopener">imgbb.com</a> (or <a href="https://imgur.com/upload" target="_blank" rel="noopener">imgur.com</a>).</li>
+        <li>Upload your photo, then copy the <em>direct image URL</em> (link ending in .jpg/.png).</li>
+        <li>Paste that URL into the Image URL fields below.</li>
+      </ol>
+      <p class="hint">Want a video guide? Watch a short tutorial: <a href="https://www.youtube.com/results?search_query=how+to+upload+image+imgur+and+get+link" target="_blank" rel="noopener">YouTube: Upload to Imgur</a></p>
+      <p class="hint">Tip: Make a collage image that shows 3–6 of your works if you want to highlight more in a single image.</p>
     </div>
 
-    <label>Upload Picture 1 (JPG/PNG) — max 6MB</label>
-    <input id="pic1" type="file" accept="image/*" required>
+    <div class="media-row" aria-hidden="true">
+      <div class="thumb" id="thumbPic1">Picture 1 (preview)</div>
+      <div class="thumb" id="thumbPic2">Picture 2 (preview)</div>
+    </div>
 
-    <label>Upload Picture 2 (JPG/PNG) — max 6MB</label>
-    <input id="pic2" type="file" accept="image/*" required>
+    <label for="pic1url">Picture 1 — paste direct image URL (required)</label>
+    <input id="pic1url" name="pic1url" type="url" placeholder="https://i.imgur.com/abc123.jpg" required>
 
-    <p class="note">By submitting you confirm you own the media. New profiles are Pending Verification.</p>
+    <label for="pic2url">Picture 2 — paste direct image URL (required)</label>
+    <input id="pic2url" name="pic2url" type="url" placeholder="https://i.imgur.com/xyz456.png" required>
+
+    <label for="videourl">Video link (optional) — paste YouTube / Vimeo / public link</label>
+    <input id="videourl" name="videourl" type="url" placeholder="https://www.youtube.com/watch?v=..." />
+    <div class="hint">If provided, a beautiful "Watch Video" button will appear on your Browse/Profile</div>
+
+    <p class="note">By submitting you confirm you own the media or have permission. Profiles are hidden until verified.</p>
 
     <button id="submitBtn" class="primary" type="submit">Submit Hustle</button>
   </form>
 </main>
 
 <script>
-/* CONFIG */
-const MAX_IMAGE = 6 * 1024 * 1024; // 6MB
+/* ---------- CONFIG: PASTE YOUR WEB APP URL HERE ---------- */
+const WEB_APP_URL = "PASTE_YOUR_WEB_APP_URL_HERE";
+/* -------------------------------------------------------- */
 
-/* ELEMENTS */
+const MAX_URL_LENGTH = 2000; // just a sanity limit
+
 const form = document.getElementById('uploadForm');
-const submitBtn = document.getElementById('submitBtn');
-const overlay = document.getElementById('overlay');
-const successPopup = document.getElementById('successPopup');
-
-const nameInput = document.getElementById('name');
-const skillInput = document.getElementById('skill');
-const provinceInput = document.getElementById('province');
-const cityInput = document.getElementById('city');
-const descriptionInput = document.getElementById('description');
-const phoneInput = document.getElementById('phone');
-
-const pic1Input = document.getElementById('pic1');
-const pic2Input = document.getElementById('pic2');
+const pic1Input = document.getElementById('pic1url');
+const pic2Input = document.getElementById('pic2url');
 const thumbPic1 = document.getElementById('thumbPic1');
 const thumbPic2 = document.getElementById('thumbPic2');
+const videourlInput = document.getElementById('videourl');
+const overlay = document.getElementById('overlay');
+const successPopup = document.getElementById('successPopup');
+const submitBtn = document.getElementById('submitBtn');
 
-function showImagePreview(file, container) {
+// simple helper: check URL looks like image
+function looksLikeImageUrl(u) {
+  if (!u) return false;
+  try { const url = new URL(u); } catch(e){ return false; }
+  const lower = u.toLowerCase();
+  return /\.(jpe?g|png|webp|gif|bmp|svg)(\?|$)/.test(lower) || lower.includes('imgur.com') || lower.includes('i.ibb.co') || lower.includes('images.unsplash.com');
+}
+
+// preview by creating an <img> with the URL; hide if fails
+function showPreview(url, container) {
   container.innerHTML = '';
+  if (!url) { container.textContent = container.id === 'thumbPic1' ? 'Picture 1 (preview)' : 'Picture 2 (preview)'; return;}
   const img = document.createElement('img');
   img.alt = 'preview';
-  const reader = new FileReader();
-  reader.onload = e => img.src = e.target.result;
-  reader.readAsDataURL(file);
+  img.onload = () => { /* ok */ };
+  img.onerror = () => { container.textContent = 'Preview unavailable — check the URL'; };
+  img.src = url;
   container.appendChild(img);
 }
 
-pic1Input.addEventListener('change', () => {
-  const f = pic1Input.files[0];
-  if (f) { if (f.size > MAX_IMAGE) { alert('Picture 1 too large (max 6MB).'); pic1Input.value = ''; return; } showImagePreview(f, thumbPic1);} else thumbPic1.innerHTML='Picture 1 preview';
+pic1Input.addEventListener('input', () => {
+  const v = pic1Input.value.trim();
+  showPreview(v, thumbPic1);
 });
-pic2Input.addEventListener('change', () => {
-  const f = pic2Input.files[0];
-  if (f) { if (f.size > MAX_IMAGE) { alert('Picture 2 too large (max 6MB).'); pic2Input.value = ''; return; } showImagePreview(f, thumbPic2);} else thumbPic2.innerHTML='Picture 2 preview';
+pic2Input.addEventListener('input', () => {
+  const v = pic2Input.value.trim();
+  showPreview(v, thumbPic2);
 });
 
-function readFileAsDataURL(file) {
-  return new Promise((res, rej) => {
-    const fr = new FileReader();
-    fr.onload = () => res(fr.result);
-    fr.onerror = rej;
-    fr.readAsDataURL(file);
-  });
+// simple video link validation (optional)
+function looksLikeVideoUrl(u) {
+  if (!u) return false;
+  try { new URL(u); } catch(e) { return false; }
+  return u.includes('youtube.com') || u.includes('vimeo.com') || u.includes('youtu.be');
 }
 
-function splitDataUrl(dataUrl) {
-  const m = dataUrl.match(/^data:(.+);base64,(.*)$/);
-  return m ? { mime: m[1], base64: m[2] } : null;
-}
-
-function setUploading(flag) {
+function setLoading(flag) {
   overlay.classList.toggle('show', flag);
   submitBtn.disabled = flag;
 }
@@ -174,66 +168,78 @@ function setUploading(flag) {
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  // validation
-  const name = nameInput.value.trim();
-  const skill = skillInput.value.trim();
-  const province = provinceInput.value.trim();
-  const city = cityInput.value.trim();
-  const description = descriptionInput.value.trim();
-  const phone = phoneInput.value.trim();
+  if (!WEB_APP_URL || WEB_APP_URL.includes('PASTE_YOUR')) {
+    alert('Please paste your Apps Script Web App URL into the top of this file before submitting.');
+    return;
+  }
+
+  // gather fields
+  const name = (document.getElementById('name').value || '').trim();
+  const skill = (document.getElementById('skill').value || '').trim();
+  const province = (document.getElementById('province').value || '').trim();
+  const city = (document.getElementById('city').value || '').trim();
+  const description = (document.getElementById('description').value || '').trim();
+  const phone = (document.getElementById('phone').value || '').trim();
+  const pic1 = pic1Input.value.trim();
+  const pic2 = pic2Input.value.trim();
+  const videourl = videourlInput.value.trim();
+
+  // basic validation
   if (!name || !skill || !province || !city || !description || !phone) { alert('Please fill all required fields.'); return; }
+  if (!pic1 || !pic2) { alert('Please paste two image URLs.'); return; }
+  if (!looksLikeImageUrl(pic1) || !looksLikeImageUrl(pic2)) {
+    if (!confirm('One or both image links do not look like a direct image URL. Continue anyway?')) return;
+  }
+  if (videourl && !looksLikeVideoUrl(videourl)) {
+    if (!confirm('Video link does not look like YouTube/Vimeo. Continue anyway?')) { return; }
+  }
 
-  const pic1 = pic1Input.files[0];
-  const pic2 = pic2Input.files[0];
-  if (!pic1 || !pic2) { alert('Please select two pictures.'); return; }
-  if (pic1.size > MAX_IMAGE || pic2.size > MAX_IMAGE) { alert('One image is too large (max 6MB).'); return; }
+  setLoading(true);
 
-  setUploading(true);
+  // prepare payload (matches sheet fields)
+  const payload = {
+    Name: name,
+    Skill: skill,
+    Province: province,
+    City: city,
+    Description: description,
+    Phone: phone,
+    Picture1URL: pic1,
+    Picture2URL: pic2,
+    VideoURL: videourl || ""
+  };
 
   try {
-    const [pic1DataUrl, pic2DataUrl] = await Promise.all([readFileAsDataURL(pic1), readFileAsDataURL(pic2)]);
-    const p1 = splitDataUrl(pic1DataUrl);
-    const p2 = splitDataUrl(pic2DataUrl);
-    if (!p1 || !p2) throw new Error('Failed to read images.');
+    const resp = await fetch(WEB_APP_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
 
-    const payload = {
-      Name: name,
-      Skill: skill,
-      Province: province,
-      City: city,
-      Description: description,
-      Phone: phone,
-      Picture1: { base64: p1.base64, mime: p1.mime, filename: pic1.name },
-      Picture2: { base64: p2.base64, mime: p2.mime, filename: pic2.name }
-    };
-
-    const resp = await fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify(payload) });
     const text = await resp.text();
     let result;
-    try { result = JSON.parse(text); } catch (err) { throw new Error('Server returned unexpected response'); }
+    try { result = JSON.parse(text); } catch (err) { result = { status: 'error', message: 'Unexpected server response' }; }
 
-    if (result && result.status === 'success') {
+    if (result.status === 'success') {
       successPopup.classList.add('show');
-      setTimeout(() => successPopup.classList.remove('show'), 3000);
+      setTimeout(()=> successPopup.classList.remove('show'), 3000);
       form.reset();
-      thumbPic1.innerHTML = 'Picture 1 preview';
-      thumbPic2.innerHTML = 'Picture 2 preview';
-      // redirect to profile page (shows pending)
-      const id = encodeURIComponent(result.id);
-      setTimeout(() => window.location.href = `profile.html?id=${id}`, 1200);
+      thumbPic1.innerHTML = 'Picture 1 (preview)';
+      thumbPic2.innerHTML = 'Picture 2 (preview)';
+      // redirect to profile after short delay (profile might show Pending)
+      setTimeout(()=> {
+        if (result.id) window.location.href = `profile.html?id=${encodeURIComponent(result.id)}`;
+      }, 1200);
     } else {
-      throw new Error(result && result.message ? result.message : 'Upload failed');
+      alert('Submission failed: ' + (result.message || 'Server error'));
     }
   } catch (err) {
     console.error(err);
-    let message = 'Upload failed. Try again.';
-    if (err instanceof ProgressEvent) message = 'Upload failed: server not reachable or file too large.';
-    else if (err.message) message = err.message;
-    alert(message);
+    alert('Submission failed — check your internet connection or app URL.');
   } finally {
-    setUploading(false);
+    setLoading(false);
   }
 });
 </script>
 </body>
-      </html>
+  </html>
