@@ -6,282 +6,205 @@
   <title>Upload Your Hustle — FindMyHustle</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --bg1: #f5f7fb;
-      --card: #ffffff;
-      --accentA: #3b0a57;
-      --accentB: #0d1a5e;
-      --accentG: #7b3fe4;
-      --accentL: #4bc0ff;
-    }
+    :root{--p1:#3b0a57;--p2:#0d1a5e;--card:bg(white);--accent1:#7b3fe4;--accent2:#4bc0ff}
     *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:'Poppins',system-ui,Arial,sans-serif;
-      background: linear-gradient(135deg,var(--accentA),var(--accentB));
-      color:#0f1724;
-      padding:20px;
-      min-height:100vh;
-      display:flex;
-      justify-content:center;
-      align-items:flex-start;
-    }
-    .wrap{width:100%;max-width:920px}
-    .card{
-      background: rgba(255,255,255,0.96);
-      padding:22px;
-      border-radius:14px;
-      box-shadow:0 18px 50px rgba(2,6,23,0.35);
-    }
-    h1{margin:0 0 8px;font-size:22px;color:var(--accentB)}
-    p.lead{margin:0 0 14px;color:#374151}
-    label{display:block;margin-top:12px;font-weight:600;color:#102a43}
-    input[type="text"], input[type="email"], input[type="tel"], input[type="url"], select, textarea {
-      width:100%;
-      padding:10px 12px;
-      margin-top:6px;
-      border-radius:10px;
-      border:1px solid #e6eef6;
-      font-size:14px;
-      background:#fff;
-      color:#0b1a2b;
+    body{font-family:'Poppins',system-ui,Arial,sans-serif;margin:0;background:linear-gradient(135deg,var(--p1),var(--p2));color:#fff;padding:18px}
+    .wrap{max-width:760px;margin:18px auto}
+    .card{background:rgba(255,255,255,0.06);padding:18px;border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.35)}
+    h1{margin:0 0 8px;text-align:center}
+    label{display:block;margin-top:12px;font-weight:600}
+    input[type=text], input[type=email], input[type=url], select, textarea {
+      width:100%;padding:10px;border-radius:8px;border:none;margin-top:6px;font-size:14px;
     }
     textarea{min-height:90px;resize:vertical}
-    .row{display:flex;gap:12px}
-    .row .col{flex:1}
-    .thumbs{display:flex;gap:12px;margin-top:10px;flex-wrap:wrap}
-    .thumb{flex:1;min-height:140px;border-radius:10px;background:#f3f7fb;border:1px dashed #e2e8f0;display:flex;align-items:center;justify-content:center;overflow:hidden;color:#64748b}
-    .thumb img{width:100%;height:100%;object-fit:cover;display:block}
-    .note{font-size:13px;color:#6b7280;margin-top:8px}
-    .tips{font-size:13px;color:#475569;background:#f8fafc;padding:10px;border-radius:8px;margin-top:10px}
-    button.primary{
-      margin-top:16px;
-      width:100%;
-      padding:12px 14px;
-      border-radius:10px;
-      border:none;
-      font-weight:800;
-      color:#fff;
-      background: linear-gradient(90deg,var(--accentG),var(--accentL));
-      cursor:pointer;
-      font-size:16px;
-    }
-    button.primary:disabled{opacity:0.6;cursor:default}
-    #overlay{display:none;position:fixed;inset:0;background:rgba(2,6,23,0.55);align-items:center;justify-content:center;z-index:9999}
+    .media-preview{display:flex;gap:10px;margin-top:10px}
+    .thumb{flex:1;min-height:120px;background:rgba(0,0,0,0.12);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#ddd;padding:6px}
+    .thumb img{width:100%;height:100%;object-fit:cover;border-radius:6px}
+    .note{font-size:13px;color:rgba(255,255,255,0.9);margin-top:8px}
+    button.primary{width:100%;margin-top:16px;padding:12px;border-radius:10px;border:none;font-weight:800;background:linear-gradient(90deg,#7b3fe4,#4bc0ff);color:#fff;cursor:pointer}
+    #overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);align-items:center;justify-content:center;z-index:9999}
     #overlay.show{display:flex}
-    .overlay-box{background:#fff;padding:14px 18px;border-radius:10px;font-weight:700;color:#06121a}
-    #success{position:fixed;left:50%;transform:translateX(-50%);top:-120px;background:linear-gradient(135deg,#4cd964,#38f9d7);color:#002;padding:12px 16px;border-radius:12px;font-weight:800;box-shadow:0 12px 30px rgba(2,6,23,0.35);z-index:10000;transition:all .45s;opacity:0}
-    #success.show{top:28px;opacity:1}
-    @media(max-width:720px){ .row{flex-direction:column} .thumb{min-height:120px} }
+    .overlay-box{background:rgba(255,255,255,0.06);padding:14px 18px;border-radius:10px;color:#fff;font-weight:700}
+    #success{position:fixed;left:50%;top:-120px;transform:translateX(-50%);background:#4cd964;color:#002;padding:12px 16px;border-radius:12px;font-weight:700;transition:all .5s;}
+    #success.show{top:24px}
+    @media(max-width:620px){.media-preview{flex-direction:column}}
   </style>
 </head>
 <body>
-  <div id="success">✅ Submission successful — we will contact you for verification.</div>
+  <div id="success">✅ Submission saved — we'll contact you for verification.</div>
   <div id="overlay"><div class="overlay-box">Submitting — please wait…</div></div>
 
   <div class="wrap">
-    <main class="card" role="main" aria-labelledby="title">
-      <h1 id="title">Upload Your Hustle</h1>
-      <p class="lead">Paste two direct image links (Imgur / i.ibb.co recommended). Optional video link (YouTube/Vimeo). Your listing will remain pending until verified.</p>
+    <main class="card" role="main">
+      <h1>Upload Your Hustle</h1>
+      <p class="note">Paste two public image links (Imgur or imgbb recommended). Optional: add a video link (YouTube/Vimeo). New listings are set to Pending for verification.</p>
+
+      <!-- Paste your deployed Apps Script Web App URL here -->
+      <script>const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzUGuj9eN4_xEBNHIEr_sypGVXJ7QA6j04UjdZ9Wzc1zYiYezEaX2p-eF_d7haAXBff/exec";</script>
 
       <form id="uploadForm" novalidate>
-        <label for="name">Full name</label>
-        <input id="name" name="Name" type="text" placeholder="Your full name" required>
+        <label>Full name</label>
+        <input id="name" name="Name" type="text" required placeholder="Your full name">
 
-        <div class="row">
-          <div class="col">
-            <label for="skill">Skill</label>
+        <label>Email (we use this only to contact you)</label>
+        <input id="email" name="Email" type="email" required placeholder="you@example.com">
+
+        <div style="display:flex;gap:10px;margin-top:8px">
+          <div style="flex:1">
+            <label>Skill</label>
             <select id="skill" name="Skill" required>
               <option value="">Select skill</option>
-              <option>Barber</option>
-              <option>Hairdresser</option>
-              <option>Nail Technician</option>
-              <option>Makeup Artist</option>
-              <option>Photographer</option>
-              <option>Videographer</option>
-              <option>Graphic Designer</option>
-              <option>DJ</option>
-              <option>Chef / Caterer</option>
-              <option>Seamstress / Tailor</option>
-              <option>Carpenter</option>
-              <option>Painter</option>
-              <option>Plumber</option>
-              <option>Electrician</option>
-              <option>Mechanic</option>
-              <option>Gardener / Landscaper</option>
-              <option>House Cleaning</option>
-              <option>Courier / Delivery</option>
-              <option>Tech Repair (Phones / Laptops)</option>
-              <option>Personal Trainer</option>
-              <option>Other</option>
+              <option>Barber</option><option>Hairdresser</option><option>Nail Technician</option><option>Makeup Artist</option><option>Photographer</option><option>Videographer</option><option>Graphic Designer</option><option>Plumber</option><option>Electrician</option><option>Mechanic</option><option>Chef</option><option>Tailor</option><option>Carpenter</option><option>Gardener</option><option>DJ</option><option>Other</option>
             </select>
           </div>
-
-          <div class="col">
-            <label for="province">Province</label>
+          <div style="flex:1">
+            <label>Province</label>
             <select id="province" name="Province" required>
               <option value="">Select province</option>
-              <option>Eastern Cape</option>
-              <option>Free State</option>
-              <option>Gauteng</option>
-              <option>KwaZulu-Natal</option>
-              <option>Limpopo</option>
-              <option>Mpumalanga</option>
-              <option>Northern Cape</option>
-              <option>North West</option>
-              <option>Western Cape</option>
+              <option>Eastern Cape</option><option>Free State</option><option>Gauteng</option><option>KwaZulu-Natal</option><option>Limpopo</option><option>Mpumalanga</option><option>Northern Cape</option><option>North West</option><option>Western Cape</option>
             </select>
           </div>
         </div>
 
-        <label for="city">City / Town</label>
-        <input id="city" name="City" type="text" placeholder="e.g. Mahikeng">
+        <label>City / Town</label>
+        <input id="city" name="City" type="text" placeholder="e.g. Mahikeng" required>
 
-        <label for="phone">Phone (WhatsApp) — include country code</label>
-        <input id="phone" name="Phone" type="tel" placeholder="+27..." required>
+        <label>Phone (WhatsApp)</label>
+        <input id="phone" name="Phone" type="text" placeholder="+27..." required>
 
-        <label for="email">Email (optional)</label>
-        <input id="email" name="Email" type="email" placeholder="you@example.com">
+        <label>Short description</label>
+        <textarea id="description" name="Description" placeholder="What you offer, rates, specialties..." required></textarea>
 
-        <label for="description">Short description</label>
-        <textarea id="description" name="Description" placeholder="What services do you offer?"></textarea>
-
-        <div class="tips">
-          <strong>Tip:</strong> If you want to show multiple works combine them into one collage image (one image can contain multiple items). Use Imgur or ImgBB to get a direct image link that ends with .jpg/.png/.webp.
-        </div>
-
-        <div class="thumbs" aria-hidden="true">
+        <div class="media-preview" aria-hidden="true">
           <div class="thumb" id="thumb1">Picture 1 preview</div>
           <div class="thumb" id="thumb2">Picture 2 preview</div>
         </div>
 
-        <label for="pic1">Picture 1 URL (direct image link)</label>
+        <label>Picture 1 URL (direct image link, required)</label>
         <input id="pic1" name="Picture1URL" type="url" placeholder="https://i.imgur.com/abc123.jpg" required>
 
-        <label for="pic2">Picture 2 URL (direct image link)</label>
+        <label>Picture 2 URL (direct image link, required)</label>
         <input id="pic2" name="Picture2URL" type="url" placeholder="https://i.imgur.com/xyz456.png" required>
 
-        <label for="video">Video link (optional)</label>
-        <input id="video" name="VideoURL" type="url" placeholder="https://www.youtube.com/watch?v=...">
+        <label>Video link (optional)</label>
+        <input id="videourl" name="VideoURL" type="url" placeholder="https://www.youtube.com/watch?v=...">
 
-        <p class="note">By submitting you confirm you own or have permission to use the media. Verified listings only appear on Browse.</p>
+        <p class="note">Tip: If you want multiple works in one image, create a collage and upload to Imgur/ImgBB to get a direct link ending with .jpg/.png/.webp.</p>
 
         <button id="submitBtn" class="primary" type="submit">Submit Hustle</button>
       </form>
     </main>
   </div>
 
-<script>
-/* ---------- CONFIG: your deployed Apps Script Web App URL ---------- */
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyPkK1BeaHTfktxPRyRX2SgcHfw6WMIMQaXIfpMhlOD4uX_9zpFG9bn_cWVy9VpWpf3/exec";
-/* --------------------------------------------------------------- */
+  <script>
+    const form = document.getElementById('uploadForm');
+    const pic1Input = document.getElementById('pic1');
+    const pic2Input = document.getElementById('pic2');
+    const thumb1 = document.getElementById('thumb1');
+    const thumb2 = document.getElementById('thumb2');
+    const overlay = document.getElementById('overlay');
+    const success = document.getElementById('success');
+    const submitBtn = document.getElementById('submitBtn');
 
-const form = document.getElementById('uploadForm');
-const submitBtn = document.getElementById('submitBtn');
-const overlay = document.getElementById('overlay');
-const success = document.getElementById('success');
-
-const pic1 = document.getElementById('pic1');
-const pic2 = document.getElementById('pic2');
-const thumb1 = document.getElementById('thumb1');
-const thumb2 = document.getElementById('thumb2');
-
-function showPreview(url, container){
-  container.innerHTML = '';
-  if (!url) { container.textContent = 'Preview unavailable'; return; }
-  const img = document.createElement('img');
-  img.alt = 'preview';
-  img.onload = () => {};
-  img.onerror = () => { container.textContent = 'Preview unavailable — check the URL'; };
-  img.src = url;
-  container.appendChild(img);
-}
-
-pic1.addEventListener('input', () => showPreview(pic1.value.trim(), thumb1));
-pic2.addEventListener('input', () => showPreview(pic2.value.trim(), thumb2));
-
-function setLoading(flag){
-  overlay.classList.toggle('show', flag);
-  submitBtn.disabled = flag;
-}
-
-function looksLikeImage(url){
-  if (!url) return false;
-  try { new URL(url); } catch(e) { return false; }
-  const l = url.toLowerCase();
-  return /\.(jpe?g|png|webp|gif|bmp|svg)(\?|$)/.test(l) || l.includes('imgur.com') || l.includes('i.ibb.co') || l.includes('i.imgur.com');
-}
-
-form.addEventListener('submit', async function(e){
-  e.preventDefault();
-
-  if (!WEB_APP_URL || WEB_APP_URL.includes('PASTE_YOUR')) {
-    alert('Web app URL is missing. Please paste it in the code.');
-    return;
-  }
-
-  const payload = {
-    Name: (document.getElementById('name').value || '').trim(),
-    Email: (document.getElementById('email').value || '').trim(),
-    Skill: (document.getElementById('skill').value || '').trim(),
-    Province: (document.getElementById('province').value || '').trim(),
-    City: (document.getElementById('city').value || '').trim(),
-    Description: (document.getElementById('description').value || '').trim(),
-    Phone: (document.getElementById('phone').value || '').trim(),
-    Picture1URL: (document.getElementById('pic1').value || '').trim(),
-    Picture2URL: (document.getElementById('pic2').value || '').trim(),
-    VideoURL: (document.getElementById('video').value || '').trim()
-  };
-
-  // required checks
-  if (!payload.Name || !payload.Skill || !payload.Province) {
-    alert('Please fill Name, Skill and Province.');
-    return;
-  }
-  if (!payload.Picture1URL || !payload.Picture2URL) {
-    alert('Please provide two image URLs.');
-    return;
-  }
-
-  // optional image heuristics
-  if (!looksLikeImage(payload.Picture1URL) || !looksLikeImage(payload.Picture2URL)) {
-    if (!confirm('One or both image URLs do not look like direct image links. Continue anyway?')) return;
-  }
-
-  setLoading(true);
-
-  try {
-    const res = await fetch(WEB_APP_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-
-    const text = await res.text();
-    let jsonRes;
-    try { jsonRes = JSON.parse(text); } catch (err) { jsonRes = { status: 'error', message: 'Unexpected server response' }; }
-
-    if (jsonRes.status && jsonRes.status === 'success') {
-      success.classList.add('show');
-      setTimeout(()=> success.classList.remove('show'), 3200);
-      form.reset();
-      thumb1.innerHTML = 'Picture 1 preview';
-      thumb2.innerHTML = 'Picture 2 preview';
-      // redirect to profile page (pending)
-      if (jsonRes.id) {
-        setTimeout(()=> window.location.href = `profile.html?id=${encodeURIComponent(jsonRes.id)}`, 1100);
-      }
-    } else {
-      alert('Submission failed: ' + (jsonRes.message || 'Server error'));
+    function showPreview(url, container) {
+      container.innerHTML = '';
+      if (!url) { container.textContent = container.id === 'thumb1' ? 'Picture 1 preview' : 'Picture 2 preview'; return; }
+      const img = document.createElement('img');
+      img.alt = 'preview';
+      img.onload = () => {};
+      img.onerror = () => { container.textContent = 'Preview unavailable — check the URL'; };
+      img.src = url;
+      container.appendChild(img);
     }
 
-  } catch (err) {
-    console.error('Upload error', err);
-    alert('Submission failed — check your internet connection and the web app URL.');
-  } finally {
-    setLoading(false);
-  }
-});
-</script>
+    function looksLikeImageUrl(u) {
+      if (!u) return false;
+      try { new URL(u); } catch (e) { return false; }
+      const lower = u.toLowerCase();
+      return /\.(jpe?g|png|webp|gif|bmp|svg)(\?|$)/.test(lower) || lower.includes('imgur.com') || lower.includes('i.ibb.co') || lower.includes('images.unsplash.com');
+    }
+
+    function looksLikeVideoUrl(u) {
+      if (!u) return false;
+      try { new URL(u); } catch (e) { return false; }
+      return u.includes('youtube.com') || u.includes('youtu.be') || u.includes('vimeo.com');
+    }
+
+    pic1Input.addEventListener('input', () => showPreview(pic1Input.value.trim(), thumb1));
+    pic2Input.addEventListener('input', () => showPreview(pic2Input.value.trim(), thumb2));
+
+    function setLoading(flag) {
+      overlay.classList.toggle('show', flag);
+      submitBtn.disabled = flag;
+    }
+
+    form.addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+
+      if (typeof WEB_APP_URL === 'undefined' || !WEB_APP_URL || WEB_APP_URL.includes('PASTE_YOUR_WEB_APP_URL')) {
+        alert('Please paste your Apps Script Web App URL into the upload.html (see top of file).');
+        return;
+      }
+
+      const Name = (document.getElementById('name').value || '').trim();
+      const Email = (document.getElementById('email').value || '').trim();
+      const Skill = (document.getElementById('skill').value || '').trim();
+      const Province = (document.getElementById('province').value || '').trim();
+      const City = (document.getElementById('city').value || '').trim();
+      const Description = (document.getElementById('description').value || '').trim();
+      const Phone = (document.getElementById('phone').value || '').trim();
+      const Picture1URL = (pic1Input.value || '').trim();
+      const Picture2URL = (pic2Input.value || '').trim();
+      const VideoURL = (document.getElementById('videourl').value || '').trim();
+
+      if (!Name || !Email || !Skill || !Picture1URL || !Picture2URL) {
+        alert('Please fill Name, Email, Skill and both image URLs.');
+        return;
+      }
+
+      if (!looksLikeImageUrl(Picture1URL) || !looksLikeImageUrl(Picture2URL)) {
+        if (!confirm('One or both image URLs do not look like direct image links. Continue anyway?')) return;
+      }
+      if (VideoURL && !looksLikeVideoUrl(VideoURL)) {
+        if (!confirm('Video link does not look like YouTube/Vimeo. Continue anyway?')) return;
+      }
+
+      setLoading(true);
+
+      const payload = { Name, Email, Skill, Province, City, Description, Phone, Picture1URL, Picture2URL, VideoURL };
+
+      try {
+        const resp = await fetch(WEB_APP_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const text = await resp.text();
+        let result;
+        try { result = JSON.parse(text); } catch (e) { result = { status: 'error', message: 'Invalid server response' }; }
+
+        if (result.status === 'success') {
+          success.classList.add('show');
+          setTimeout(()=> success.classList.remove('show'), 3500);
+          form.reset();
+          thumb1.innerHTML = 'Picture 1 preview';
+          thumb2.innerHTML = 'Picture 2 preview';
+
+          // redirect to profile (shows Pending)
+          if (result.id) {
+            setTimeout(()=> window.location.href = `profile.html?id=${encodeURIComponent(result.id)}`, 1200);
+          }
+        } else {
+          alert('Submission failed: ' + (result.message || 'Server error'));
+        }
+      } catch (err) {
+        console.error('submit error', err);
+        alert('Submission failed — check your internet connection and the web app URL.');
+      } finally {
+        setLoading(false);
+      }
+    });
+  </script>
 </body>
-          </html>
+                                                                                                                                                      </html>
