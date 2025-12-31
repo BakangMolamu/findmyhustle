@@ -1,209 +1,255 @@
-<!doctype html>
-
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Upload Your Hustle — FindMyHustle</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-  <style>
-    :root{--glass: rgba(255,255,255,0.85);} 
-    html,body{height:100%;margin:0;font-family:'Poppins',system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#0b1320}
-    body{
-      background: linear-gradient(135deg,#c8f1ff 0%, #d6c3ff 50%, #e6d5ff 100%);
-      display:flex;align-items:center;justify-content:center;padding:24px;
-    }
-    .card{max-width:820px;width:100%;background:var(--glass);backdrop-filter:blur(6px);border-radius:14px;box-shadow:0 8px 30px rgba(11,19,32,0.12);padding:20px 22px}
-    h1{margin:0 0 6px;font-weight:600;font-size:20px}
-    p.lead{margin:0 0 18px;color:#10203a}
-    form{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    label{display:block;font-size:13px;margin-bottom:6px;color:#1b2a44}
-    input[type=text],input[type=email],textarea,select{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(11,19,32,0.08);font-size:14px}
-    textarea{min-height:92px;resize:vertical}
-    .full{grid-column:1/-1}
-    .actions{display:flex;gap:10px;align-items:center;justify-content:flex-end;margin-top:6px}
-    button{background:linear-gradient(90deg,#6c63ff,#4facff);color:white;border:0;padding:10px 14px;border-radius:10px;font-weight:600;cursor:pointer}
-    button.ghost{background:transparent;color:#10203a;border:1px solid rgba(11,19,32,0.06)}
-    .note{font-size:13px;color:#2a3b56}
-    .msg{padding:10px;border-radius:8px;margin-top:10px}
-    .msg.success{background:#e6fbf0;color:#064e2a}
-    .msg.error{background:#fff1f2;color:#6b0f1a}
-    .img-preview{display:flex;gap:8px;align-items:center}
-    .img-preview img{width:84px;height:84px;object-fit:cover;border-radius:8px;border:1px solid rgba(11,19,32,0.06)}
-    @media (max-width:720px){form{grid-template-columns:1fr} .actions{justify-content:stretch} button{width:100%}}
-  </style>
-</head>
-<body>
-  <div class="card">
-    <h1>Upload your hustle</h1>
-    <p class="lead">Fill the form below and we'll add your profile to the FindMyHustle spreadsheet. <strong>Required:</strong> Name, Skill, Picture1URL, Picture2URL.</p><form id="hustleForm" autocomplete="off">
-  <div>
-    <label for="name">Full name *</label>
-    <input id="name" name="Name" type="text" placeholder="e.g. Thabo M" required />
-  </div>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Upload Your Hustle — FindMyHustle</title><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet"><style>
+  :root {
+    --blue: #7ad3ff;
+    --purple: #8a6cff;
+    --card-bg: rgba(255,255,255,0.08);
+    --glass: rgba(255,255,255,0.06);
+  }
 
-  <div>
-    <label for="skill">Skill *</label>
-    <input id="skill" name="Skill" type="text" placeholder="e.g. Tailor, Packer, Photographer" required />
-  </div>
+  html,body { height:100%; margin:0; font-family:'Poppins',system-ui,Arial,sans-serif; }
+  body {
+    display:flex;
+    justify-content:center;
+    padding:28px;
+    /* light blue + purple gradient as requested */
+    background: linear-gradient(135deg, var(--blue) 0%, #c9b6ff 50%, var(--purple) 100%);
+    color:#07203a;
+  }
 
-  <div>
-    <label for="province">Province</label>
-    <input id="province" name="Province" type="text" placeholder="e.g. Gauteng" />
-  </div>
+  .card {
+    width:100%;
+    max-width:820px;
+    background:var(--card-bg);
+    border-radius:14px;
+    padding:22px;
+    box-shadow:0 12px 30px rgba(3,8,18,0.12);
+    backdrop-filter:blur(6px);
+  }
 
-  <div>
-    <label for="city">City</label>
-    <input id="city" name="City" type="text" placeholder="e.g. Johannesburg" />
-  </div>
+  h1 { text-align:center; margin:0 0 6px; }
+  p.lead { text-align:center; margin:0 0 18px; color:rgba(3,8,18,0.65); }
 
-  <div class="full">
-    <label for="email">Email</label>
-    <input id="email" name="Email" type="email" placeholder="optional" />
-  </div>
+  label { display:block; margin-top:12px; font-weight:600; font-size:13px; color:rgba(3,8,18,0.85); }
+  input, select, textarea {
+    width:100%;
+    padding:10px;
+    margin-top:6px;
+    border-radius:10px;
+    border:none;
+    font-size:14px;
+    box-shadow:0 1px 0 rgba(3,8,18,0.03) inset;
+  }
 
-  <div class="full">
-    <label for="phone">Phone / WhatsApp</label>
-    <input id="phone" name="Phone" type="text" placeholder="e.g. +27 82 555 1234" />
-  </div>
+  textarea { min-height:90px; }
 
-  <div class="full">
-    <label for="description">Short description</label>
-    <textarea id="description" name="Description" placeholder="Tell customers what you do (1-2 lines)"></textarea>
-  </div>
+  .row { display:flex; gap:12px; }
+  .row .col { flex:1; }
 
-  <div>
-    <label for="pic1">Picture 1 URL *</label>
-    <input id="pic1" name="Picture1URL" type="text" placeholder="Direct image URL (Imgur / Cloudinary / public Drive link)" required />
-  </div>
+  .media-row { display:flex; gap:12px; margin-top:10px; }
+  .thumb {
+    flex:1;
+    min-height:120px;
+    background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(0,0,0,0.04));
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    border:1px dashed rgba(3,8,18,0.06);
+  }
 
-  <div>
-    <label for="pic2">Picture 2 URL *</label>
-    <input id="pic2" name="Picture2URL" type="text" placeholder="Another image URL" required />
-  </div>
+  .thumb img { width:100%; height:100%; object-fit:cover; display:block }
 
-  <div>
-    <label for="video">Video URL</label>
-    <input id="video" name="VideoURL" type="text" placeholder="YouTube or public video link (optional)" />
-  </div>
+  button {
+    width:100%;
+    margin-top:20px;
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:700;
+    background:linear-gradient(90deg,#6c63ff,#4bc0ff);
+    color:white;
+    cursor:pointer;
+  }
 
-  <div class="full img-preview" id="previews">
-    <!-- live previews inserted here -->
-  </div>
+  .small { font-size:13px; color:rgba(3,8,18,0.6); margin-top:6px }
 
-  <div class="full note">
-    Tip: the script stores image links — host images somewhere public (Imgur, Cloudinary, or Google Drive public link). If you want help hosting images, tell me and I can show steps.
-  </div>
+  #overlay {
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(2,6,23,0.35);
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+    color:white;
+    z-index:9999;
+  }
 
-  <div class="full actions">
-    <button type="button" id="submitBtn">Submit listing</button>
-    <button type="button" id="clearBtn" class="ghost">Clear</button>
-  </div>
+  #overlay.show { display:flex; }
 
-  <div id="messageArea" class="full"></div>
+  #toast {
+    position:fixed;
+    left:50%;
+    transform:translateX(-50%);
+    bottom:28px;
+    background:#0b3; /* will be overwritten for error */
+    color:#002;
+    padding:12px 16px;
+    border-radius:10px;
+    font-weight:700;
+    display:none;
+    z-index:10000;
+  }
+  #toast.show{ display:block }
+  #toast.error{ background:#ffd6d6; color:#420000 }
+
+  @media (max-width:720px){ .row{flex-direction:column} }
+</style></head>
+<body><div id="overlay">Uploading… please wait</div>
+<div id="toast">Message</div><main class="card">
+<h1>Upload Your Hustle</h1>
+<p class="lead">Profiles appear on Browse only after verification. Required: <strong>Name, Skill, Picture1URL, Picture2URL</strong>.</p><script>
+// Using the web app URL you provided earlier (the one in your Apps Script message).
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzUGuj9eN4_xEBNHIEr_sypGVXJ7QA6j04UjdZ9Wzc1zYiYezEaX2p-eF_d7haAXBff/exec";
+</script><form id="uploadForm"><label>Full Name *</label> <input id="name" name="Name" required placeholder="e.g. Thabo M">
+
+<div class="row">
+  <div class="col">
+    <label>Skill *</label>
+    <select id="skill" name="Skill" required>
+      <option value="">Select skill</option>
+      <option>Barber</option>
+      <option>Hairdresser</option>
+      <option>Photographer</option>
+      <option>Videographer</option>
+      <option>Electrician</option>
+      <option>Plumber</option>
+      <option>Graphic Designer</option>
+      <option>Other</option>
+    </select>
+  </div>  <div class="col">
+    <label>Province</label>
+    <select id="province" name="Province">
+      <option value="">Select province</option>
+      <option>Eastern Cape</option>
+      <option>Free State</option>
+      <option>Gauteng</option>
+      <option>KwaZulu-Natal</option>
+      <option>Limpopo</option>
+      <option>Mpumalanga</option>
+      <option>North West</option>
+      <option>Western Cape</option>
+    </select>
+  </div>
+</div><label>City</label> <input id="city" name="City" placeholder="e.g. Johannesburg">
+
+<label>Email (optional)</label> <input id="email" name="Email" type="email" placeholder="optional">
+
+<label>Description</label>
+
+<textarea id="description" name="Description" placeholder="Short description (1-2 lines)"></textarea><label>Phone</label> <input id="phone" name="Phone" placeholder="e.g. +27 82 555 1234">
+
+<div class="media-row" style="margin-top:12px;">
+  <div class="thumb" id="thumb1">Picture 1 preview</div>
+  <div class="thumb" id="thumb2">Picture 2 preview</div>
+</div><label>Picture 1 URL *</label> <input id="pic1" name="Picture1URL" type="url" required placeholder="Direct public image URL (Imgur, Cloudinary, public Drive link)">
+
+<label>Picture 2 URL *</label> <input id="pic2" name="Picture2URL" type="url" required placeholder="Another image URL">
+
+<label>Video URL (YouTube link or public video URL)</label> <input id="video" name="VideoURL" type="url" placeholder="optional — e.g. https://youtu.be/XXXXX">
+
+<div class="small">Tip: your Apps Script stores links — host images publicly. If you want, I can show how to upload to Imgur or Cloudinary from your phone.</div><button type="submit">Submit Hustle</button>
+
 </form>
+</main><script>
+const form = document.getElementById('uploadForm');
+const overlay = document.getElementById('overlay');
+const toast = document.getElementById('toast');
+const thumb1 = document.getElementById('thumb1');
+const thumb2 = document.getElementById('thumb2');
 
-  </div>  <script>
-    // CHANGE THIS to your web app URL (already set by the page creator)
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzUGuj9eN4_xEBNHIEr_sypGVXJ7QA6j04UjdZ9Wzc1zYiYezEaX2p-eF_d7haAXBff/exec";
+function showToast(text, isError){
+  toast.textContent = text;
+  toast.className = isError ? 'error show' : 'show';
+  setTimeout(()=>{ toast.className = isError ? 'error' : ''; toast.style.display='none'; toast.style.display=''; }, 4000);
+}
 
-    const form = document.getElementById('hustleForm');
-    const submitBtn = document.getElementById('submitBtn');
-    const clearBtn = document.getElementById('clearBtn');
-    const messageArea = document.getElementById('messageArea');
-    const previews = document.getElementById('previews');
+function setImagePreview(el, url){
+  el.innerHTML = '';
+  if(!url) { el.textContent = 'No preview'; return }
+  const img = document.createElement('img');
+  img.src = url;
+  img.alt = 'preview';
+  img.onerror = ()=>{ el.textContent = 'Could not load preview'; };
+  el.appendChild(img);
+}
 
-    function showMessage(text, type='success'){
-      messageArea.innerHTML = '';
-      const div = document.createElement('div');
-      div.className = 'msg ' + (type === 'error' ? 'error' : 'success');
-      div.textContent = text;
-      messageArea.appendChild(div);
-    }
+// live previews
+document.getElementById('pic1').addEventListener('input', (e)=> setImagePreview(thumb1, e.target.value.trim()));
+document.getElementById('pic2').addEventListener('input', (e)=> setImagePreview(thumb2, e.target.value.trim()));
 
-    function clearMessage(){ messageArea.innerHTML = ''; }
+form.addEventListener('submit', async (ev)=>{
+  ev.preventDefault();
 
-    function updatePreviews(){
-      previews.innerHTML = '';
-      const urls = [document.getElementById('pic1').value.trim(), document.getElementById('pic2').value.trim()];
-      urls.forEach(u => {
-        if (!u) return;
-        const img = document.createElement('img');
-        img.src = u;
-        img.alt = 'preview';
-        img.onerror = () => { img.style.opacity = 0.5; img.title = 'Could not load image — check the URL'; };
-        previews.appendChild(img);
-      });
-    }
+  // gather data
+  const payload = {
+    Name: (document.getElementById('name').value || '').trim(),
+    Email: (document.getElementById('email').value || '').trim(),
+    Skill: (document.getElementById('skill').value || '').trim(),
+    Province: (document.getElementById('province').value || '').trim(),
+    City: (document.getElementById('city').value || '').trim(),
+    Description: (document.getElementById('description').value || '').trim(),
+    Phone: (document.getElementById('phone').value || '').trim(),
+    Picture1URL: (document.getElementById('pic1').value || '').trim(),
+    Picture2URL: (document.getElementById('pic2').value || '').trim(),
+    VideoURL: (document.getElementById('video').value || '').trim()
+  };
 
-    document.getElementById('pic1').addEventListener('input', updatePreviews);
-    document.getElementById('pic2').addEventListener('input', updatePreviews);
+  // client-side required check (match Apps Script)
+  const missing = [];
+  if(!payload.Name) missing.push('Name');
+  if(!payload.Skill) missing.push('Skill');
+  if(!payload.Picture1URL) missing.push('Picture1URL');
+  if(!payload.Picture2URL) missing.push('Picture2URL');
+  if(missing.length) return showToast('Missing required: ' + missing.join(', '), true);
 
-    clearBtn.addEventListener('click', () => {
-      form.reset(); previews.innerHTML = ''; clearMessage();
+  // show overlay
+  overlay.classList.add('show');
+
+  try{
+    // Important: do NOT set mode: 'cors' — Apps Script + browser works best without preflight
+    const res = await fetch(WEB_APP_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
     });
 
-    submitBtn.addEventListener('click', async () => {
-      clearMessage();
+    // Some deployments return non-200 even when successful; still try to parse
+    const data = await res.json().catch(()=>null);
 
-      const payload = {
-        Name: document.getElementById('name').value.trim(),
-        Email: document.getElementById('email').value.trim(),
-        Skill: document.getElementById('skill').value.trim(),
-        Province: document.getElementById('province').value.trim(),
-        City: document.getElementById('city').value.trim(),
-        Description: document.getElementById('description').value.trim(),
-        Phone: document.getElementById('phone').value.trim(),
-        Picture1URL: document.getElementById('pic1').value.trim(),
-        Picture2URL: document.getElementById('pic2').value.trim(),
-        VideoURL: document.getElementById('video').value.trim()
-      };
+    overlay.classList.remove('show');
 
-      // client-side validation for required fields
-      const missing = [];
-      if (!payload.Name) missing.push('Name');
-      if (!payload.Skill) missing.push('Skill');
-      if (!payload.Picture1URL) missing.push('Picture1URL');
-      if (!payload.Picture2URL) missing.push('Picture2URL');
-      if (missing.length) return showMessage('Missing required: ' + missing.join(', '), 'error');
-
-      // disable UI
-      submitBtn.disabled = true; submitBtn.textContent = 'Submitting...';
-
-      try{
-        const res = await fetch(WEB_APP_URL, {
-          method: 'POST',
-          mode: 'cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-
-        // Apps Script returns JSON text
-        const data = await res.json();
-
-        if (data && data.status === 'success'){
-          showMessage('Success! Listing created with id: ' + data.id);
-          form.reset(); previews.innerHTML = '';
-        } else if (data && data.status === 'error'){
-          showMessage('Error: ' + (data.message || 'unknown'), 'error');
-        } else {
-          // sometimes script returns array/object — show it
-          showMessage('Response: ' + JSON.stringify(data));
-        }
-
-      } catch (err){
-        console.error(err);
-        // Common cause: CORS or network. Show helpful troubleshooting note.
-        showMessage('Network error or CORS problem. Check your web app deployment (must allow Anyone, even anonymous).\n' + err.message, 'error');
-      } finally{
-        submitBtn.disabled = false; submitBtn.textContent = 'Submit listing';
-      }
-    });
-
-    // friendly tip: open developer console for errors
-    (function(){
-      // small UX improvement: press Enter to submit when in last field
-      form.addEventListener('submit', (ev) => { ev.preventDefault(); submitBtn.click(); });
-    })();
-  </script></body>
+    if(data && data.status === 'success'){
+      showToast('Success — Listing created: ' + data.id, false);
+      form.reset();
+      setImagePreview(thumb1, '');
+      setImagePreview(thumb2, '');
+      // optional: redirect to profile page (if you have one)
+      // location.href = `profile.html?id=${data.id}`;
+    } else if(data && data.status === 'error'){
+      showToast('Server error: ' + (data.message||'Unknown'), true);
+      console.error('Apps Script returned error', data);
+    } else {
+      // unexpected response
+      showToast('Unexpected response from server. Open console for details.', true);
+      console.log('response', res, data);
+    }
+});
+</script></body>
       </html>
