@@ -117,7 +117,7 @@ button:hover{background:#0f4f7a}
 
   <button type="submit">Submit Hustle (Free)</button>
 
-  <div id="status"></div>
+  <div id="status" role="status" aria-live="polite"></div>
 </form>
 
 <button id="mama-suzan-btn" onclick="toggleMamaSuzan()">🧓 Need Help?</button>
@@ -130,35 +130,74 @@ button:hover{background:#0f4f7a}
 </div>
 
 <script>
-const scriptURL = "PASTE_YOUR_WEB_APP_URL_HERE";
+/*
+  IMPORTANT:
+  1) Replace below with your deployed Apps Script Web App URL (deployed as "Execute as: Me" and "Who has access: Anyone")
+  2) Make sure your Apps Script doPost returns JSON like { status: "success", message: "..."}
+*/
+const scriptURL = "PASTE_YOUR_WEB_APP_URL_HERE"; // <-- replace this
+
 const form = document.getElementById("hustleForm");
 const statusMsg = document.getElementById("status");
 
-form.addEventListener("submit", e => {
-  e.preventDefault();
+function showStatus(text, color = "#333") {
   statusMsg.style.display = "block";
-  statusMsg.style.color = "#555";
-  statusMsg.textContent = "Submitting...";
+  statusMsg.style.color = color;
+  statusMsg.textContent = text;
+}
 
-  fetch(scriptURL, {
-    method: "POST",
-    body: new FormData(form)
-  })
-  .then(res => res.text())
-  .then(() => {
-    statusMsg.style.color = "green";
-    statusMsg.textContent = "✅ Hustle uploaded successfully!";
-    form.reset();
-  })
-  .catch(() => {
-    statusMsg.style.color = "red";
-    statusMsg.textContent = "❌ Submission failed. Try again.";
-  });
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  // Basic client-side validation for the required image URL field
+  const image1 = form.querySelector('input[name="image1"]').value.trim();
+  if (!image1) {
+    showStatus("Please provide at least one image URL.", "crimson");
+    return;
+  }
+
+  showStatus("Submitting...", "#555");
+
+  try {
+    const res = await fetch(scriptURL, {
+      method: "POST",
+      body: new FormData(form)
+    });
+
+    // try parse JSON first (Apps Script returns JSON in the current setup)
+    let data;
+    const text = await res.text();
+    try { data = JSON.parse(text); } catch (err) { data = null; }
+
+    if (!res.ok) {
+      // non-2xx HTTP status
+      showStatus("❌ Submission failed (server). Try again.", "crimson");
+      console.error("Server error", res.status, text);
+      return;
+    }
+
+    // If JSON contains a success flag use it, otherwise accept non-empty reply
+    if (data && data.status === "success") {
+      showStatus("✅ Hustle uploaded successfully!", "green");
+      form.reset();
+      // set date back to today (optional UX)
+      document.querySelector('input[name="date"]').value = new Date().toISOString().slice(0,10);
+    } else {
+      // If server returned something but not the success JSON
+      showStatus("✅ Submitted (server responded).", "green");
+      form.reset();
+      document.querySelector('input[name="date"]').value = new Date().toISOString().slice(0,10);
+      console.log("Server response:", text);
+    }
+  } catch (err) {
+    showStatus("❌ Submission failed (network). Check your connection.", "crimson");
+    console.error("Fetch error:", err);
+  }
 });
 
 function toggleMamaSuzan(){
-  const box = document.getElementById("mama-suzan-box");
-  box.style.display = box.style.display === "block" ? "none" : "block";
+  const box = document.getElementById('mama-suzan-box');
+  box.style.display = box.style.display === 'block' ? 'none' : 'block';
 }
 </script>
 
