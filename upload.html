@@ -302,50 +302,38 @@
           <div id="status" role="status" aria-live="polite"></div>
         </div>
 
+        <p style="font-size:13px; text-align:center; margin-top:15px; opacity:0.85;">
+By submitting this application you agree to our 
+<a href="terms.html" target="_blank" style="color:#a855f7; font-weight:600; text-decoration:underline;">Terms & Conditions</a> and 
+<a href="privacy.html" target="_blank" style="color:#3b82f6; font-weight:600; text-decoration:underline;">Privacy Policy</a>.
+        </p>
+
         <div class="full helper" style="margin-top:10px;">
           <strong class="muted">Quick note:</strong> Use <em>direct image links</em> from imgbb.com. Do not paste page or album links. If you need help, open the guide below.
         </div>
       </form>
     </div>
 
-    <!-- Guide / Instructions -->
-    <div class="card guide" aria-hidden="false">
-      <h3>How to get your image URL from imgbb.com</h3>
+    <a href="https://imgbb.com/" target="_blank" 
+   style="display:inline-block; margin-top:8px; padding:8px 14px; 
+          background: linear-gradient(90deg, #a855f7, #3b82f6); 
+          color:#fff; border-radius:8px; text-decoration:none; font-weight:600;">
+📸 Upload Images to imgbb
+    </a>
 
-      <ol>
-        <li>Open <strong>https://imgbb.com</strong> on your phone or computer.</li>
-        <li>Tap <strong>Start Uploading</strong> or drag your image to the page.</li>
-        <li>Choose your photo and upload it. Wait until it's finished uploading.</li>
-        <li>After upload, click <strong>Embed</strong> (or the share button) and choose <em>Direct Link</em> (a URL that ends with <code>.jpg</code> or <code>.png</code>).</li>
-        <li>Copy that direct link and paste it into <strong>Work Image URL 1</strong> (and the second if you have another).</li>
-      </ol>
-
-      <h3 style="margin-top:10px;">Image tips (for best results)</h3>
-      <ul style="color:var(--muted); margin:6px 0 0 18px; line-height:1.45;">
-        <li>Use clear, well-lit photos showing the finished work.</li>
-        <li>Prefer landscape or square images — 800×800 or higher looks sharp.</li>
-        <li>Don't upload images with personal ID documents or sensitive data.</li>
-      </ul>
-
-      <h3 style="margin-top:10px;">Verification & listing</h3>
-      <p style="color:var(--muted); margin:6px 0;">
-        After you submit, your hustle is added to our list but is <strong>not shown publicly</strong> until an admin approves it. An admin will type <code>Yes</code> in the <strong>Verified</strong> column on the Hustlers sheet. Once verified, your profile will appear in the public Browse page.
-      </p>
-
-      <h3 style="margin-top:10px;">Privacy & safety</h3>
-      <p style="color:var(--muted); margin:6px 0;">
-        We only store the details and image links you submit in the Hustlers sheet. If you want content removed, message the admin and we will remove your entry.
-      </p>
+    <p style="text-align:center; margin-top:12px; font-size:14px; opacity:0.9;">
+Need help uploading your image url? Watch this tutorial: 
+<a href="https://youtu.be/ziLjnXe_ZHg?si=P8ccN-XOyx7ASCqE" target="_blank" 
+   style="color:#3b82f6; font-weight:600; text-decoration:underline;">
+📹 How to Upload Image on ImgBB
+</a>
+    
     </div>
   </div>
 
   <!-- Mama Suzan helper -->
-  <button id="mama-suzan-btn" onclick="toggleMamaSuzan()">🧓 Need Help?</button>
+  
 
-  <div id="mama-suzan-box" role="dialog" aria-hidden="true">
-    <p style="margin:0">🧓 Hello ngwanake! This platform is free — no payment needed.</p>
-    <p style="margin:6px 0 0">If you need help getting image links from imgbb, follow the guide or ask here — Mama Suzan will help. ❤️</p>
-  </div>
 
 <script>
   // INSERTED Apps Script Web App URL you provided
@@ -416,11 +404,7 @@
     box.setAttribute('aria-hidden', isOpen ? 'true' : 'false');
   }
 </script>
-
-  <p style="font-size:12px; opacity:0.8; margin-top:12px;">
-By submitting this application you agree to our
-<a href="terms.html" target="_blank">Terms</a> and
-<a href="privacy.html" target="_blank">Privacy Policy</a>.
+  
   </p>
 </body>
             </html>
