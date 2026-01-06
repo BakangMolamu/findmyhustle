@@ -1,205 +1,420 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Upload Hustle - FindMyHustle</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Upload Hustle — FindMyHustle</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
-body{
-  font-family:Poppins,Arial,sans-serif;
-  background:#f4f7fb;
-  padding:20px;
-  color:#123;
-}
-h1{text-align:center;color:#135f9a}
-
-form{
-  max-width:520px;
-  margin:auto;
-  background:#fff;
-  padding:20px;
-  border-radius:12px;
-  box-shadow:0 8px 25px rgba(0,0,0,.08);
-}
-
-label{font-weight:600;margin-top:14px;display:block;font-size:14px}
-input{
-  width:100%;
-  padding:10px;
-  margin-top:6px;
-  border:1px solid #ddd;
-  border-radius:8px;
-  font-size:14px;
-}
-
-button{
-  margin-top:22px;
-  width:100%;
-  background:#135f9a;
-  color:white;
-  border:none;
-  padding:12px;
-  font-size:16px;
-  border-radius:10px;
-  cursor:pointer;
-}
-button:hover{background:#0f4f7a}
-
-#status{
-  margin-top:15px;
-  font-weight:600;
-  text-align:center;
-  display:none;
-}
-
-#mama-suzan-btn{
-  position:fixed;
-  bottom:20px;
-  right:20px;
-  background:white;
-  border:2px solid #135f9a;
-  color:#135f9a;
-  padding:10px 14px;
-  border-radius:30px;
-  font-weight:700;
-  cursor:pointer;
-}
-
-#mama-suzan-box{
-  display:none;
-  position:fixed;
-  bottom:80px;
-  right:20px;
-  width:300px;
-  background:white;
-  padding:15px;
-  border-radius:12px;
-  box-shadow:0 10px 30px rgba(0,0,0,.15);
-  font-size:14px;
-}
-</style>
-</head>
-
-<body>
-
-<h1>Upload Your Hustle</h1>
-
-<form id="hustleForm">
-  <label>Name</label>
-  <input name="name" required>
-
-  <label>Skill / Hustle</label>
-  <input name="skill" required>
-
-  <label>Province</label>
-  <input name="province" required>
-
-  <label>City</label>
-  <input name="city" required>
-
-  <label>Phone</label>
-  <input name="phone">
-
-  <label>Email</label>
-  <input type="email" name="email">
-
-  <label>Date</label>
-  <input type="date" name="date" required>
-
-  <label>Work Image URL 1</label>
-  <input type="url" name="image1" required>
-
-  <label>Work Image URL 2</label>
-  <input type="url" name="image2">
-
-  <button type="submit">Submit Hustle (Free)</button>
-
-  <div id="status" role="status" aria-live="polite"></div>
-</form>
-
-<button id="mama-suzan-btn" onclick="toggleMamaSuzan()">🧓 Need Help?</button>
-
-<div id="mama-suzan-box">
-  <p>🧓 Hello ngwanake ❤️</p>
-  <p>This platform is completely FREE.</p>
-  <p>Add clear image links of your work so people can see what you do.</p>
-  <p>Mama Suzan is proud of you.</p>
-</div>
-
-<script>
-/*
-  IMPORTANT:
-  1) Replace below with your deployed Apps Script Web App URL (deployed as "Execute as: Me" and "Who has access: Anyone")
-  2) Make sure your Apps Script doPost returns JSON like { status: "success", message: "..."}
-*/
-const scriptURL = "https://script.google.com/macros/s/AKfycbzUaUmJe5BXagtPTWpP0FwQe9_ngrJL5_BBraTF3pedVbmFQ1xzXh1UOonUSzWOLJ8oNA/exec"; // <-- replace this
-
-const form = document.getElementById("hustleForm");
-const statusMsg = document.getElementById("status");
-
-function showStatus(text, color = "#333") {
-  statusMsg.style.display = "block";
-  statusMsg.style.color = color;
-  statusMsg.textContent = text;
-}
-
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  // Basic client-side validation for the required image URL field
-  const image1 = form.querySelector('input[name="image1"]').value.trim();
-  if (!image1) {
-    showStatus("Please provide at least one image URL.", "crimson");
-    return;
+  :root{
+    --bg1: #4b006e; /* purple */
+    --bg2: #06112a; /* dark blue */
+    --card: rgba(255,255,255,0.98);
+    --muted: #cbd5e1;
+    --accent: #8b5cf6;
+    --accent-dark: #3b82f6;
+    --radius: 14px;
   }
 
-  showStatus("Submitting...", "#555");
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: "Poppins", Arial, sans-serif;
+    background: linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 100%);
+    color: #e6eef9;
+    padding: 18px;
+    -webkit-font-smoothing:antialiased;
+  }
 
-  try {
-    const res = await fetch(scriptURL, {
-      method: "POST",
-      body: new FormData(form)
-    });
+  .wrap{
+    max-width:980px;
+    margin: 10px auto;
+    display:grid;
+    gap:18px;
+    grid-template-columns: 1fr;
+  }
 
-    // try parse JSON first (Apps Script returns JSON in the current setup)
-    let data;
-    const text = await res.text();
-    try { data = JSON.parse(text); } catch (err) { data = null; }
+  header{
+    text-align:center;
+    color: white;
+    margin-bottom: 6px;
+  }
+  header h1{
+    margin:0;
+    font-size:22px;
+    letter-spacing:.2px;
+    font-weight:600;
+  }
+  header p{
+    margin:6px 0 0;
+    color: var(--muted);
+    font-size:14px;
+  }
 
-    if (!res.ok) {
-      // non-2xx HTTP status
-      showStatus("❌ Submission failed (server). Try again.", "crimson");
-      console.error("Server error", res.status, text);
+  .card{
+    background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+    border-radius: var(--radius);
+    padding:14px;
+    box-shadow: 0 10px 30px rgba(2,6,23,0.35);
+    backdrop-filter: blur(6px);
+  }
+
+  form{
+    max-width:720px;
+    margin:8px auto;
+    background: var(--card);
+    color: #04243a;
+    padding:18px;
+    border-radius:12px;
+    box-shadow: 0 6px 20px rgba(2,6,23,0.12);
+  }
+
+  .row {
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:12px;
+  }
+
+  label{
+    display:block;
+    margin-bottom:6px;
+    font-weight:600;
+    font-size:13px;
+    color:#102a43;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="date"],
+  input[type="url"],
+  select {
+    width:100%;
+    padding:10px 12px;
+    border-radius:10px;
+    border:1px solid #e6eef6;
+    font-size:14px;
+    outline:none;
+    background: white;
+  }
+
+  .full { grid-column: 1 / -1; }
+
+  button{
+    margin-top:14px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+    color:white;
+    border:none;
+    padding:12px;
+    font-size:16px;
+    border-radius:10px;
+    width:100%;
+    cursor:pointer;
+    font-weight:700;
+  }
+  button:hover{ filter:brightness(.98); transform: translateY(-1px); }
+
+  #status{
+    margin-top:12px;
+    font-weight:700;
+    text-align:center;
+    display:none;
+  }
+
+  .helper {
+    font-size:13px;
+    color:#0f1724;
+    margin-top:8px;
+  }
+
+  /* Mama Suzan */
+  #mama-suzan-btn{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    background:white;
+    border:2px solid rgba(139,92,246,0.95);
+    color: rgba(11,37,70,1);
+    padding:10px 14px;
+    border-radius:30px;
+    font-weight:700;
+    cursor:pointer;
+    z-index:60;
+  }
+  #mama-suzan-box{
+    display:none;
+    position:fixed;
+    bottom:80px;
+    right:20px;
+    width:340px;
+    background:white;
+    padding:14px;
+    border-radius:12px;
+    box-shadow:0 18px 40px rgba(2,6,23,0.35);
+    z-index:60;
+    color:#07203a;
+    font-size:14px;
+  }
+
+  /* Guide area */
+  .guide{
+    background: rgba(255,255,255,0.05);
+    padding:14px;
+    border-radius:12px;
+    color: #ecf2ff;
+    font-size:14px;
+    line-height:1.45;
+  }
+  .guide h3{ margin:0 0 8px; font-size:16px; color:#fff;}
+  .guide ol{ padding-left:18px; margin:8px 0; color:var(--muted);}
+  .guide code{
+    display:inline-block;
+    background: rgba(0,0,0,0.25);
+    padding:4px 6px;
+    border-radius:6px;
+    color:#fff;
+    font-size:13px;
+  }
+
+  .muted { color: var(--muted); font-size:13px; }
+
+  @media (max-width:760px){
+    .row { grid-template-columns: 1fr; }
+    #mama-suzan-box { right:10px; left:10px; width:auto; }
+    form { padding:14px; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Upload Your Hustle</h1>
+      <p>Free. Professional. Help people find your skill — upload two images hosted on imgbb.com</p>
+    </header>
+
+    <div class="card">
+      <form id="hustleForm" autocomplete="off" novalidate>
+        <div class="row">
+          <div>
+            <label for="name">Full Name</label>
+            <input id="name" name="name" type="text" placeholder="e.g. Naledi M." required />
+          </div>
+
+          <div>
+            <label for="skill">Skill / Hustle</label>
+            <select id="skill" name="skill" required>
+              <!-- Common hustles/skills in South Africa -->
+              <option value="" disabled selected>Select your skill</option>
+              <option>Tailor / Sewing</option>
+              <option>Barber / Haircut</option>
+              <option>Hairstylist / Braiding</option>
+              <option>Makeup Artist</option>
+              <option>Nail Technician</option>
+              <option>Photographer</option>
+              <option>Videographer</option>
+              <option>Graphic Designer</option>
+              <option>Web Developer</option>
+              <option>Mobile Phone Repair</option>
+              <option>Computer Technician</option>
+              <option>Baker / Pastry</option>
+              <option>Chef / Catering</option>
+              <option>Street Food Vendor</option>
+              <option>Carpenter</option>
+              <option>Painter (House/Signs)</option>
+              <option>Plumber</option>
+              <option>Electrician</option>
+              <option>Mechanic</option>
+              <option>Driver / Delivery</option>
+              <option>Cleaner / Domestic</option>
+              <option>Gardener / Landscaping</option>
+              <option>Tutor / Academic Coach</option>
+              <option>Fitness Trainer</option>
+              <option>DJ / Musician</option>
+              <option>Event Planner</option>
+              <option>Jewellery / Beading</option>
+              <option>Shoe Repair</option>
+              <option>Tailor (Alterations)</option>
+              <option>Handyman / General Repairs</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+        </div>
+
+        <div class="row" style="margin-top:10px;">
+          <div>
+            <label for="province">Province</label>
+            <select id="province" name="province" required>
+              <option value="" disabled selected>Select province</option>
+              <option>Eastern Cape</option>
+              <option>Free State</option>
+              <option>Gauteng</option>
+              <option>KwaZulu-Natal</option>
+              <option>Limpopo</option>
+              <option>Mpumalanga</option>
+              <option>Northern Cape</option>
+              <option>North West</option>
+              <option>Western Cape</option>
+              <option>Other / Remote</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="city">City / Town</label>
+            <input id="city" name="city" type="text" placeholder="e.g. Pretoria" required />
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:10px;">
+          <div>
+            <label for="phone">Phone (optional)</label>
+            <input id="phone" name="phone" type="text" placeholder="e.g. 0721234567" />
+          </div>
+
+          <div>
+            <label for="email">Email (optional)</label>
+            <input id="email" name="email" type="email" placeholder="name@example.com" />
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:10px;">
+          <div>
+            <label for="date">Date</label>
+            <input id="date" name="date" type="date" required />
+          </div>
+
+          <div>
+            <label for="image1">Work Image URL 1</label>
+            <input id="image1" name="image1" type="url" placeholder="Paste direct image link from imgbb.com" required />
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:10px;">
+          <div class="full">
+            <label for="image2">Work Image URL 2 (optional)</label>
+            <input id="image2" name="image2" type="url" placeholder="Optional second image link" />
+          </div>
+        </div>
+
+        <div class="full" style="margin-top:12px;">
+          <button type="submit">Submit Hustle (Free)</button>
+          <div id="status" role="status" aria-live="polite"></div>
+        </div>
+
+        <div class="full helper" style="margin-top:10px;">
+          <strong class="muted">Quick note:</strong> Use <em>direct image links</em> from imgbb.com. Do not paste page or album links. If you need help, open the guide below.
+        </div>
+      </form>
+    </div>
+
+    <!-- Guide / Instructions -->
+    <div class="card guide" aria-hidden="false">
+      <h3>How to get your image URL from imgbb.com</h3>
+
+      <ol>
+        <li>Open <strong>https://imgbb.com</strong> on your phone or computer.</li>
+        <li>Tap <strong>Start Uploading</strong> or drag your image to the page.</li>
+        <li>Choose your photo and upload it. Wait until it's finished uploading.</li>
+        <li>After upload, click <strong>Embed</strong> (or the share button) and choose <em>Direct Link</em> (a URL that ends with <code>.jpg</code> or <code>.png</code>).</li>
+        <li>Copy that direct link and paste it into <strong>Work Image URL 1</strong> (and the second if you have another).</li>
+      </ol>
+
+      <h3 style="margin-top:10px;">Image tips (for best results)</h3>
+      <ul style="color:var(--muted); margin:6px 0 0 18px; line-height:1.45;">
+        <li>Use clear, well-lit photos showing the finished work.</li>
+        <li>Prefer landscape or square images — 800×800 or higher looks sharp.</li>
+        <li>Don't upload images with personal ID documents or sensitive data.</li>
+      </ul>
+
+      <h3 style="margin-top:10px;">Verification & listing</h3>
+      <p style="color:var(--muted); margin:6px 0;">
+        After you submit, your hustle is added to our list but is <strong>not shown publicly</strong> until an admin approves it. An admin will type <code>Yes</code> in the <strong>Verified</strong> column on the Hustlers sheet. Once verified, your profile will appear in the public Browse page.
+      </p>
+
+      <h3 style="margin-top:10px;">Privacy & safety</h3>
+      <p style="color:var(--muted); margin:6px 0;">
+        We only store the details and image links you submit in the Hustlers sheet. If you want content removed, message the admin and we will remove your entry.
+      </p>
+    </div>
+  </div>
+
+  <!-- Mama Suzan helper -->
+  <button id="mama-suzan-btn" onclick="toggleMamaSuzan()">🧓 Need Help?</button>
+
+  <div id="mama-suzan-box" role="dialog" aria-hidden="true">
+    <p style="margin:0">🧓 Hello ngwanake! This platform is free — no payment needed.</p>
+    <p style="margin:6px 0 0">If you need help getting image links from imgbb, follow the guide or ask here — Mama Suzan will help. ❤️</p>
+  </div>
+
+<script>
+  // INSERTED Apps Script Web App URL you provided
+  const scriptURL = "https://script.google.com/macros/s/AKfycbzUaUmJe5BXagtPTWpP0FwQe9_ngrJL5_BBraTF3pedVbmFQ1xzXh1UOonUSzWOLJ8oNA/exec";
+
+  const form = document.getElementById('hustleForm');
+  const statusMsg = document.getElementById('status');
+
+  // Set date default to today
+  document.getElementById('date').value = new Date().toISOString().slice(0,10);
+
+  function showStatus(text, color = "#083344") {
+    statusMsg.style.display = "block";
+    statusMsg.style.color = color;
+    statusMsg.textContent = text;
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // Basic validation
+    const image1 = document.getElementById('image1').value.trim();
+    if (!image1) {
+      showStatus('Please provide at least one image URL (from imgbb).', 'crimson');
       return;
     }
 
-    // If JSON contains a success flag use it, otherwise accept non-empty reply
-    if (data && data.status === "success") {
-      showStatus("✅ Hustle uploaded successfully!", "green");
-      form.reset();
-      // set date back to today (optional UX)
-      document.querySelector('input[name="date"]').value = new Date().toISOString().slice(0,10);
-    } else {
-      // If server returned something but not the success JSON
-      showStatus("✅ Submitted (server responded).", "green");
-      form.reset();
-      document.querySelector('input[name="date"]').value = new Date().toISOString().slice(0,10);
-      console.log("Server response:", text);
+    showStatus('Submitting...', '#083344');
+
+    try {
+      const res = await fetch(scriptURL, {
+        method: 'POST',
+        body: new FormData(form)
+      });
+
+      const text = await res.text();
+      let json = null;
+      try { json = JSON.parse(text); } catch (err) { /* ignore */ }
+
+      if (!res.ok) {
+        showStatus('Submission failed (server). Try again.', 'crimson');
+        console.error('Server error', res.status, text);
+        return;
+      }
+
+      if (json && json.status === 'success') {
+        showStatus('✅ Hustle uploaded successfully! Your entry awaits verification.', 'green');
+        form.reset();
+        document.getElementById('date').value = new Date().toISOString().slice(0,10);
+        // Reset selects to placeholder
+        document.getElementById('skill').selectedIndex = 0;
+        document.getElementById('province').selectedIndex = 0;
+      } else {
+        showStatus('Submitted (server responded).', 'green');
+        form.reset();
+      }
+
+    } catch (err) {
+      showStatus('Submission failed (network). Check connection.', 'crimson');
+      console.error('Fetch error', err);
     }
-  } catch (err) {
-    showStatus("❌ Submission failed (network). Check your connection.", "crimson");
-    console.error("Fetch error:", err);
+  });
+
+  function toggleMamaSuzan(){
+    const box = document.getElementById('mama-suzan-box');
+    const isOpen = box.style.display === 'block';
+    box.style.display = isOpen ? 'none' : 'block';
+    box.setAttribute('aria-hidden', isOpen ? 'true' : 'false');
   }
-});
-
-function toggleMamaSuzan(){
-  const box = document.getElementById('mama-suzan-box');
-  box.style.display = box.style.display === 'block' ? 'none' : 'block';
-}
 </script>
-
 </body>
-</html>
+            </html>
