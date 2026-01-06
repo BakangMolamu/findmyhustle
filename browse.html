@@ -1,133 +1,481 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Browse — FindMyHustle</title>
+<title>Browse Hustlers — FindMyHustle</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
 <style>
-  :root{--p1:#3b0a57;--p2:#0d1a5e;--card:#fff;--muted:#6c7a96}
-  body{margin:0;font-family:'Poppins',system-ui,Arial,sans-serif;background:linear-gradient(135deg,var(--p1),var(--p2));color:#fff;padding:20px}
-  .wrapper{max-width:1000px;margin:0 auto}
-  h1{margin:0 0 14px}
-  .filters{display:flex;gap:12px;margin-bottom:18px;flex-wrap:wrap}
-  select,input{padding:10px;border-radius:8px;border:none;min-width:180px}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
-  .card{background:#fff;color:#111;padding:12px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.12)}
-  .media{display:flex;gap:6px}
-  .media img{width:50%;height:140px;object-fit:cover;border-radius:8px}
-  .meta{padding:8px 0}
-  .meta h3{margin:0;font-size:16px}
-  .meta p{margin:4px 0;color:#444;font-size:14px}
-  .viewBtn{display:inline-block;margin-top:8px;padding:8px 10px;border-radius:8px;background:#3b0a57;color:#fff;text-decoration:none}
-  .empty{color:#fff;text-align:center;padding:40px}
+  :root{
+    --bg1: #4b006e; /* purple */
+    --bg2: #06112a; /* dark blue */
+    --card-bg: rgba(255,255,255,0.98);
+    --muted: #cbd5e1;
+    --accent: #8b5cf6;
+    --accent-dark: #3b82f6;
+    --glass: rgba(255,255,255,0.06);
+    --radius: 14px;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: "Poppins", Arial, sans-serif;
+    background: linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 100%);
+    color: #e6eef9;
+    -webkit-font-smoothing:antialiased;
+    padding: 20px;
+  }
+
+  header {
+    max-width: 980px;
+    margin: 0 auto 18px;
+    text-align: center;
+  }
+  header h1 {
+    margin: 0;
+    font-size: 24px;
+    color: #fff;
+    font-weight: 600;
+  }
+  header p {
+    margin:6px 0 0;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .controls {
+    max-width: 980px;
+    margin: 0 auto 18px;
+    display:flex;
+    gap:12px;
+    align-items:center;
+    flex-wrap:wrap;
+  }
+
+  .select {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 10px;
+    display:flex;
+    gap:8px;
+    align-items:center;
+    box-shadow: 0 8px 24px rgba(2,6,23,0.18);
+    color: #04243a;
+  }
+
+  .select label {
+    margin-right:8px;
+    font-weight:600;
+    color:#07203a;
+    font-size:13px;
+  }
+
+  select {
+    padding:8px 10px;
+    border-radius:8px;
+    border:1px solid #e6eef6;
+    font-size:14px;
+    outline:none;
+  }
+
+  .grid {
+    max-width: 980px;
+    margin: 0 auto;
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap:18px;
+  }
+
+  @media (max-width:980px){
+    .grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width:640px){
+    .grid { grid-template-columns: 1fr; }
+    .controls { flex-direction: column; align-items: stretch; }
+  }
+
+  .card {
+    background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 12px 30px rgba(2,6,23,0.32);
+    transition: transform .18s ease, box-shadow .18s ease;
+    border: 1px solid rgba(255,255,255,0.04);
+  }
+  .card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(2,6,23,0.45); }
+
+  .card .images {
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:4px;
+    height:180px;
+  }
+  .card .images img {
+    width:100%;
+    height:180px;
+    object-fit:cover;
+    display:block;
+    cursor:zoom-in;
+    transition: transform .18s ease;
+  }
+  .card .images img:hover { transform: scale(1.03); }
+
+  .card .content {
+    padding:12px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  }
+
+  .meta-line {
+    display:flex;
+    justify-content:space-between;
+    gap:8px;
+    align-items:center;
+  }
+
+  .name {
+    font-weight:700;
+    color: #fff;
+    font-size:15px;
+  }
+  .skill {
+    font-size:13px;
+    color: var(--muted);
+    font-weight:600;
+  }
+  .location {
+    margin-top:8px;
+    font-size:13px;
+    color:var(--muted);
+  }
+
+  .contact {
+    margin-top:10px;
+    display:flex;
+    gap:8px;
+    align-items:center;
+    flex-wrap:wrap;
+  }
+
+  .pill {
+    background: rgba(255,255,255,0.04);
+    padding:6px 8px;
+    border-radius: 999px;
+    color: var(--muted);
+    font-weight:600;
+    font-size:13px;
+    border:1px solid rgba(255,255,255,0.03);
+  }
+
+  .view-btn {
+    margin-top:10px;
+    display:inline-block;
+    background: linear-gradient(90deg,var(--accent),var(--accent-dark));
+    color:white;
+    padding:8px 12px;
+    border-radius:8px;
+    font-weight:700;
+    text-decoration:none;
+    cursor:pointer;
+    border:none;
+  }
+
+  .no-results {
+    max-width:980px;
+    margin:60px auto;
+    text-align:center;
+    color:var(--muted);
+    font-size:16px;
+  }
+
+  /* Lightbox */
+  .lightbox {
+    position:fixed;
+    inset:0;
+    display:none;
+    justify-content:center;
+    align-items:center;
+    background: rgba(2,6,23,0.8);
+    z-index:120;
+    padding:18px;
+  }
+  .lightbox.open { display:flex; }
+  .lightbox .box {
+    max-width:1000px;
+    width:100%;
+    background:#fff;
+    border-radius:12px;
+    overflow:hidden;
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:8px;
+  }
+  .lightbox img { width:100%; height:80vh; object-fit:contain; background:#000; }
+  .lightbox .info {
+    padding:12px;
+    background:#fff;
+    color:#04243a;
+  }
+  .lightbox .close {
+    position:absolute;
+    top:18px;
+    right:20px;
+    background:transparent;
+    color:#fff;
+    border:2px solid rgba(255,255,255,0.25);
+    padding:8px 10px;
+    border-radius:8px;
+    font-weight:700;
+    cursor:pointer;
+  }
+
+  /* small helper */
+  .muted { color: var(--muted); }
 </style>
 </head>
 <body>
-<div class="wrapper">
-  <h1>Browse Hustles</h1>
+  <header>
+    <h1>Browse Hustlers</h1>
+    <p>Only verified hustlers are shown. Filter by province or skill to find local talent.</p>
+  </header>
 
-  <div class="filters">
-    <select id="filterSkill"><option value="">All skills</option></select>
-    <select id="filterProvince"><option value="">All provinces</option></select>
-    <input id="search" placeholder="Search name or city" />
+  <div class="controls" aria-hidden="false">
+    <div class="select">
+      <label for="filterSkill">Skill</label>
+      <select id="filterSkill">
+        <option value="all">All Skills</option>
+      </select>
+    </div>
+
+    <div class="select">
+      <label for="filterProvince">Province</label>
+      <select id="filterProvince">
+        <option value="all">All Provinces</option>
+      </select>
+    </div>
+
+    <div style="margin-left:auto; display:flex; gap:8px; align-items:center;">
+      <div class="select" style="padding:8px 12px;">
+        <label style="margin-right:8px; font-weight:600; color:#07203a;">Results</label>
+        <span id="resultCount" style="font-weight:700; color:#fff;">0</span>
+      </div>
+    </div>
   </div>
 
-  <div id="grid" class="grid"></div>
-  <div id="empty" class="empty" style="display:none">No hustlers found.</div>
-</div>
+  <main id="listArea" class="grid" aria-live="polite"></main>
+
+  <div id="noResults" class="no-results" style="display:none;">No hustlers found. Try clearing filters.</div>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox" role="dialog" aria-hidden="true">
+    <button class="close" id="closeLightbox">Close ✕</button>
+    <div class="box">
+      <img id="lightImg1" src="" alt="Image 1">
+      <img id="lightImg2" src="" alt="Image 2">
+      <div class="info" style="grid-column: 1 / -1">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div id="lbName" style="font-weight:800; font-size:18px; color:#04243a"></div>
+            <div id="lbSkill" class="muted" style="margin-top:6px"></div>
+          </div>
+          <div id="lbLocation" class="muted" style="font-weight:700"></div>
+        </div>
+
+        <div style="margin-top:10px" id="lbContacts" class="muted"></div>
+        <div style="margin-top:8px; color:#07203a; font-weight:700" id="lbDate"></div>
+      </div>
+    </div>
+  </div>
 
 <script>
-  // ---------- PASTE YOUR WEB APP URL ----------
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw-jpUAzD76hG25-TgKuKOXSltCCnmG7AqI0Q-gT0-ZqTbf17AyLzTYCaXUVzNnIkHzXQ/exec";
-  // ------------------------------------------
+  // ================= CONFIG =================
+  const API_URL = "https://script.google.com/macros/s/AKfycbzUaUmJe5BXagtPTWpP0FwQe9_ngrJL5_BBraTF3pedVbmFQ1xzXh1UOonUSzWOLJ8oNA/exec";
 
-  const grid = document.getElementById('grid');
-  const empty = document.getElementById('empty');
+  // Skill and Province lists must match exactly the upload.html values
+  const SKILLS = [
+    "Tailor / Sewing","Barber / Haircut","Hairstylist / Braiding","Makeup Artist","Nail Technician",
+    "Photographer","Videographer","Graphic Designer","Web Developer","Mobile Phone Repair","Computer Technician",
+    "Baker / Pastry","Chef / Catering","Street Food Vendor","Carpenter","Painter (House/Signs)","Plumber",
+    "Electrician","Mechanic","Driver / Delivery","Cleaner / Domestic","Gardener / Landscaping","Tutor / Academic Coach",
+    "Fitness Trainer","DJ / Musician","Event Planner","Jewellery / Beading","Shoe Repair","Tailor (Alterations)","Handyman / General Repairs","Other"
+  ];
+
+  const PROVINCES = [
+    "Eastern Cape","Free State","Gauteng","KwaZulu-Natal","Limpopo","Mpumalanga","Northern Cape","North West","Western Cape","Other / Remote"
+  ];
+
+  // ================= UI ELEMENTS =================
+  const listArea = document.getElementById('listArea');
+  const noResults = document.getElementById('noResults');
   const filterSkill = document.getElementById('filterSkill');
   const filterProvince = document.getElementById('filterProvince');
-  const search = document.getElementById('search');
+  const resultCount = document.getElementById('resultCount');
 
-  let data = [];
+  // Lightbox elements
+  const lightbox = document.getElementById('lightbox');
+  const closeLightbox = document.getElementById('closeLightbox');
+  const lightImg1 = document.getElementById('lightImg1');
+  const lightImg2 = document.getElementById('lightImg2');
+  const lbName = document.getElementById('lbName');
+  const lbSkill = document.getElementById('lbSkill');
+  const lbLocation = document.getElementById('lbLocation');
+  const lbContacts = document.getElementById('lbContacts');
+  const lbDate = document.getElementById('lbDate');
 
-  function renderCards(items) {
-  grid.innerHTML = '';
-  if (!items.length) {
-    empty.style.display = 'block';
-    return;
-  }
-  empty.style.display = 'none';
-
-  items.forEach(item => {
-
-    const img1 = item.Picture1URL
-      ? `<img src="${item.Picture1URL}" alt="pic1">`
-      : '';
-
-    const img2 = item.Picture2URL
-      ? `<img src="${item.Picture2URL}" alt="pic2">`
-      : '';
-
-    const div = document.createElement('div');
-    div.className = 'card';
-    div.innerHTML = `
-      <div class="media">
-        ${img1}
-        ${img2}
-      </div>
-      <div class="meta">
-        <h3>${escapeHtml(item.Name || '')}</h3>
-        <p>${escapeHtml(item.Skill || '')} • ${escapeHtml(item.Province || '')} • ${escapeHtml(item.City || '')}</p>
-        <p>${escapeHtml(item.Description || '').slice(0,120)}</p>
-        <a class="viewBtn" href="profile.html?id=${encodeURIComponent(item.ID)}">View profile</a>
-      </div>
-    `;
-    grid.appendChild(div);
-  });
-  }
-
-  function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-
-  function populateFilters(list) {
-    const skills = Array.from(new Set(list.map(x=>x.Skill).filter(Boolean))).sort();
-    const provinces = Array.from(new Set(list.map(x=>x.Province).filter(Boolean))).sort();
-    skills.forEach(s => filterSkill.appendChild(new Option(s, s)));
-    provinces.forEach(p => filterProvince.appendChild(new Option(p, p)));
-  }
-
-  function applyFilters() {
-    const s = filterSkill.value.toLowerCase();
-    const p = filterProvince.value.toLowerCase();
-    const q = search.value.toLowerCase().trim();
-    const items = data.filter(i => {
-      if (s && String(i.Skill||'').toLowerCase() !== s) return false;
-      if (p && String(i.Province||'').toLowerCase() !== p) return false;
-      if (q && !(String(i.Name||'').toLowerCase().includes(q) || String(i.City||'').toLowerCase().includes(q))) return false;
-      return true;
+  // Populate filter selects
+  function populateFilters(){
+    SKILLS.forEach(s => {
+      const opt = document.createElement('option');
+      opt.value = s;
+      opt.textContent = s;
+      filterSkill.appendChild(opt);
     });
-    renderCards(items);
+    PROVINCES.forEach(p => {
+      const opt = document.createElement('option');
+      opt.value = p;
+      opt.textContent = p;
+      filterProvince.appendChild(opt);
+    });
   }
 
-  async function load() {
+  // Fetch verified hustlers from API
+  async function fetchHustlers(){
     try {
-      const r = await fetch(WEB_APP_URL);
-      const text = await r.text();
-      const arr = JSON.parse(text || '[]');
-      data = Array.isArray(arr) ? arr : [];
-      populateFilters(data);
-      applyFilters();
+      const res = await fetch(API_URL);
+      if(!res.ok) throw new Error('Network response not ok');
+      const data = await res.json();
+      // Ensure it's an array. doGet already filters but double-check Verified === 'Yes'
+      return Array.isArray(data) ? data.filter(item => String((item.Verified||'')).toLowerCase() === 'yes') : [];
     } catch (err) {
-      console.error(err);
-      empty.textContent = 'Failed loading hustlers.';
-      empty.style.display = 'block';
+      console.error('Fetch error', err);
+      return [];
     }
   }
 
-  filterSkill.addEventListener('change', applyFilters);
-  filterProvince.addEventListener('change', applyFilters);
-  search.addEventListener('input', applyFilters);
+  // Render cards
+  function renderCards(items){
+    listArea.innerHTML = '';
+    if(items.length === 0){
+      noResults.style.display = 'block';
+      resultCount.textContent = '0';
+      return;
+    }
+    noResults.style.display = 'none';
+    resultCount.textContent = String(items.length);
 
-  load();
+    items.forEach(item => {
+      const image1 = item.Image1 || '';
+      const image2 = item.Image2 || image1 || '';
+      const name = item.Name || 'Unknown';
+      const skill = item.Skill || '';
+      const province = item.Province || '';
+      const city = item.City || '';
+      const phone = item.Phone || '';
+      const email = item.Email || '';
+      const date = item.Date || '';
+
+      const card = document.createElement('article');
+      card.className = 'card';
+      card.innerHTML = `
+        <div class="images">
+          <img loading="lazy" src="${escapeHtml(image1)}" alt="${escapeHtml(name)} image 1" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=400 height=300><rect fill=%23f3f7fa width=100% height=100%/><text x=50% y=50% alignment-baseline=middle text-anchor=middle fill=%23999 font-size=16>Image not found</text></svg>'">
+          <img loading="lazy" src="${escapeHtml(image2)}" alt="${escapeHtml(name)} image 2" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=400 height=300><rect fill=%23f3f7fa width=100% height=100%/><text x=50% y=50% alignment-baseline=middle text-anchor=middle fill=%23999 font-size=16>Image not found</text></svg>'">
+        </div>
+
+        <div class="content">
+          <div class="meta-line">
+            <div>
+              <div class="name">${escapeHtml(name)}</div>
+              <div class="skill">${escapeHtml(skill)}</div>
+            </div>
+            <div class="pill">${escapeHtml(province)}</div>
+          </div>
+
+          <div class="location">${escapeHtml(city)}</div>
+
+          <div class="contact">
+            ${ phone ? `<div class="pill">📞 ${escapeHtml(phone)}</div>` : '' }
+            ${ email ? `<div class="pill">✉️ ${escapeHtml(email)}</div>` : '' }
+            <div style="margin-left:auto"><button class="view-btn" type="button">View</button></div>
+          </div>
+        </div>
+      `;
+
+      // view button opens lightbox with large images and details
+      const viewBtn = card.querySelector('.view-btn');
+      viewBtn.addEventListener('click', () => openLightbox({image1, image2, name, skill, province, city, phone, email, date}));
+
+      // clicking any image also opens lightbox
+      card.querySelectorAll('.images img').forEach(img => img.addEventListener('click', () => openLightbox({image1, image2, name, skill, province, city, phone, email, date})));
+
+      listArea.appendChild(card);
+    });
+  }
+
+  // Filtering logic
+  function applyFilters(allItems){
+    const skill = filterSkill.value;
+    const province = filterProvince.value;
+
+    let filtered = allItems.slice();
+
+    if(skill && skill !== 'all'){
+      filtered = filtered.filter(it => (it.Skill || '') === skill);
+    }
+    if(province && province !== 'all'){
+      filtered = filtered.filter(it => (it.Province || '') === province);
+    }
+
+    renderCards(filtered);
+  }
+
+  // Lightbox open
+  function openLightbox(data){
+    lightImg1.src = data.image1 || '';
+    lightImg2.src = data.image2 || data.image1 || '';
+    lbName.textContent = data.name || '';
+    lbSkill.textContent = data.skill || '';
+    lbLocation.textContent = (data.city ? data.city + ', ' : '') + (data.province || '');
+    lbContacts.innerHTML = (data.phone ? 'Phone: ' + escapeHtml(data.phone) + ' ' : '') + (data.email ? ' • Email: ' + escapeHtml(data.email) : '');
+    lbDate.textContent = data.date ? 'Submitted: ' + escapeHtml(data.date) : '';
+    lightbox.classList.add('open');
+    lightbox.setAttribute('aria-hidden','false');
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  function closeLightboxFn(){
+    lightbox.classList.remove('open');
+    lightbox.setAttribute('aria-hidden','true');
+    lightImg1.src = '';
+    lightImg2.src = '';
+  }
+  closeLightbox.addEventListener('click', closeLightboxFn);
+  lightbox.addEventListener('click', (e)=> { if(e.target === lightbox) closeLightboxFn(); });
+
+  // Escape helper
+  function escapeHtml(str){
+    if(!str) return '';
+    return String(str)
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;')
+      .replace(/'/g,'&#039;');
+  }
+
+  // Init: populate filters, fetch items, wire events
+  (async function init(){
+    populateFilters();
+    const allItems = await fetchHustlers();
+    // Save original list for re-filtering
+    window.__ALL_HUSTLERS__ = allItems;
+    applyFilters(allItems);
+
+    filterSkill.addEventListener('change', ()=> applyFilters(allItems));
+    filterProvince.addEventListener('change', ()=> applyFilters(allItems));
+  })();
 </script>
 </body>
-</html>
+  </html>
