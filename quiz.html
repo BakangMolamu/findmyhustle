@@ -88,19 +88,11 @@ button {
 </header>
 
 <div class="container">
-  <h2>Your Quiz</h2>
+  <h2>Your AI-Generated Quiz</h2>
 
   <div class="notes-box" id="studentNotes"></div>
 
-  <div class="question" id="mcqQuestion">
-    <p><strong>Q1:</strong> (MCQ from notes will appear here)</p>
-    <div class="options" id="mcqOptions"></div>
-  </div>
-
-  <div class="question">
-    <p><strong>Q2:</strong> Write a short definition / explanation from your notes:</p>
-    <textarea id="shortAnswer" placeholder="Type your answer here..."></textarea>
-  </div>
+  <div id="quizContainer"></div>
 
   <button onclick="checkAnswers()">Submit Answers</button>
 
@@ -112,43 +104,59 @@ button {
 const notes = localStorage.getItem('studentNotes') || '';
 document.getElementById('studentNotes').innerText = notes || 'No notes found. Please go back and paste your notes.';
 
-// Simple dynamic MCQ generation (for now picks first sentence as question)
-let mcqQuestionText = 'What is the main topic of your notes?';
-let mcqOptions = ['Option A', 'Option B', 'Option C']; // placeholders
+// Placeholder for AI-generated quiz
+let quizData = [];
 
 if (notes) {
-  const firstSentence = notes.split('. ')[0];
-  if(firstSentence) {
-    mcqQuestionText = `What does this describe: "${firstSentence.trim()}"?`;
-    mcqOptions = [`${firstSentence.split(' ')[0]} answer`, 'Option B', 'Option C'];
-  }
+  // Simulate AI generating questions dynamically
+  quizData = [
+    {
+      type: 'mcq',
+      question: `Based on your notes: "${notes.split('. ')[0]}" what is correct?`,
+      options: ['Option A', 'Option B', 'Option C'],
+      answer: 0
+    },
+    {
+      type: 'short',
+      question: 'Write a short definition or explanation based on your notes.',
+      keywords: notes.split(' ').slice(0,5) // basic keyword check
+    }
+  ];
 }
 
-document.querySelector('#mcqQuestion p').innerText = mcqQuestionText;
-const optionsContainer = document.getElementById('mcqOptions');
-optionsContainer.innerHTML = '';
-mcqOptions.forEach((opt, i) => {
-  const label = document.createElement('label');
-  label.innerHTML = `<input type='radio' name='q1' value='${i}'> ${opt}`;
-  optionsContainer.appendChild(label);
+const quizContainer = document.getElementById('quizContainer');
+quizData.forEach((q, index) => {
+  const div = document.createElement('div');
+  div.className = 'question';
+  if(q.type === 'mcq'){
+    div.innerHTML = `<p><strong>Q${index+1}:</strong> ${q.question}</p><div class='options'></div>`;
+    q.options.forEach((opt,i)=>{
+      const label = document.createElement('label');
+      label.innerHTML = `<input type='radio' name='q${index}' value='${i}'> ${opt}`;
+      div.querySelector('.options').appendChild(label);
+    });
+  } else if(q.type === 'short'){
+    div.innerHTML = `<p><strong>Q${index+1}:</strong> ${q.question}</p><textarea id='q${index}' placeholder='Type your answer here...'></textarea>`;
+  }
+  quizContainer.appendChild(div);
 });
 
-function checkAnswers() {
+function checkAnswers(){
   let score = 0;
-
-  // Check MCQ (we just assume first option is correct for now)
-  const q1 = document.querySelector('input[name="q1"]:checked');
-  if (q1 && q1.value === '0') score++;
-
-  // Short answer basic check
-  const shortAnswer = document.getElementById('shortAnswer').value.toLowerCase();
-  if (notes && shortAnswer && notes.toLowerCase().includes(shortAnswer.trim())) {
-    score++;
-  }
-
-  document.getElementById('result').innerText = `Your Score: ${score}/2`;
+  quizData.forEach((q,index)=>{
+    if(q.type==='mcq'){
+      const sel = document.querySelector(`input[name='q${index}']:checked`);
+      if(sel && parseInt(sel.value)===q.answer) score++;
+    } else if(q.type==='short'){
+      const ans = document.getElementById(`q${index}`).value.toLowerCase();
+      const matched = q.keywords.some(k=>ans.includes(k.toLowerCase()));
+      if(matched) score++;
+    }
+  });
+  document.getElementById('result').innerText = `Your Score: ${score}/${quizData.length}`;
 }
 </script>
 </body>
 </html>
+
 
