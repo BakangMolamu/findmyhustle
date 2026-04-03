@@ -19,66 +19,20 @@ header {
   padding: 16px 20px;
 }
 header h1 { font-size: 20px; font-weight: 700; }
-nav a {
-  color: #fff;
-  margin-left: 14px;
-  text-decoration: none;
-  font-weight: 500;
-}
-.container {
-  padding: 30px 20px;
-  max-width: 800px;
-  margin: auto;
-}
-h2 {
-  text-align: center;
-  background: linear-gradient(90deg, #a855f7, #3b82f6);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.question {
-  margin-top: 25px;
-  background: rgba(255,255,255,0.08);
-  padding: 15px;
-  border-radius: 12px;
-}
-.options label {
-  display: block;
-  margin: 8px 0;
-}
-textarea {
-  width: 100%;
-  margin-top: 10px;
-  padding: 10px;
-  border-radius: 8px;
-  border: none;
-}
-button {
-  margin-top: 20px;
-  padding: 14px;
-  border: none;
-  border-radius: 12px;
-  font-weight: 600;
-  background: linear-gradient(90deg, #3b82f6, #22c55e);
-  color: #fff;
-  cursor: pointer;
-}
-.result {
-  margin-top: 20px;
-  font-weight: bold;
-}
-.notes-box {
-  background: rgba(255,255,255,0.05);
-  padding: 12px;
-  border-radius: 10px;
-  margin-bottom: 20px;
-  font-size: 14px;
-  max-height: 150px;
-  overflow-y: auto;
-}
+nav a { color: #fff; margin-left: 14px; text-decoration: none; font-weight: 500; }
+.container { padding: 30px 20px; max-width: 800px; margin: auto; }
+h2 { text-align: center; background: linear-gradient(90deg, #a855f7, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.question { margin-top: 25px; background: rgba(255,255,255,0.08); padding: 15px; border-radius: 12px; }
+.options label { display: block; margin: 8px 0; }
+textarea { width: 100%; margin-top: 10px; padding: 10px; border-radius: 8px; border: none; }
+button { margin-top: 20px; padding: 14px; border: none; border-radius: 12px; font-weight: 600; background: linear-gradient(90deg, #3b82f6, #22c55e); color: #fff; cursor: pointer; }
+.result { margin-top: 20px; font-weight: bold; }
+.notes-box { background: rgba(255,255,255,0.05); padding: 12px; border-radius: 10px; margin-bottom: 20px; font-size: 14px; max-height: 150px; overflow-y: auto; }
+.loading { text-align:center; margin-top:20px; font-style:italic; }
 </style>
 </head>
 <body>
+
 <header>
   <h1>StudySmart AI</h1>
   <nav>
@@ -91,64 +45,69 @@ button {
   <h2>Your AI-Generated Quiz</h2>
 
   <div class="notes-box" id="studentNotes"></div>
-
+  <div class="loading" id="loading">Generating quiz...</div>
   <div id="quizContainer"></div>
-
-  <button onclick="checkAnswers()">Submit Answers</button>
-
+  <button onclick="checkAnswers()" id="submitBtn" style="display:none;">Submit Answers</button>
   <div class="result" id="result"></div>
 </div>
 
 <script>
-// Load notes from localStorage
 const notes = localStorage.getItem('studentNotes') || '';
 document.getElementById('studentNotes').innerText = notes || 'No notes found. Please go back and paste your notes.';
 
-// Placeholder for quiz data
+if (!notes) document.getElementById('loading').innerText = 'Please paste your notes first.';
+
 let quizData = [];
 
-async function generateAIQuiz() {
-  if(!notes) return;
+// Replace with your new Apps Script Web App URL
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwLzWnxuKPgJkfmCS-FAQshWmc7wT6Q1VOeNJopQ5lLks7wJ45TkxpmwPvSmHcJLddBZg/exec';
 
+// Fetch quiz from Apps Script
+async function generateQuiz() {
+  if (!notes) return;
   try {
-    const response = await fetch('https://script.google.com/macros/s/AKfycbzI2859PkVlfz2HgCj-OiIxMI1ZAHUaRvT_WXMgIg1NQJdBgiUuJqmPZjFERhFJ1nrrtw/exec', {
+    const response = await fetch(WEB_APP_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ notes })
     });
-
     const data = await response.json();
     quizData = data;
-    buildQuizFromAI(data);
-  } catch (error) {
-    console.error('Error fetching AI quiz:', error);
+    buildQuiz(quizData);
+  } catch (err) {
+    document.getElementById('loading').innerText = 'Error generating quiz. Try again.';
+    console.error(err);
   }
 }
 
-function buildQuizFromAI(quizData) {
-  const quizContainer = document.getElementById('quizContainer');
-  quizContainer.innerHTML = '';
+function buildQuiz(data) {
+  document.getElementById('loading').style.display = 'none';
+  const container = document.getElementById('quizContainer');
+  const submitBtn = document.getElementById('submitBtn');
+  container.innerHTML = '';
+  submitBtn.style.display = 'block';
 
-  quizData.forEach((q, index) => {
+  data.forEach((q, index) => {
     const div = document.createElement('div');
     div.className = 'question';
 
-    if(q.type === 'mcq'){
+    if (q.type === 'mcq') {
       div.innerHTML = `<p><strong>Q${index+1}:</strong> ${q.question}</p><div class='options'></div>`;
       q.options.forEach((opt,i)=>{
         const label = document.createElement('label');
         label.innerHTML = `<input type='radio' name='q${index}' value='${i}'> ${opt}`;
         div.querySelector('.options').appendChild(label);
       });
-    } else if(q.type === 'short'){
+    } else if (q.type === 'short') {
       div.innerHTML = `<p><strong>Q${index+1}:</strong> ${q.question}</p><textarea id='q${index}' placeholder='Type your answer here...'></textarea>`;
     }
 
-    quizContainer.appendChild(div);
+    container.appendChild(div);
   });
 }
 
-function checkAnswers(){
+function checkAnswers() {
+  if (!quizData.length) return;
   let score = 0;
   quizData.forEach((q,index)=>{
     if(q.type==='mcq'){
@@ -164,10 +123,8 @@ function checkAnswers(){
 }
 
 // Generate quiz on page load
-generateAIQuiz();
+generateQuiz();
 </script>
+
 </body>
 </html>
-
-
-
